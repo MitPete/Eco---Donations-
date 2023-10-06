@@ -1,10 +1,10 @@
 # Eco Coin and Donations Smart Contracts
 This repository contains two Solidity smart contracts: EcoCoin.sol and DonationContract.sol. Below are the details and usage instructions for each contract.
 
-EcoCoin.sol
+# EcoCoin.sol
 EcoCoin.sol is an ERC20 token contract representing Eco Coin (ECO). It extends the OpenZeppelin ERC20 contract and includes functionality for minting tokens, setting maximum supply, and allowing the contract owner to withdraw funds.
 
-Contract Details:
+# Contract Details:
 Name: Eco Coin
 Symbol: ECO
 Inheritance: ERC20
@@ -14,16 +14,19 @@ Usage:
 Mint Tokens:
 
 Use the mintTokens(address account, uint256 amount) function to mint new tokens to a specified account.
+
 Tokens can only be minted if the total supply (including the new minted amount) does not exceed the maximum supply.
 Withdraw Funds:
 
 The contract owner can withdraw funds using the withdraw() function.
 Only the contract owner can initiate fund withdrawal.
+
 Smart Contract Code: EcoCoin.sol
-DonationContract.sol
+
+# DonationContract.sol 
 DonationContract.sol is a contract managing donations made to various foundations. It utilizes the Eco Coin (ECO) token to record donations and maintains a donation history for different foundations.
 
-Contract Details:
+# Contract Details:
 Donation Foundations: SaveTheOceans, ProtectTheRainforest, ProtectTheSequoias, CleanEnergy
 Functions:
 Donate: Make a donation to a specific foundation with an optional message. Tokens are minted to the donor's address based on the donation amount.
