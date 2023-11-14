@@ -14,10 +14,11 @@ contract EcoCoin is ERC20 {
     }
 
     function mintTokens(address account, uint256 amount) external {
-        require(totalSupply() + amount <= maxSupply, "Total supply cannot exceed maximum supply");
-        _mint(account, amount);
-        emit Transfer(address(0), account, amount);
-    }
+    require(msg.sender == owner, "Only the owner can mint tokens");
+    require(totalSupply() + amount <= maxSupply, "Total supply cannot exceed maximum supply");
+    _mint(account, amount);
+    emit Transfer(address(0), account, amount);
+}
 
     function withdraw() public {
         require(msg.sender == owner, "Only contract owner can withdraw funds");
@@ -30,4 +31,8 @@ contract EcoCoin is ERC20 {
         super._mint(account, amount);
         totalMintedSupply += amount;
     }
+
+    function getTotalMintedSupply() public view returns (uint256) {
+    return totalMintedSupply;
+}
 }

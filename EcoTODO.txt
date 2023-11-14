@@ -1,0 +1,9 @@
+Eco Coin 
+1.Adjust the contract there are two mint functions which is redundant 
+2.Check if “ EcoCoin is Erc20 “ does that mean anyone can call a function in Erc20 to mint tokens 
+3. Why do we need a withdraw function ? 
+Because we do not want that only the owner should create new tokens.
+
+Eco Coin Test 
+1.Make test to check that only owner can call mint function 
+2.Make sure the owner is set properly 

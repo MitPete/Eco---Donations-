@@ -7,6 +7,9 @@ contract DonationContract {
     address public owner;
     EcoCoin public ecoCoinInstance;
 
+    
+
+
     struct Donation {
         address sender;
         uint256 amount;
