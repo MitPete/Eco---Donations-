@@ -1,0 +1,55 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5f7fa;
+  color: #333;
+}
+header {
+  background: #0a6dff;
+  color: white;
+  padding: 1em 0;
+  text-align: center;
+}
+nav a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+}
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 2em;
+}
+.hero {
+  text-align: center;
+  padding: 4em 0;
+}
+.hero .cta {
+  background: #0a6dff;
+  color: white;
+  padding: 0.7em 1.2em;
+  border-radius: 4px;
+  text-decoration: none;
+}
+button {
+  background: #0a6dff;
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  cursor: pointer;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0.5em;
+  border-bottom: 1px solid #ccc;
+}

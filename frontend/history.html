@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donation History - Eco Donations</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+</head>
+<body onload="loadHistory()">
+  <header>
+    <h1>Eco Donations</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="donate.html">Donate</a>
+      <a href="history.html">Donation History</a>
+    </nav>
+  </header>
+  <main class="container">
+    <h2>Donation Totals</h2>
+    <ul id="totals"></ul>
+    <h2>Donations</h2>
+    <table id="donationTable">
+      <thead>
+        <tr>
+          <th>Foundation</th>
+          <th>Donor</th>
+          <th>Amount (ETH)</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
