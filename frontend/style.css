@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
   background: #f5f7fa;
@@ -10,11 +10,21 @@ header {
   color: white;
   padding: 1em 0;
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 nav a {
   margin: 0 10px;
   color: white;
   text-decoration: none;
+}
+.wallet {
+  margin-top: 0.5em;
+}
+.balance {
+  margin-left: 10px;
 }
 .container {
   max-width: 800px;
@@ -24,6 +34,8 @@ nav a {
 .hero {
   text-align: center;
   padding: 4em 0;
+  background: #e1edff;
+  border-radius: 8px;
 }
 .hero .cta {
   background: #0a6dff;
@@ -32,6 +44,9 @@ nav a {
   border-radius: 4px;
   text-decoration: none;
 }
+section.info {
+  margin-top: 3em;
+}
 button {
   background: #0a6dff;
   color: white;
@@ -39,6 +54,9 @@ button {
   padding: 0.6em 1.2em;
   border-radius: 4px;
   cursor: pointer;
+}
+.intro {
+  margin-bottom: 1.5em;
 }
 input, select, textarea {
   width: 100%;
@@ -52,4 +70,7 @@ table {
 th, td {
   padding: 0.5em;
   border-bottom: 1px solid #ccc;
+}
+tbody tr:nth-child(even) {
+  background: #eef1f6;
 }

@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Donation History - Eco Donations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 </head>
@@ -15,9 +18,20 @@
       <a href="donate.html">Donate</a>
       <a href="history.html">Donation History</a>
     </nav>
+    <div class="wallet">
+      <span id="walletAddress"></span>
+      <span id="walletBalance" class="balance"></span>
+      <button onclick="connectWallet()" id="connectButton">Connect Wallet</button>
+    </div>
   </header>
   <main class="container">
-    <h2>Donation Totals</h2>
+    <h2>Your Impact</h2>
+    <p class="intro">
+      The tables below aggregate all donations made through the platform and display each
+      individual contribution. Connect your wallet to ensure your address is properly
+      recognised in the list.
+    </p>
+    <h3>Donation Totals</h3>
     <ul id="totals"></ul>
     <h2>Donations</h2>
     <table id="donationTable">

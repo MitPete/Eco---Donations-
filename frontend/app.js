@@ -1,4 +1,9 @@
 const donationContractAddress = "0xYourContractAddress"; // replace with deployed contract address
+const ecoCoinAddress = "0xYourEcoCoinAddress"; // replace with deployed ECO token address
+
+const ecoCoinAbi = [
+  "function balanceOf(address) view returns (uint256)"
+];
 
 const donationAbi = [
   {
@@ -34,6 +39,23 @@ const donationAbi = [
 let provider;
 let signer;
 let donationContract;
+let ecoCoinContract;
+
+function formatAddress(addr) {
+  return addr.slice(0, 6) + "..." + addr.slice(-4);
+}
+
+async function updateBalance() {
+  if (!signer) return;
+  if (!ecoCoinContract) {
+    ecoCoinContract = new ethers.Contract(ecoCoinAddress, ecoCoinAbi, provider);
+  }
+  const address = await signer.getAddress();
+  const bal = await ecoCoinContract.balanceOf(address);
+  document.getElementById("walletAddress").innerText = formatAddress(address);
+  document.getElementById("walletBalance").innerText =
+    ethers.utils.formatEther(bal) + " ECO";
+}
 
 async function connectWallet() {
   if (!window.ethereum) {
@@ -45,6 +67,7 @@ async function connectWallet() {
   signer = provider.getSigner();
   donationContract = new ethers.Contract(donationContractAddress, donationAbi, signer);
   document.getElementById("connectButton").innerText = "Wallet Connected";
+  updateBalance();
 }
 
 async function sendDonation() {
@@ -60,6 +83,7 @@ async function sendDonation() {
   document.getElementById("txStatus").innerText = "Waiting for confirmation...";
   await tx.wait();
   document.getElementById("txStatus").innerText = "Donation successful!";
+  updateBalance();
   return false;
 }
 
@@ -68,6 +92,13 @@ async function loadHistory() {
     return;
   }
   provider = new ethers.providers.Web3Provider(window.ethereum);
+  try {
+    const accounts = await provider.listAccounts();
+    if (accounts.length > 0) {
+      signer = provider.getSigner();
+      updateBalance();
+    }
+  } catch (e) {}
   const contract = new ethers.Contract(donationContractAddress, donationAbi, provider);
 
   // Load totals
