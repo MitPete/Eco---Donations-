@@ -15,7 +15,6 @@ contract EcoCoin is ERC20, Ownable {
     function mintTokens(address account, uint256 amount) external onlyOwner {
         require(totalSupply() + amount <= maxSupply, "Total supply cannot exceed maximum supply");
         _mint(account, amount);
-        emit Transfer(address(0), account, amount);
     }
 
     function withdraw() public onlyOwner {
