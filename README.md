@@ -1,46 +1,38 @@
 # Eco Coin and Donations Smart Contracts
-This repository contains two Solidity smart contracts: EcoCoin.sol and DonationContract.sol. Below are the details and usage instructions for each contract.
 
-# EcoCoin.sol
-EcoCoin.sol is an ERC20 token contract representing Eco Coin (ECO). It extends the OpenZeppelin ERC20 contract and includes functionality for minting tokens, setting maximum supply, and allowing the contract owner to withdraw funds.
+This repository contains two Solidity smart contracts used to reward donations with an ERC20 token.
 
-# Contract Details:
-Name: Eco Coin
-Symbol: ECO
-Inheritance: ERC20, Ownable
-Owner: The deployer of the contract is set as the initial owner, but ownership is transferred to the DonationContract so it can mint tokens.
-Max Supply: The maximum supply of ECO tokens is set during deployment.
-Usage:
-Mint Tokens:
+## Setup
 
-Use the mintTokens(address account, uint256 amount) function to mint new tokens to a specified account.
-Tokens can only be minted by the owner and if the total supply (including the new minted amount) does not exceed the maximum supply.
-Withdraw Funds:
+Install dependencies and run the tests with the following commands:
 
-The contract owner can withdraw funds using the withdraw() function.
-Only the contract owner can initiate fund withdrawal.
+```bash
+npm install
+npx hardhat test
+```
 
-Smart Contract Code: EcoCoin.sol
+## Deployment
 
-# DonationContract.sol 
-DonationContract.sol is a contract managing donations made to various foundations. It utilizes the Eco Coin (ECO) token to record donations and maintains a donation history for different foundations.
+Deploy the contracts to the network of your choice:
 
-# Contract Details:
-Donation Foundations: SaveTheOceans, ProtectTheRainforest, ProtectTheSequoias, CleanEnergy
-Functions:
-Donate: Make a donation to a specific foundation with an optional message. Tokens are minted to the donor's address based on the donation amount.
-Withdraw: The contract owner can withdraw collected donations.
-Update Eco Coin Address: The contract owner can update the address of the Eco Coin contract.
-Usage:
-Make a Donation:
+```bash
+npx hardhat run scripts/deploy.js --network <network>
+```
 
-Use the donate(Foundation foundation, string memory message) function to make a donation to one of the predefined foundations.
-Donors receive ECO tokens based on their donation amount. The donation amount is multiplied by 10 to calculate the token amount.
-Withdraw Funds:
+The deploy script creates `EcoCoin` and `DonationContract` and transfers ownership of the token to the donation contract so it can mint new tokens.
 
-The contract owner can withdraw collected donation funds using the withdraw() function.
-Update Eco Coin Address:
+## Contracts
 
-The contract owner can update the Eco Coin contract address using the updateEcoCoinAddress(address _ecoCoinAddress) function.
-Smart Contract Code: DonationContract.sol
-Feel free to deploy these contracts to your preferred Ethereum network and integrate them into your decentralized application (DApp) or blockchain project. If you have any questions or need further assistance, please refer to the provided contract code or reach out to the contract developers.
+### EcoCoin.sol
+
+* ERC20 token named **ECO Coin** with symbol `ECO`.
+* Maximum supply is set on deployment.
+* Only the owner can mint new tokens.
+
+### DonationContract.sol
+
+* Records donations for a set of predefined foundations.
+* Donors receive 10 ECO for every ether donated.
+* Ether transfers use the `call` pattern for safety.
+* The owner can withdraw any ether held by the contract.
+* Ownership can be transferred using `transferOwnership`.
