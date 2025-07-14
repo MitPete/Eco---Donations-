@@ -24,14 +24,23 @@ const donationAbi = [
     "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [
+      "anonymous": false,
+      "inputs": [
       { "indexed": false, "internalType": "uint8", "name": "foundation", "type": "uint8" },
       { "indexed": true, "internalType": "address", "name": "sender", "type": "address" },
       { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
       { "indexed": false, "internalType": "string", "name": "message", "type": "string" }
     ],
-    "name": "DonationMade",
+      "name": "DonationMade",
+      "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "donor", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "balance", "type": "uint256" }
+    ],
+    "name": "TokenBalanceUpdated",
     "type": "event"
   }
 ];
@@ -67,6 +76,14 @@ async function connectWallet() {
   signer = provider.getSigner();
   donationContract = new ethers.Contract(donationContractAddress, donationAbi, signer);
   document.getElementById("connectButton").innerText = "Wallet Connected";
+  donationContract.on("TokenBalanceUpdated", (donor, balance) => {
+    signer.getAddress().then((addr) => {
+      if (addr.toLowerCase() === donor.toLowerCase()) {
+        document.getElementById("walletBalance").innerText =
+          ethers.utils.formatEther(balance) + " ECO";
+      }
+    });
+  });
   updateBalance();
 }
 
@@ -103,8 +120,12 @@ async function loadHistory() {
 
   // Load totals
   const totalList = document.getElementById("totals");
+  const topList = document.getElementById("topDonors");
+  const personalBody = document.querySelector("#personalTable tbody");
   const foundations = ["Save The Oceans", "Protect The Rainforest", "Protect The Sequoias", "Clean Energy"];
   totalList.innerHTML = "";
+  topList.innerHTML = "";
+  if (personalBody) personalBody.innerHTML = "";
   for (let i = 0; i < foundations.length; i++) {
     const total = await contract.foundationDonations(i);
     const li = document.createElement("li");
@@ -117,7 +138,17 @@ async function loadHistory() {
   tableBody.innerHTML = "";
   const filter = contract.filters.DonationMade();
   const events = await contract.queryFilter(filter, 0, "latest");
+  let currentAddress = null;
+  if (signer) {
+    try {
+      currentAddress = (await signer.getAddress()).toLowerCase();
+    } catch (e) {}
+  }
+  const donorTotals = {};
   events.forEach(ev => {
+    const donor = ev.args.sender.toLowerCase();
+    donorTotals[donor] = (donorTotals[donor] || ethers.BigNumber.from(0)).add(ev.args.amount);
+
     const row = document.createElement("tr");
     const cells = [
       foundations[ev.args.foundation],
@@ -131,5 +162,29 @@ async function loadHistory() {
       row.appendChild(td);
     });
     tableBody.appendChild(row);
+
+    if (currentAddress && donor === currentAddress && personalBody) {
+      const prow = document.createElement("tr");
+      const pcells = [
+        foundations[ev.args.foundation],
+        ethers.utils.formatEther(ev.args.amount),
+        ev.args.message
+      ];
+      pcells.forEach(text => {
+        const td = document.createElement("td");
+        td.textContent = text;
+        prow.appendChild(td);
+      });
+      personalBody.appendChild(prow);
+    }
+  });
+
+  const sorted = Object.entries(donorTotals).sort((a, b) => {
+    return b[1].sub(a[1]);
+  });
+  sorted.slice(0, 5).forEach(([addr, total]) => {
+    const li = document.createElement("li");
+    li.textContent = `${formatAddress(addr)}: ${ethers.utils.formatEther(total)} ETH`;
+    topList.appendChild(li);
   });
 }
