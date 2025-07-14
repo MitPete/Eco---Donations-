@@ -17,11 +17,6 @@ contract EcoCoin is ERC20, Ownable {
         _mint(account, amount);
     }
 
-    function withdraw() public onlyOwner {
-        uint256 balance = address(this).balance;
-        payable(owner()).transfer(balance);
-    }
-
     function _mint(address account, uint256 amount) internal virtual override {
         require(totalMintedSupply + amount <= maxSupply, "Total supply cannot exceed maximum supply");
         super._mint(account, amount);

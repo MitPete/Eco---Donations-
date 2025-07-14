@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
-import "./ecoCoin.sol";
+import "./EcoCoin.sol";
 
 contract DonationContract {
     address public owner;
@@ -32,6 +32,7 @@ contract DonationContract {
     );
 
     event TokenBalanceUpdated(address indexed donor, uint256 balance);
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only contract owner can perform this action");
@@ -41,7 +42,6 @@ contract DonationContract {
     constructor(address _ecoCoinAddress, address saveTheOceansAddress, address protectTheRainforestAddress, address protectTheSequoiasAddress, address cleanEnergyAddress) {
         owner = msg.sender;
         ecoCoinInstance = EcoCoin(_ecoCoinAddress);
-        ecoCoinInstance.transferOwnership(address(this));
 
         // Set the addresses of the foundations
         foundationAddresses[Foundation.SaveTheOceans] = saveTheOceansAddress;
@@ -65,8 +65,9 @@ contract DonationContract {
 
         require(foundationAddress != address(0), "Invalid foundation");
 
-        // Transfer the donation amount to the foundation
-        payable(foundationAddress).transfer(msg.value);
+        // Transfer the donation amount to the foundation using call pattern
+        (bool success, ) = payable(foundationAddress).call{value: msg.value}("");
+        require(success, "Transfer failed");
 
         // Update the donation history
         foundationDonations[foundation] += msg.value;
@@ -83,12 +84,19 @@ contract DonationContract {
 
     function withdraw() public onlyOwner {
         uint256 balance = address(this).balance;
-        payable(owner).transfer(balance);
+        (bool success, ) = payable(owner).call{value: balance}("");
+        require(success, "Withdraw failed");
+    }
+
+    function transferOwnership(address newOwner) public onlyOwner {
+        require(newOwner != address(0), "New owner is the zero address");
+        address previousOwner = owner;
+        owner = newOwner;
+        emit OwnershipTransferred(previousOwner, newOwner);
     }
 
     function updateEcoCoinAddress(address _ecoCoinAddress) public onlyOwner {
         ecoCoinInstance = EcoCoin(_ecoCoinAddress);
-        ecoCoinInstance.transferOwnership(address(this));
     }
 }
 

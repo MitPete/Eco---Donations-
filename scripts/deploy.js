@@ -19,6 +19,9 @@ async function main() {
   );
   await donation.deployed();
   console.log(`DonationContract deployed to ${donation.address}`);
+
+  await ecoCoin.transferOwnership(donation.address);
+  console.log("EcoCoin ownership transferred to DonationContract");
 }
 
 main().catch((error) => {
