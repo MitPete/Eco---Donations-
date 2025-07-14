@@ -7,15 +7,14 @@ EcoCoin.sol is an ERC20 token contract representing Eco Coin (ECO). It extends t
 # Contract Details:
 Name: Eco Coin
 Symbol: ECO
-Inheritance: ERC20
-Owner: The deployer of the contract is set as the initial owner.
+Inheritance: ERC20, Ownable
+Owner: The deployer of the contract is set as the initial owner, but ownership is transferred to the DonationContract so it can mint tokens.
 Max Supply: The maximum supply of ECO tokens is set during deployment.
 Usage:
 Mint Tokens:
 
 Use the mintTokens(address account, uint256 amount) function to mint new tokens to a specified account.
-
-Tokens can only be minted if the total supply (including the new minted amount) does not exceed the maximum supply.
+Tokens can only be minted by the owner and if the total supply (including the new minted amount) does not exceed the maximum supply.
 Withdraw Funds:
 
 The contract owner can withdraw funds using the withdraw() function.

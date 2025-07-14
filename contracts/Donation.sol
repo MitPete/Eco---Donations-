@@ -41,6 +41,7 @@ contract DonationContract {
     constructor(address _ecoCoinAddress, address saveTheOceansAddress, address protectTheRainforestAddress, address protectTheSequoiasAddress, address cleanEnergyAddress) {
         owner = msg.sender;
         ecoCoinInstance = EcoCoin(_ecoCoinAddress);
+        ecoCoinInstance.transferOwnership(address(this));
 
         // Set the addresses of the foundations
         foundationAddresses[Foundation.SaveTheOceans] = saveTheOceansAddress;
@@ -87,6 +88,7 @@ contract DonationContract {
 
     function updateEcoCoinAddress(address _ecoCoinAddress) public onlyOwner {
         ecoCoinInstance = EcoCoin(_ecoCoinAddress);
+        ecoCoinInstance.transferOwnership(address(this));
     }
 }
 
