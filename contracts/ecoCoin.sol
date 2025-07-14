@@ -2,27 +2,25 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract EcoCoin is ERC20 {
-    address payable public owner;
+contract EcoCoin is ERC20, Ownable {
     uint256 public maxSupply;
     uint256 public totalMintedSupply;
 
     constructor(uint256 _maxSupply) ERC20("ECO Coin", "ECO") {
-        owner = payable(msg.sender);
         maxSupply = _maxSupply;
     }
 
-    function mintTokens(address account, uint256 amount) external {
+    function mintTokens(address account, uint256 amount) external onlyOwner {
         require(totalSupply() + amount <= maxSupply, "Total supply cannot exceed maximum supply");
         _mint(account, amount);
         emit Transfer(address(0), account, amount);
     }
 
-    function withdraw() public {
-        require(msg.sender == owner, "Only contract owner can withdraw funds");
+    function withdraw() public onlyOwner {
         uint256 balance = address(this).balance;
-        owner.transfer(balance);
+        payable(owner()).transfer(balance);
     }
 
     function _mint(address account, uint256 amount) internal virtual override {

@@ -1,30 +1,26 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const [deployer, saveTheOceans, protectTheRainforest, protectTheSequoias, cleanEnergy] = await hre.ethers.getSigners();
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  const EcoCoin = await hre.ethers.getContractFactory("EcoCoin");
+  const maxSupply = hre.ethers.utils.parseEther("1000000");
+  const ecoCoin = await EcoCoin.deploy(maxSupply);
+  await ecoCoin.deployed();
+  console.log(`EcoCoin deployed to ${ecoCoin.address}`);
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+  const DonationContract = await hre.ethers.getContractFactory("DonationContract");
+  const donation = await DonationContract.deploy(
+    ecoCoin.address,
+    saveTheOceans.address,
+    protectTheRainforest.address,
+    protectTheSequoias.address,
+    cleanEnergy.address
   );
+  await donation.deployed();
+  console.log(`DonationContract deployed to ${donation.address}`);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
