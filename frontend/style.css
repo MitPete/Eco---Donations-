@@ -2,51 +2,86 @@ body {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f5f7fa;
+  background: linear-gradient(#f5f7fa, #e9ecef);
   color: #333;
 }
+
 header {
-  background: #0a6dff;
+  background: linear-gradient(90deg, #1e3c72, #2a5298);
   color: white;
-  padding: 1em 0;
+  padding: 1em;
   text-align: center;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 nav a {
   margin: 0 10px;
   color: white;
   text-decoration: none;
+  font-weight: 600;
 }
+
+nav a:hover {
+  text-decoration: underline;
+}
+
 .wallet {
   margin-top: 0.5em;
 }
+
 .balance {
   margin-left: 10px;
 }
+
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
   padding: 2em;
 }
+
+.card {
+  background: #fff;
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2em;
+}
+
 .hero {
   text-align: center;
   padding: 4em 0;
-  background: #e1edff;
+  background: linear-gradient(135deg, #dfe9f3 0%, #e1edff 100%);
   border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 .hero .cta {
   background: #0a6dff;
   color: white;
   padding: 0.7em 1.2em;
   border-radius: 4px;
   text-decoration: none;
+  transition: background 0.3s;
+  display: inline-block;
+  margin-top: 1em;
 }
+
+.hero .cta:hover {
+  background: #084ec8;
+}
+
 section.info {
   margin-top: 3em;
+  background: #fff;
+  padding: 1.5em;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
+
 button {
   background: #0a6dff;
   color: white;
@@ -54,25 +89,57 @@ button {
   padding: 0.6em 1.2em;
   border-radius: 4px;
   cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
 }
+
+button:hover {
+  background: #084ec8;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
 .intro {
   margin-bottom: 1.5em;
 }
-input, select, textarea {
+
+input,
+select,
+textarea {
   width: 100%;
   padding: 0.5em;
   margin-bottom: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
-th, td {
+
+th,
+td {
   padding: 0.5em;
   border-bottom: 1px solid #ccc;
 }
+
+th {
+  background: #f0f4f9;
+  text-align: left;
+}
+
 tbody tr:nth-child(even) {
   background: #eef1f6;
+}
+
+tbody tr:hover {
+  background: #f6faff;
 }
 
 @media (max-width: 600px) {
