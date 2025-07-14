@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Donate - Eco Donations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 </head>
@@ -15,10 +18,18 @@
       <a href="donate.html">Donate</a>
       <a href="history.html">Donation History</a>
     </nav>
+    <div class="wallet">
+      <span id="walletAddress"></span>
+      <span id="walletBalance" class="balance"></span>
+      <button onclick="connectWallet()" id="connectButton">Connect Wallet</button>
+    </div>
   </header>
   <main class="container">
     <h2>Make a Donation</h2>
-    <button onclick="connectWallet()" id="connectButton">Connect Wallet</button>
+    <p class="intro">
+      Choose a foundation, enter an optional note, and specify how much ETH you would like
+      to donate. Once the transaction is confirmed your ECO balance will update automatically.
+    </p>
     <form id="donationForm" onsubmit="return sendDonation()">
       <label for="foundation">Foundation</label>
       <select id="foundation">

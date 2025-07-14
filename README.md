@@ -21,6 +21,10 @@ npx hardhat run scripts/deploy.js --network <network>
 
 The deploy script creates `EcoCoin` and `DonationContract` and transfers ownership of the token to the donation contract so it can mint new tokens.
 
+## Frontend
+
+Open `frontend/index.html` in a browser with MetaMask installed. Use the **Connect Wallet** button in the header to link your account, make donations and view your ECO balance and history.
+
 ## Contracts
 
 ### EcoCoin.sol
