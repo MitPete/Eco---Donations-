@@ -27,6 +27,15 @@
       ],
       "name": "DonationMade",
       "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        { "indexed": true, "internalType": "address", "name": "donor", "type": "address" },
+        { "indexed": false, "internalType": "uint256", "name": "balance", "type": "uint256" }
+      ],
+      "name": "TokenBalanceUpdated",
+      "type": "event"
     }
   ]
 }

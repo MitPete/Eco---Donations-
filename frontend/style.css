@@ -74,3 +74,16 @@ th, td {
 tbody tr:nth-child(even) {
   background: #eef1f6;
 }
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  nav {
+    margin-bottom: 1em;
+  }
+  .container {
+    padding: 1em;
+  }
+}

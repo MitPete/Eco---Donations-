@@ -31,9 +31,11 @@ describe("DonationContract", function () {
     const donor = foundations[4];
     const amount = ethers.utils.parseEther("1");
 
-    await expect(
-      donation.connect(donor).donate(0, "test message", { value: amount })
-    ).to.emit(donation, "DonationMade");
+    const tx = donation.connect(donor).donate(0, "test message", { value: amount });
+    await expect(tx).to.emit(donation, "DonationMade");
+    await expect(tx)
+      .to.emit(donation, "TokenBalanceUpdated")
+      .withArgs(donor.address, ethers.utils.parseEther("10"));
 
     expect(await ecoCoin.balanceOf(donor.address)).to.equal(
       ethers.utils.parseEther("10")
