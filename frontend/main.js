@@ -1,7 +1,8 @@
 // frontend/src/main.js
 
 import { ethers } from 'ethers';
-import contracts from './contracts.json';
+// dynamic addresses written by the deploy script
+import contracts from './src/contracts.json';
 
 console.log('%c[Eco-Donations] Ethers v' + ethers.version, 'color:green;');
 console.log('[main] Loaded contracts:', contracts);
@@ -36,10 +37,15 @@ async function updateBalance() {
   if (!ecoCoinContract) {
     ecoCoinContract = new ethers.Contract(ecoCoinAddress, ecoCoinAbi, provider);
   }
-  const addr = await signer.getAddress();
-  const bal  = await ecoCoinContract.balanceOf(addr);
-  document.getElementById('walletAddress').textContent = clip(addr);
-  document.getElementById('walletBalance').textContent = ethers.formatEther(bal) + ' ECO';
+  try {
+    const addr = await signer.getAddress();
+    const bal  = await ecoCoinContract.balanceOf(addr);
+    document.getElementById('walletAddress').textContent = clip(addr);
+    document.getElementById('walletBalance').textContent =
+      ethers.formatEther(bal) + ' ECO';
+  } catch (err) {
+    console.error('[updateBalance]', err);
+  }
 }
 
 // ───────── Auto-detect wallet on page load ─────────
@@ -49,9 +55,10 @@ if (window.ethereum) {
     if (accts.length) {
       signer = await provider.getSigner();
       donationContract = new ethers.Contract(donationContractAddress, donationAbi, signer);
-      const btn = document.getElementById('connectButton');
-      if (btn) {
-        btn.textContent = 'Wallet Connected';
+      const btn  = document.getElementById('connectButton');
+      const addr = accts[0];
+      if (btn && addr) {
+        btn.textContent = clip(addr);
         btn.classList.add('connected');
       }
       updateBalance();
@@ -70,9 +77,10 @@ async function connectWallet() {
   signer   = await provider.getSigner();
   donationContract = new ethers.Contract(donationContractAddress, donationAbi, signer);
 
-  const btn = document.getElementById('connectButton');
+  const btn  = document.getElementById('connectButton');
+  const addr = await signer.getAddress();
   if (btn) {
-    btn.textContent = 'Wallet Connected';
+    btn.textContent = clip(addr);
     btn.classList.add('connected');
   }
 
@@ -107,15 +115,20 @@ async function sendDonation(ev) {
   }
 
   console.log('[sendDonation] →', val, 'ETH, foundation', f);
-  const tx = await donationContract.donate(f, msg, {
-    value: ethers.parseEther(val)
-  });
-  console.log('[sendDonation] tx', tx.hash);
-  document.getElementById('txStatus').textContent = 'Waiting for confirmation…';
-  await tx.wait();
-  console.log('[sendDonation] confirmed', tx.hash);
-  document.getElementById('txStatus').textContent = '✅ Donation confirmed!';
-  updateBalance();
+  try {
+    const tx = await donationContract.donate(f, msg, {
+      value: ethers.parseEther(val)
+    });
+    console.log('[sendDonation] tx', tx.hash);
+    document.getElementById('txStatus').textContent = 'Waiting for confirmation…';
+    await tx.wait();
+    console.log('[sendDonation] confirmed', tx.hash);
+    document.getElementById('txStatus').textContent = '✅ Donation confirmed!';
+    updateBalance();
+  } catch (err) {
+    console.error('[sendDonation]', err);
+    document.getElementById('txStatus').textContent = '❌ ' + (err.message || err);
+  }
 
   // If you’re on history.html, re-load immediately
   if (document.getElementById('donationTable')) {
@@ -143,21 +156,30 @@ async function loadHistory() {
   [totalsUL, topUL, personalTB, tableBody].forEach(el => el && (el.innerHTML = ''));
 
   // 1) foundation totals
-  for (let i=0; i<names.length; i++) {
-    const wei = await contract.foundationDonations(i);
-    const li  = document.createElement('li');
-    li.textContent = `${names[i]}: ${ethers.formatEther(wei)} ETH`;
-    totalsUL.appendChild(li);
+  for (let i = 0; i < names.length; i++) {
+    try {
+      const wei = await contract.foundationDonations(i);
+      const li  = document.createElement('li');
+      li.textContent = `${names[i]}: ${ethers.formatEther(wei)} ETH`;
+      totalsUL.appendChild(li);
+    } catch (err) {
+      console.error('foundationDonations', err);
+    }
   }
 
   // 2) grab raw logs, decode
-  const logs = await provider.getLogs({
-    address:   donationContractAddress,
-    fromBlock: 0,
-    toBlock:   'latest',
-    topics:    [ DONATION_TOPIC ]
-  });
-  console.log('[loadHistory] raw logs found:', logs.length);
+  let logs = [];
+  try {
+    logs = await provider.getLogs({
+      address:   donationContractAddress,
+      fromBlock: 0,
+      toBlock:   'latest',
+      topics:    [ DONATION_TOPIC ]
+    });
+    console.log('[loadHistory] raw logs found:', logs.length);
+  } catch (err) {
+    console.error('getLogs', err);
+  }
 
   const me = (await provider.send('eth_accounts', []))[0]?.toLowerCase() ?? null;
   const sums = {};
