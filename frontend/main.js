@@ -37,7 +37,13 @@ async function updateBalance() {
     ecoCoinContract = new ethers.Contract(ecoCoinAddress, ecoCoinAbi, provider);
   }
   const addr = await signer.getAddress();
-  const bal  = await ecoCoinContract.balanceOf(addr);
+  let bal;
+  try {
+    bal = await ecoCoinContract.balanceOf(addr);
+  } catch (err) {
+    console.warn('[updateBalance] balanceOf failed →', err);
+    bal = 0n;
+  }
   document.getElementById('walletAddress').textContent = clip(addr);
   document.getElementById('walletBalance').textContent = ethers.formatEther(bal) + ' ECO';
 }
