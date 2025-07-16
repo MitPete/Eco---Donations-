@@ -2,14 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- relaxed CSP for local dev -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eco Donations</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- fonts & icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+
+ 
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header -->
   <header>
     <h1>Eco Donations</h1>
     <nav>
@@ -23,32 +31,93 @@
       <button onclick="connectWallet()" id="connectButton">Connect Wallet</button>
     </div>
   </header>
+
+  <!-- Main -->
   <main class="container">
-    <section class="hero card">
-      <h2>Support Our Planet</h2>
-      <p>Donate to environmental foundations and get rewarded with ECO Coin tokens.</p>
-      <a class="cta" href="donate.html">Make a Donation</a>
+    <!-- Hero -->
+    <section class="hero--video card">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="assets/hero-bg.mp4" type="video/mp4">
+      </video>
+      <div class="hero-content">
+        <h2>Protect <span role="img" aria-label="Earth">🌍</span> and Earn ECO</h2>
+        <p>Donate to vetted environmental foundations and receive Eco Coin rewards for every contribution.</p>
+        <a class="cta" href="donate.html">Make a Donation</a>
+      </div>
     </section>
 
+    <!-- Impact metrics -->
+    <section class="card">
+      <h3 style="margin-top:0">Impact Snapshot</h3>
+      <div class="metrics">
+        <div class="metric"><i class="fa-solid fa-hand-holding-dollar"></i><span class="num" id="kpiTotalDonated">0</span><span class="label">Total Donated</span></div>
+        <div class="metric"><i class="fa-solid fa-leaf"></i><span class="num" id="kpiCarbon">0</span><span class="label">CO₂ Offset</span></div>
+        <div class="metric"><i class="fa-solid fa-user-group"></i><span class="num" id="kpiDonors">0</span><span class="label">Unique Donors</span></div>
+        <div class="metric"><i class="fa-solid fa-coins"></i><span class="num" id="kpiEcoMinted">0</span><span class="label">ECO Minted</span></div>
+      </div>
+    </section>
+
+    <!-- How it works -->
     <section class="info card">
       <h3>How It Works</h3>
-      <p>
-        Each donation is sent directly to the chosen foundation. For every ether donated
-        you earn 10 ECO tokens as a thank you for supporting environmental causes.
-      </p>
-      <p>
-        Connect your wallet to track your ECO balance and view your full donation history.
-      </p>
+      <p>Pick a foundation, choose an amount, sign the transaction in your wallet. For each 1 ETH donated you’ll automatically get 10 ECO tokens.</p>
     </section>
 
+    <!-- Foundations -->
+    <section class="card">
+      <h3 style="margin-top:0">Our Partner Foundations</h3>
+      <div class="foundations">
+        <div class="foundation">
+          <span class="badge" id="badge-oceans">Raised 0 ETH</span>
+          <img src="https://unpkg.com/simple-icons@latest/icons/oceanprotocol.svg" alt="Save The Oceans" loading="lazy">
+          <h4>Save The Oceans</h4>
+          <p>Funding marine conservation and plastic clean-ups worldwide.</p>
+          <a class="mini-cta" href="donate.html?foundation=0">Donate</a>
+        </div>
+        <div class="foundation">
+          <span class="badge" id="badge-forest">Raised 0 ETH</span>
+          <img src="https://unpkg.com/simple-icons@latest/icons/leaflet.svg" alt="Protect The Rainforest" loading="lazy">
+          <h4>Protect The Rainforest</h4>
+          <p>Safeguarding biodiversity hotspots across the Amazon basin.</p>
+          <a class="mini-cta" href="donate.html?foundation=1">Donate</a>
+        </div>
+        <div class="foundation">
+          <span class="badge" id="badge-sequoia">Raised 0 ETH</span>
+          <img src="https://unpkg.com/simple-icons@latest/icons/tree.svg" alt="Protect The Sequoias" loading="lazy">
+          <h4>Protect The Sequoias</h4>
+          <p>Preserving ancient giants against wildfires & climate pressure.</p>
+          <a class="mini-cta" href="donate.html?foundation=2">Donate</a>
+        </div>
+        <div class="foundation">
+          <span class="badge" id="badge-energy">Raised 0 ETH</span>
+          <img src="https://unpkg.com/simple-icons@latest/icons/powerbi.svg" alt="Clean Energy" loading="lazy">
+          <h4>Clean Energy</h4>
+          <p>Accelerating renewable installations in underserved regions.</p>
+          <a class="mini-cta" href="donate.html?foundation=3">Donate</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tokenomics -->
     <section class="info card">
-      <h3>About ECO Coin</h3>
-      <p>
-        ECO is an ERC20 token with a fixed supply issued by this platform. You can hold it
-        as a proof of your contributions or transfer it just like any other token.
-      </p>
+      <h3>ECO Tokenomics at a Glance</h3>
+      <ul style="margin:0;padding-left:1.25rem;line-height:1.65">
+        <li>🪙 <strong>Fixed supply — 1 million ECO</strong></li>
+        <li>🔗 ERC-20 compliant, transferable & DeFi-ready</li>
+        <li>🎗️ Optional soul-bound proof-of-impact</li>
+        <li>📊 On-chain governance coming Q4 2025</li>
+      </ul>
     </section>
   </main>
-  <script src="app.js"></script>
+
+  <!-- Footer -->
+  <footer>
+    <span>© 2025 Eco Donations. Built with 💚 for the planet.</span> •
+    <a href="#">Terms</a> • <a href="#">Privacy</a> •
+    <a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a>
+  </footer>
+
+  <!-- app logic -->
+  <script type="module" src="/main.js"></script>
 </body>
 </html>

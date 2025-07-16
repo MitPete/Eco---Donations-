@@ -2,13 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 script-src 'self' 'unsafe-eval' 'unsafe-inline';
+                 style-src  'self' 'unsafe-inline' https:;
+                 font-src   https:;
+                 img-src    'self' https: data:;
+                 connect-src *;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Donate - Eco Donations</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+  <title>Donate – Eco Donations</title>
+
+  <!-- fonts & icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -24,33 +34,36 @@
       <button onclick="connectWallet()" id="connectButton">Connect Wallet</button>
     </div>
   </header>
+
   <main class="container">
     <div class="card">
-    <h2>Make a Donation</h2>
-    <p class="intro">
-      Choose a foundation, enter an optional note, and specify how much ETH you would like
-      to donate. Once the transaction is confirmed your ECO balance will update automatically.
-    </p>
-    <form id="donationForm" onsubmit="return sendDonation()">
-      <label for="foundation">Foundation</label>
-      <select id="foundation">
-        <option value="0">Save The Oceans</option>
-        <option value="1">Protect The Rainforest</option>
-        <option value="2">Protect The Sequoias</option>
-        <option value="3">Clean Energy</option>
-      </select>
+      <h2>Make a Donation</h2>
+      <p class="intro">Enter an amount, add an optional note, sign the transaction, and watch your ECO balance grow.</p>
 
-      <label for="message">Message</label>
-      <textarea id="message" rows="3"></textarea>
+      <!-- pass the event object so we can prevent default submit -->
+      <form id="donationForm" onsubmit="sendDonation(event)">
+        <label for="foundation">Foundation</label>
+        <select id="foundation">
+          <option value="0">Save The Oceans</option>
+          <option value="1">Protect The Rainforest</option>
+          <option value="2">Protect The Sequoias</option>
+          <option value="3">Clean Energy</option>
+        </select>
 
-      <label for="amount">Amount (ETH)</label>
-      <input type="number" id="amount" step="0.01" min="0" required />
+        <label for="message">Message</label>
+        <textarea id="message" rows="3"></textarea>
 
-      <button type="submit">Donate</button>
-    </form>
-    <div id="txStatus"></div>
+        <label for="amount">Amount (ETH)</label>
+        <input type="number" id="amount" step="0.01" min="0" required />
+
+        <button type="submit">Donate</button>
+      </form>
+
+      <div id="txStatus"></div>
     </div>
   </main>
-  <script src="app.js"></script>
+
+  <!-- only one module script -->
+  <script type="module" src="/main.js"></script>
 </body>
 </html>

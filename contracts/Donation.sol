@@ -39,7 +39,13 @@ contract DonationContract {
         _;
     }
 
-    constructor(address _ecoCoinAddress, address saveTheOceansAddress, address protectTheRainforestAddress, address protectTheSequoiasAddress, address cleanEnergyAddress) {
+    constructor(
+        address _ecoCoinAddress,
+        address saveTheOceansAddress,
+        address protectTheRainforestAddress,
+        address protectTheSequoiasAddress,
+        address cleanEnergyAddress
+    ) {
         owner = msg.sender;
         ecoCoinInstance = EcoCoin(_ecoCoinAddress);
 
@@ -98,5 +104,7 @@ contract DonationContract {
     function updateEcoCoinAddress(address _ecoCoinAddress) public onlyOwner {
         ecoCoinInstance = EcoCoin(_ecoCoinAddress);
     }
-}
 
+    // ✅ This allows the contract to receive ETH directly (e.g., in tests)
+    receive() external payable {}
+}
