@@ -2,109 +2,65 @@
 pragma solidity ^0.8.0;
 
 import "./EcoCoin.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract DonationContract {
+contract DonationContract is ERC721URIStorage {
+    enum Foundation { SaveTheOceans, ProtectTheRainforest, ProtectTheSequoias, CleanEnergy }
+
+    EcoCoin public eco;
     address public owner;
-    EcoCoin public ecoCoinInstance;
-
-    struct Donation {
-        address sender;
-        uint256 amount;
-        string message;
-    }
-
-    enum Foundation {
-        SaveTheOceans,
-        ProtectTheRainforest,
-        ProtectTheSequoias,
-        CleanEnergy
-    }
-
-    mapping(Foundation => uint256) public foundationDonations;
-    mapping(Foundation => Donation[]) public foundationDonationHistory;
     mapping(Foundation => address) public foundationAddresses;
+    mapping(uint256 => Foundation) private _tokenFoundation;
+    string[4] private _uris;       // one URI per foundation
+    uint256 public nextId = 1;
 
-    event DonationMade(
-        Foundation foundation,
-        address sender,
-        uint256 amount,
-        string message
-    );
-
-    event TokenBalanceUpdated(address indexed donor, uint256 balance);
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only contract owner can perform this action");
-        _;
-    }
+    event DonationMade(Foundation f, address sender, uint amount, string msg_);
+    event TokenBalanceUpdated(address donor, uint256 bal);
 
     constructor(
-        address _ecoCoinAddress,
-        address saveTheOceansAddress,
-        address protectTheRainforestAddress,
-        address protectTheSequoiasAddress,
-        address cleanEnergyAddress
-    ) {
+        address ecoAddr,
+        address oceansAddr,
+        address rainAddr,
+        address sequoiasAddr,
+        address energyAddr
+    )
+        ERC721("Eco Donation Badge", "ECO-BADGE")
+    {
         owner = msg.sender;
-        ecoCoinInstance = EcoCoin(_ecoCoinAddress);
+        eco   = EcoCoin(ecoAddr);
 
-        // Set the addresses of the foundations
-        foundationAddresses[Foundation.SaveTheOceans] = saveTheOceansAddress;
-        foundationAddresses[Foundation.ProtectTheRainforest] = protectTheRainforestAddress;
-        foundationAddresses[Foundation.ProtectTheSequoias] = protectTheSequoiasAddress;
-        foundationAddresses[Foundation.CleanEnergy] = cleanEnergyAddress;
+        foundationAddresses[Foundation.SaveTheOceans]        = oceansAddr;
+        foundationAddresses[Foundation.ProtectTheRainforest] = rainAddr;
+        foundationAddresses[Foundation.ProtectTheSequoias]   = sequoiasAddr;
+        foundationAddresses[Foundation.CleanEnergy]          = energyAddr;
+
+        // for now EVERY foundation returns the Oceans badge
+        _uris[0] = "/badges/oceans.json";
+        _uris[1] = "/badges/oceans.json";
+        _uris[2] = "/badges/oceans.json";
+        _uris[3] = "/badges/oceans.json";
     }
 
-    function donate(Foundation foundation, string memory message) public payable {
-        require(msg.value > 0, "Donation amount must be greater than 0");
+    function donate(Foundation f, string calldata message) external payable {
+        require(msg.value > 0, "Send ETH");
+        eco.mintTokens(msg.sender, msg.value * 10);
+        emit TokenBalanceUpdated(msg.sender, eco.balanceOf(msg.sender));
 
-        // Mint tokens to the donor's address
-        ecoCoinInstance.mintTokens(msg.sender, msg.value * 10);
+        (bool ok,) = payable(foundationAddresses[f]).call{value: msg.value}("");
+        require(ok, "Transfer failed");
 
-        // Get the updated token balance for the donor
-        uint256 donorBalance = ecoCoinInstance.balanceOf(msg.sender);
+        uint256 id = nextId++;
+        _safeMint(msg.sender, id);
+        _tokenFoundation[id] = f;
 
-        emit TokenBalanceUpdated(msg.sender, donorBalance);
-
-        address foundationAddress = foundationAddresses[foundation];
-
-        require(foundationAddress != address(0), "Invalid foundation");
-
-        // Transfer the donation amount to the foundation using call pattern
-        (bool success, ) = payable(foundationAddress).call{value: msg.value}("");
-        require(success, "Transfer failed");
-
-        // Update the donation history
-        foundationDonations[foundation] += msg.value;
-        foundationDonationHistory[foundation].push(
-            Donation({
-                sender: msg.sender,
-                amount: msg.value,
-                message: message
-            })
-        );
-
-        emit DonationMade(foundation, msg.sender, msg.value, message);
+        emit DonationMade(f, msg.sender, msg.value, message);
     }
 
-    function withdraw() public onlyOwner {
-        uint256 balance = address(this).balance;
-        (bool success, ) = payable(owner).call{value: balance}("");
-        require(success, "Withdraw failed");
+    // every tokenId returns URI based on its foundation
+    function tokenURI(uint256 id) public view override returns (string memory) {
+        require(_exists(id), "no token");
+        return _uris[uint8(_tokenFoundation[id])];
     }
 
-    function transferOwnership(address newOwner) public onlyOwner {
-        require(newOwner != address(0), "New owner is the zero address");
-        address previousOwner = owner;
-        owner = newOwner;
-        emit OwnershipTransferred(previousOwner, newOwner);
-    }
-
-    function updateEcoCoinAddress(address _ecoCoinAddress) public onlyOwner {
-        ecoCoinInstance = EcoCoin(_ecoCoinAddress);
-    }
-
-    // ✅ This allows the contract to receive ETH directly (e.g., in tests)
     receive() external payable {}
 }

@@ -1,0 +1,47 @@
+/* ------------ Eco Coin  (scoped) ------------ */
+.eco-coin{ --d:220px;--t:28px;--edge:80;--deg:4.5deg;--spin:4s;
+  --g1:#d4af37;--g2:#f0c24e;--g3:#a67c00;--g4:#ffd700;
+  --rim:#8b6b00;--detail:#f7e1b5;--tilt-x:0deg;--tilt-y:0deg;
+  width:var(--d);height:var(--d);position:relative;perspective:1000px;
+  transform-style:preserve-3d;animation:spin var(--spin) linear infinite;
+}
+@keyframes spin{to{transform:perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) rotateY(360deg);}}
+
+/* faces */
+.eco-coin .oval,.eco-coin .oval-back{position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(145deg,var(--g2),var(--g1),var(--g3));
+  display:flex;align-items:center;justify-content:center;backface-visibility:hidden;
+  box-shadow:0 4px 10px rgb(0 0 0 /.25);
+}
+.eco-coin .oval      {transform:translateZ(calc(var(--t)/2));}
+.eco-coin .oval-back {transform:translateZ(calc(-1*var(--t)/2)) rotateY(180deg);}
+
+.eco-coin .inner-oval{width:78%;height:78%;border-radius:50%;
+  background:radial-gradient(circle at 50% 35%,var(--g4) 0%,var(--g2) 65%,var(--g1) 100%);
+  box-shadow:inset 0 2px 6px rgb(0 0 0 /.35),inset 0 -1px 3px rgb(255 255 255 /.2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+
+.eco-coin .coin-icon,
+.eco-coin .coin-icon-back{font-size:2.8rem;margin-bottom:4px;color:#28a745;
+  filter:drop-shadow(0 2px 2px rgb(0 0 0 /.35));}
+.eco-coin .coin-label{font:700 1.25rem/1.1 "Poppins",sans-serif;letter-spacing:2px;
+  text-transform:uppercase;-webkit-background-clip:text;color:transparent;
+  background:linear-gradient(90deg,#1e7e34 0%,#34eb6a 100%);text-shadow:0 1px 3px rgb(0 0 0 /.35);}
+
+/* edge */
+.eco-coin .coin__edge{position:absolute;inset:0;transform-style:preserve-3d;}
+.eco-coin .coin__edge div{--h:calc(3.1416*var(--d)/var(--edge));position:absolute;
+  width:var(--t);height:var(--h);
+  transform:translateY(calc(var(--d)/2 - var(--h)/2))
+            translateX(calc(var(--d)/2 - var(--t)/2))
+            rotateZ(calc(var(--i)*var(--deg) + 90deg))
+            translateX(calc(var(--d)/2)) rotateY(90deg);
+  background:linear-gradient(90deg,var(--rim)0 20%,var(--detail)20% 35%,var(--rim)35% 100%);
+  background-size:8px 100%;border-right:1px solid rgb(0 0 0 /.1);
+}
+
+/* optional front highlight */
+.eco-coin .oval::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgb(255 255 255 /.9)0%,transparent 70%);
+  filter:blur(4px);pointer-events:none;}

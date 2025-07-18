@@ -12,18 +12,16 @@ async function main() {
   console.log("⛓  deploying with account:", deployer.address);
 
   /* ------------------------------------------------------------------
-     2. Deploy EcoCoin (now with a maxSupply arg)
-        constructor(uint256 _maxSupply) ERC20("ECO Coin", "ECO")
+     2. Deploy EcoCoin (constructor(uint256 _maxSupply) ERC20("ECO Coin", "ECO"))
   ------------------------------------------------------------------ */
   const EcoCoin = await hre.ethers.getContractFactory("EcoCoin");
-  // set your max supply (e.g. 1 000 000 tokens, 18 decimals)
   const maxSupply = hre.ethers.utils.parseUnits("1000000", 18);
   const eco       = await EcoCoin.deploy(maxSupply);
   await eco.deployed();
   console.log("✅ EcoCoin          :", eco.address);
 
   /* ------------------------------------------------------------------
-     3. Deploy DonationContract (5-arg constructor)
+     3. Deploy DonationContract (constructor args unchanged)
   ------------------------------------------------------------------ */
   const Donation = await hre.ethers.getContractFactory("DonationContract");
   const donation = await Donation.deploy(
@@ -45,15 +43,35 @@ async function main() {
   /* ------------------------------------------------------------------
      5. Persist addresses for the front-end
   ------------------------------------------------------------------ */
+  const frontDir = path.join(__dirname, "../frontend/src");
+  fs.mkdirSync(frontDir, { recursive: true });
+
   const out = {
     ecoCoin:          eco.address,
     donationContract: donation.address,
-    chainId:          31337
+    chainId:          hre.network.config.chainId || 31337
   };
-  const outfile = path.join(__dirname, "../frontend/src/contracts.json");
-  fs.mkdirSync(path.dirname(outfile), { recursive: true });
-  fs.writeFileSync(outfile, JSON.stringify(out, null, 2));
-  console.log("📝  Wrote addresses →", outfile);
+  fs.writeFileSync(
+    path.join(frontDir, "contracts.json"),
+    JSON.stringify(out, null, 2)
+  );
+  console.log("📝  Wrote addresses →", path.join(frontDir, "contracts.json"));
+
+  /* ------------------------------------------------------------------
+     6. Copy fresh ABIs into the front-end
+  ------------------------------------------------------------------ */
+  const ecoArtifact     = await hre.artifacts.readArtifact("EcoCoin");
+  const donationArtifact = await hre.artifacts.readArtifact("DonationContract");
+
+  fs.writeFileSync(
+    path.join(frontDir, "EcoCoin.json"),
+    JSON.stringify(ecoArtifact, null, 2)
+  );
+  fs.writeFileSync(
+    path.join(frontDir, "DonationContract.json"),
+    JSON.stringify(donationArtifact, null, 2)
+  );
+  console.log("📝  Wrote ABIs → EcoCoin.json, DonationContract.json");
 }
 
 main()

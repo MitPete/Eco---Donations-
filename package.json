@@ -6,7 +6,7 @@
     "vite": "^7.0.4"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.9.3",
+    "@openzeppelin/contracts": "^4.9.6",
     "ethers": "5.7.2"
   }
 }
