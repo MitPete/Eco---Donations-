@@ -1,23 +1,36 @@
 # Eco Donations Platform
 
-Eco Donations is a full-stack dApp for making Ethereum-based donations to environmental foundations, rewarding donors with ECO tokens, and tracking impact transparently on-chain.
+Eco Donations is a full-stack decentralized application (dApp) for making Ethereum-based donations to environmental foundations. Donors are rewarded with ECO tokens, and all activity is tracked transparently on-chain.
+
+## Project Architecture
+
+- **Smart Contracts (Solidity, Hardhat):**
+  - `EcoCoin.sol`: ERC20 token contract for ECO Coin. Only the owner (DonationContract) can mint new tokens. Maximum supply is set at deployment.
+  - `Donation.sol`: Manages donations to predefined foundations, records donor history, and mints ECO tokens as rewards. Ether is transferred securely using the `call` pattern.
+- **Frontend (HTML, CSS, JS):**
+  - Modern, unified UI for donation, history, dashboard, and foundation pages.
+  - Connects to Ethereum via MetaMask and local ethers.js (CSP-compliant).
+  - Displays donation forms, history, stats, badges, and partner foundations.
+- **Deployment Scripts:**
+  - Hardhat scripts for deploying contracts and transferring ownership.
+- **Testing:**
+  - Automated tests for smart contracts using Hardhat and Mocha/Chai.
 
 ## Features
 
-- **Unified, Modern Frontend**: Professional UI with a single CSS file for all pages, fully responsive and cross-browser compatible (Chrome, Safari, etc).
-- **Donation System**: Donate ETH to featured foundations and earn ECO tokens.
-- **Partner Foundations**: Discover and support ocean, rainforest, sequoia, and clean energy projects.
-- **Dashboard**: View your ECO balance, donation stats, and badges.
-- **Donation History**: Track your past donations and impact.
-- **Smart Contracts**: Secure, audited Solidity contracts for ERC20 ECO token and donation logic.
-- **MetaMask Integration**: Connect your wallet, send transactions, and view balances.
-- **Local Ethers.js**: CSP-compliant, no external dependencies for blockchain interactions.
+- Donate ETH to featured environmental foundations.
+- Earn ECO tokens for every donation (10 ECO per ETH).
+- View donation history and impact.
+- Dashboard for ECO balance, badges, and stats.
+- Discover and support partner foundations.
+- Secure, transparent blockchain transactions.
+- Unified, modern frontend with responsive design and cross-browser support.
 
 ## Tech Stack
 
-- **Frontend**: HTML, CSS (`frontend/styles.css`), JavaScript (modules, ethers.js)
-- **Smart Contracts**: Solidity, Hardhat
-- **Backend/Server**: Static file server (Python HTTP server recommended for local dev)
+- **Smart Contracts:** Solidity, Hardhat
+- **Frontend:** HTML, CSS (`frontend/styles.css`), JavaScript (modules, ethers.js)
+- **Server:** Static file server (Python HTTP server recommended for local dev)
 
 ## Getting Started
 
@@ -29,7 +42,7 @@ cd Eco---Donations-
 npm install
 ```
 
-### 2. Run Local Server
+### 2. Run Local Frontend Server
 
 ```bash
 cd frontend
@@ -38,13 +51,21 @@ python3 -m http.server 8000
 
 Visit [http://localhost:8000/index.html](http://localhost:8000/index.html) in your browser.
 
-### 3. Deploy Contracts (Optional)
+### 3. Deploy Smart Contracts
 
 ```bash
 npx hardhat run scripts/deploy.js --network <network>
 ```
 
-### 4. Use the dApp
+This deploys EcoCoin and DonationContract, and sets up ownership for minting.
+
+### 4. Run Tests
+
+```bash
+npx hardhat test
+```
+
+### 5. Use the dApp
 
 - Connect your wallet (MetaMask recommended)
 - Make donations, earn ECO tokens, and view your history and stats
@@ -59,6 +80,8 @@ npx hardhat run scripts/deploy.js --network <network>
   - `EcoCoin.sol`, `Donation.sol`
 - `scripts/` — Deployment scripts
 - `test/` — Contract tests
+- `artifacts/` — Compiled contract artifacts
+- `cache/` — Hardhat build cache
 
 ## Contributing
 
