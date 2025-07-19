@@ -4,58 +4,192 @@
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Donation History – Eco Donations</title>
+  <title>Donation History - Eco Donations</title>
+  <meta name="description" content="Track your environmental donations and impact. View your donation history and see community contributions.">
 
-  <!-- fonts & icons -->
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
-
-  <link rel="stylesheet" href="style.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css?v=1.7.0">
 </head>
-<body onload="loadHistory()">
-  <header>
-    <h1>Eco Donations</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="donate.html">Donate</a>
-      <a href="history.html">Donation History</a>
+<body class="historypage" onload="loadHistory()">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      Eco Donations
+    </a>
+    <nav class="header__nav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="history.html" class="header__nav-link active">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
     </nav>
-    <div class="wallet">
-      <span id="walletAddress"></span>
-      <span id="walletBalance" class="balance"></span>
-      <button onclick="connectWallet()" id="connectButton">Connect Wallet</button>
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
     </div>
   </header>
 
-  <main class="container">
-    <div class="card">
-      <h2>Your Impact</h2>
-      <p class="intro">Below are platform-wide totals, top donors, and your personal contributions.</p>
+  <!-- Main Content -->
+  <main class="history-container">
+    <!-- Hero Section -->
+    <div class="history-hero">
+      <div class="history-hero__content">
+        <div class="history-hero__text">
+          <h1 class="history-hero__title">Your Impact Dashboard</h1>
+          <p class="history-hero__subtitle">Track your donations, see your environmental impact, and explore community contributions</p>
+        </div>
+        <button onclick="loadHistory()" class="history-hero__refresh">
+          <i class="fas fa-sync-alt"></i>
+          Refresh Data
+        </button>
+      </div>
+    </div>
 
-      <h3>📊 Totals</h3>
-      <ul id="totals"></ul>
+    <!-- Stats Overview -->
+    <div class="history-stats">
+      <div class="history-stats__grid">
+        <div class="history-stat-card">
+          <div class="history-stat-card__icon">
+            <i class="fas fa-donate"></i>
+          </div>
+          <div class="history-stat-card__content">
+            <div class="history-stat-card__value" id="totalDonationsValue">0</div>
+            <div class="history-stat-card__label">Total Donations</div>
+          </div>
+        </div>
+        <div class="history-stat-card">
+          <div class="history-stat-card__icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <div class="history-stat-card__content">
+            <div class="history-stat-card__value" id="yourImpactValue">0</div>
+            <div class="history-stat-card__label">Your Donations</div>
+          </div>
+        </div>
+        <div class="history-stat-card">
+          <div class="history-stat-card__icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="history-stat-card__content">
+            <div class="history-stat-card__value" id="ecoCoinsValue">0</div>
+            <div class="history-stat-card__label">ECO Coins Earned</div>
+          </div>
+        </div>
+        <div class="history-stat-card">
+          <div class="history-stat-card__icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="history-stat-card__content">
+            <div class="history-stat-card__value" id="rankValue">#--</div>
+            <div class="history-stat-card__label">Your Rank</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <h3>🏆 Top Donors</h3>
-      <ul id="topDonors"></ul>
+    <!-- Foundation Breakdown -->
+    <div class="history-section">
+      <div class="history-section__header">
+        <h2><i class="fas fa-chart-pie"></i> Foundation Breakdown</h2>
+        <p>See how donations are distributed across our environmental causes</p>
+      </div>
+      <div class="history-section__content">
+        <div class="foundation-stats" id="foundationStats">
+          <!-- Foundation stats will be populated here -->
+        </div>
+      </div>
+    </div>
 
-      <h3>🧑‍💻 Your Donations</h3>
-      <table id="personalTable">
-        <thead><tr><th>Foundation</th><th>Amount (ETH)</th><th>Message</th></tr></thead>
-        <tbody></tbody>
-      </table>
+    <!-- Top Donors -->
+    <div class="history-section">
+      <div class="history-section__header">
+        <h2><i class="fas fa-crown"></i> Top Contributors</h2>
+        <p>Celebrating our most generous community members</p>
+      </div>
+      <div class="history-section__content">
+        <div class="donors-list" id="topDonorsList">
+          <!-- Top donors will be populated here -->
+        </div>
+      </div>
+    </div>
 
-      <h2>🌐 All Donations</h2>
-      <table id="donationTable">
-        <thead><tr><th>Foundation</th><th>Donor</th><th>Amount (ETH)</th><th>Message</th></tr></thead>
-        <tbody></tbody>
-      </table>
+    <!-- Your Personal History -->
+    <div class="history-section">
+      <div class="history-section__header">
+        <h2><i class="fas fa-user-circle"></i> Your Donation History</h2>
+        <p>Track your personal contributions and environmental impact</p>
+      </div>
+      <div class="history-section__content">
+        <div id="personalDonationsSection">
+          <div class="table-container">
+            <table id="personalTable" class="history-table">
+              <thead>
+                <tr>
+                  <th><i class="fas fa-leaf"></i> Foundation</th>
+                  <th><i class="fas fa-ethereum"></i> Amount</th>
+                  <th><i class="fas fa-comment"></i> Message</th>
+                  <th><i class="fas fa-calendar"></i> Date</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div id="walletPrompt" class="wallet-prompt">
+            <div class="wallet-prompt__content">
+              <i class="fas fa-wallet"></i>
+              <h3>Connect Your Wallet</h3>
+              <p>Connect your wallet to view your personal donation history and track your environmental impact.</p>
+              <button onclick="connectWallet()" class="wallet-prompt__button">
+                <i class="fas fa-link"></i> Connect Wallet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Donations -->
+    <div class="history-section">
+      <div class="history-section__header">
+        <h2><i class="fas fa-globe"></i> Community Donations</h2>
+        <p>All donations from our global community of environmental supporters</p>
+      </div>
+      <div class="history-section__content">
+        <div class="table-container">
+          <table id="donationTable" class="history-table">
+            <thead>
+              <tr>
+                <th><i class="fas fa-leaf"></i> Foundation</th>
+                <th><i class="fas fa-user"></i> Donor</th>
+                <th><i class="fas fa-ethereum"></i> Amount</th>
+                <th><i class="fas fa-comment"></i> Message</th>
+                <th><i class="fas fa-calendar"></i> Date</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </main>
 
-  <script type="module" src="/main.js"></script>
-
+  <!-- App logic -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="contract-fix.js"></script>
+  <script src="main.js?v=2.0.0"></script>
 </body>
 </html>

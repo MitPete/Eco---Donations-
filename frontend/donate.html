@@ -2,76 +2,191 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self';
-                 script-src 'self' 'unsafe-eval' 'unsafe-inline';
-                 style-src  'self' 'unsafe-inline' https:;
-                 font-src   https:;
-                 img-src    'self' https: data:;
-                 connect-src *;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Donate – Eco Donations</title>
+  <title>Donate - Eco Donations</title>
+  <meta name="description" content="Make environmental donations with Ethereum and earn ECO tokens. Support ocean cleanup, forest protection, and renewable energy projects.">
 
-  <!-- fonts & icons -->
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        referrerpolicy="no-referrer">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
-  <!-- your global styles -->
-  <link rel="stylesheet" href="style.css">
-  <!-- coin styles -->
-<link rel="stylesheet" href="/src/coin.css">
-
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css?v=1.7.0">
 </head>
-<body>
-  <header>
-    <h1>Eco Donations</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="donate.html">Donate</a>
-      <a href="history.html">Donation History</a>
+<body class="donatepage" onload="prefillDonationForm(); initializeDonationPage()">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      Eco Donations
+    </a>
+    <nav class="header__nav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link active">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
     </nav>
-    <div class="wallet">
-      <span id="walletAddress"></span>
-      <span id="walletBalance" class="balance"></span>
-      <button onclick="connectWallet()" id="connectButton">Connect Wallet</button>
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
     </div>
   </header>
 
-  <main class="container">
-    <div class="card">
-      <h2>Make a Donation</h2>
-      <p class="intro">Enter an amount, add an optional note, sign the transaction, and watch your ECO balance grow.</p>
+  <!-- Main Content -->
+  <main class="donate-container">
+    <div class="donate-hero">
+      <div class="donate-hero__content">
+        <h1 class="donate-hero__title">Make a Donation</h1>
+        <p class="donate-hero__subtitle">Support environmental causes and earn ECO tokens for your contribution</p>
+      </div>
+    </div>
 
-      <!-- donation form -->
-      <form id="donationForm" onsubmit="return sendDonation(event)">
-        <label for="foundation">Foundation</label>
-        <select id="foundation">
-          <option value="0">Save The Oceans</option>
-          <option value="1">Protect The Rainforest</option>
-          <option value="2">Protect The Sequoias</option>
-          <option value="3">Clean Energy</option>
-        </select>
+    <div class="donate-form-section">
+      <div class="donate-form-container">
+        <div class="donate-form-card">
+          <div class="donate-form-header">
+            <h2>Choose Your Impact</h2>
+            <p>Select a foundation, enter your donation amount, and watch your ECO balance grow.</p>
+          </div>
 
-        <label for="message">Message</label>
-        <textarea id="message" rows="3"></textarea>
+          <form id="donationForm" onsubmit="return sendDonation(event)" class="donate-form">
+            <div class="form-group">
+              <label for="foundation" class="form-label">
+                <i class="fas fa-globe"></i>
+                Foundation
+              </label>
+              <select id="foundation" class="form-select">
+                <option value="0">🌊 Save The Oceans</option>
+                <option value="1">🌳 Protect The Rainforest</option>
+                <option value="2">🌲 Protect The Sequoias</option>
+                <option value="3">⚡ Clean Energy</option>
+              </select>
+            </div>
 
-        <label for="amount">Amount (ETH)</label>
-        <input type="number" id="amount" step="0.01" min="0" required />
+            <div class="form-group">
+              <label for="amount" class="form-label">
+                <i class="fab fa-ethereum"></i>
+                Amount (ETH)
+              </label>
+              <input type="number" id="amount" step="0.01" min="0" required class="form-input" placeholder="0.1" />
+            </div>
 
-        <button type="submit">Donate</button>
-      </form>
+            <div class="form-group">
+              <label for="message" class="form-label">
+                <i class="fas fa-message"></i>
+                Message (Optional)
+              </label>
+              <textarea id="message" rows="3" class="form-textarea" placeholder="Share your motivation for this donation..."></textarea>
+            </div>
 
-      <!-- badge & thank-you -->
-      <div id="badgeContainer" style="margin-top:1.5rem;"></div>
-      <div id="txStatus" style="margin-top:0.5rem;"></div>
+            <button type="submit" class="donate-button">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </button>
+          </form>
+
+          <div id="badgeContainer" class="badge-container"></div>
+          <div id="txStatus" class="tx-status"></div>
+        </div>
+
+        <div class="donate-info-card">
+          <h3>Why Donate?</h3>
+          <div class="donate-benefits">
+            <div class="benefit-item">
+              <i class="fas fa-coins"></i>
+              <div>
+                <h4>Earn ECO Tokens</h4>
+                <p>Receive ECO tokens for every donation made</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <i class="fas fa-leaf"></i>
+              <div>
+                <h4>Real Impact</h4>
+                <p>100% of donations go directly to environmental causes</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <i class="fas fa-shield-alt"></i>
+              <div>
+                <h4>Transparent</h4>
+                <p>All transactions are recorded on the blockchain</p>
+              </div>
+            </div>
+            <div class="benefit-item">
+              <i class="fas fa-trophy"></i>
+              <div>
+                <h4>Earn Badges</h4>
+                <p>Unlock special badges for your contributions</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
-  <!-- app logic -->
-  <script type="module" src="/main.js"></script>
+  <!-- Donation Confirmation Modal -->
+  <div id="donationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <div class="modal-header">
+        <i class="fas fa-check-circle"></i>
+        <h2>Thank You for Your Donation!</h2>
+      </div>
+      <div class="modal-body">
+        <div class="coin-display">
+          <div class="eco-coin">
+            <div class="oval">
+              <div class="inner-oval front">
+                <span class="coin-icon">🍃</span>
+                <span class="coin-label">ECO&nbsp;COIN</span>
+              </div>
+            </div>
+            <div class="coin__edge"></div>
+            <div class="oval-back">
+              <div class="inner-oval back">
+                <span class="coin-icon-back">🍃</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="modalMessage"></p>
+        <div class="modal-actions">
+          <a href="history.html" class="modal-button primary">
+            <i class="fas fa-history"></i>
+            View History
+          </a>
+          <button onclick="closeModal()" class="modal-button secondary">
+            <i class="fas fa-times"></i>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App logic -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // Close modal when clicking outside the content
+    window.onclick = function(event) {
+      const modal = document.getElementById('donationModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+  </script>
 </body>
 </html>

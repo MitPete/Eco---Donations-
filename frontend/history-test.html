@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .donation { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>History Loading Test</h1>
+    <button onclick="testHistory()">Test History Loading</button>
+    <div id="result"></div>
+
+    <script src="ethers.umd.min.js"></script>
+    <script src="contract-fix.js"></script>
+    <script>
+        async function testHistory() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing history loading...</p>';
+
+            try {
+                // Use the same logic as the main app
+                const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+                const donationAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+                const donationAbi = [
+                    'function donate(uint8,string) payable',
+                    'event DonationMade(uint8 f,address sender,uint amount,string msg_)'
+                ];
+
+                const contract = new ethers.Contract(donationAddress, donationAbi, provider);
+
+                // Test contract exists
+                const code = await provider.getCode(donationAddress);
+                if (code === '0x') {
+                    throw new Error('Contract not deployed');
+                }
+
+                // Get donation events
+                const events = await contract.queryFilter(contract.filters.DonationMade(), 0, 'latest');
+
+                console.log('Found events:', events);
+
+                const names = ['Save The Oceans', 'Protect The Rainforest', 'Protect The Sequoias', 'Clean Energy'];
+
+                let html = `<div class="success">✅ Found ${events.length} donations:</div>`;
+
+                events.forEach((event, index) => {
+                    const { f, sender, amount, msg_ } = event.args;
+                    html += `
+                        <div class="donation">
+                            <strong>${names[f]}</strong><br>
+                            From: ${sender.slice(0, 6)}...${sender.slice(-4)}<br>
+                            Amount: ${ethers.utils.formatEther(amount)} ETH<br>
+                            Message: ${msg_}<br>
+                            Block: ${event.blockNumber}
+                        </div>
+                    `;
+                });
+
+                resultDiv.innerHTML = html;
+
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

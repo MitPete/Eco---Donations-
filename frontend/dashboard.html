@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Eco Donations</title>
+  <meta name="description" content="Your personal dashboard for tracking donations, ECO tokens, and environmental impact.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/styles.css?v=1.7.0">
+</head>
+<body onload="loadDashboard()">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      Eco Donations
+    </a>
+    <nav class="header__nav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link active">Dashboard</a>
+    </nav>
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="dashboard-container">
+    <!-- Hero Section -->
+    <div class="dashboard-hero">
+      <div class="dashboard-hero__content">
+        <h1 class="dashboard-hero__title">Your Impact Dashboard</h1>
+        <p class="dashboard-hero__subtitle">Track your donations, ECO tokens, and environmental impact in one place</p>
+      </div>
+    </div>
+
+    <!-- Welcome Section -->
+    <div class="dashboard-welcome" id="dashboardWelcome">
+      <div class="dashboard-welcome__content">
+        <div class="dashboard-welcome__text">
+          <h2>Welcome back!</h2>
+          <p>Here's your environmental impact at a glance</p>
+        </div>
+        <div class="dashboard-welcome__actions">
+          <button onclick="loadDashboard()" class="dashboard-refresh-button">
+            <i class="fas fa-sync-alt"></i>
+            Refresh Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="dashboard-stats">
+      <div class="dashboard-stats__grid">
+        <div class="dashboard-stat-card">
+          <div class="dashboard-stat-card__icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="dashboard-stat-card__content">
+            <div class="dashboard-stat-card__value" id="ecoBalance">0</div>
+            <div class="dashboard-stat-card__label">ECO Tokens</div>
+          </div>
+        </div>
+        <div class="dashboard-stat-card">
+          <div class="dashboard-stat-card__icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <div class="dashboard-stat-card__content">
+            <div class="dashboard-stat-card__value" id="totalDonations">0</div>
+            <div class="dashboard-stat-card__label">ETH Donated</div>
+          </div>
+        </div>
+        <div class="dashboard-stat-card">
+          <div class="dashboard-stat-card__icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <div class="dashboard-stat-card__content">
+            <div class="dashboard-stat-card__value" id="topFoundation">N/A</div>
+            <div class="dashboard-stat-card__label">Top Foundation</div>
+          </div>
+        </div>
+        <div class="dashboard-stat-card">
+          <div class="dashboard-stat-card__icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="dashboard-stat-card__content">
+            <div class="dashboard-stat-card__value" id="impactRank">#--</div>
+            <div class="dashboard-stat-card__label">Impact Rank</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <div class="dashboard-main">
+      <!-- Recent Donations -->
+      <div class="dashboard-section">
+        <div class="dashboard-section__header">
+          <h2><i class="fas fa-history"></i> Recent Donations</h2>
+          <a href="history.html" class="dashboard-section__link">View All</a>
+        </div>
+        <div class="dashboard-section__content">
+          <div class="dashboard-table-container">
+            <table id="donationTable" class="dashboard-table">
+              <thead>
+                <tr>
+                  <th><i class="fas fa-leaf"></i> Foundation</th>
+                  <th><i class="fas fa-ethereum"></i> Amount</th>
+                  <th><i class="fas fa-comment"></i> Message</th>
+                  <th><i class="fas fa-calendar"></i> Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Donations will be populated here -->
+              </tbody>
+            </table>
+            <div id="noDonationsMessage" class="dashboard-empty-state">
+              <i class="fas fa-heart"></i>
+              <h3>No donations yet</h3>
+              <p>Start making a difference by donating to environmental causes</p>
+              <a href="donate.html" class="dashboard-cta-button">
+                <i class="fas fa-plus"></i>
+                Make Your First Donation
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact Metrics -->
+      <div class="dashboard-section">
+        <div class="dashboard-section__header">
+          <h2><i class="fas fa-seedling"></i> Your Environmental Impact</h2>
+        </div>
+        <div class="dashboard-section__content">
+          <div class="dashboard-impact-grid">
+            <div class="dashboard-impact-card">
+              <div class="dashboard-impact-card__icon">
+                <i class="fas fa-water"></i>
+              </div>
+              <div class="dashboard-impact-card__content">
+                <span class="dashboard-impact-card__value" id="oceanImpact">0</span>
+                <span class="dashboard-impact-card__label">Ocean Areas Protected</span>
+              </div>
+            </div>
+            <div class="dashboard-impact-card">
+              <div class="dashboard-impact-card__icon">
+                <i class="fas fa-tree"></i>
+              </div>
+              <div class="dashboard-impact-card__content">
+                <span class="dashboard-impact-card__value" id="forestImpact">0</span>
+                <span class="dashboard-impact-card__label">Trees Planted</span>
+              </div>
+            </div>
+            <div class="dashboard-impact-card">
+              <div class="dashboard-impact-card__icon">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <div class="dashboard-impact-card__content">
+                <span class="dashboard-impact-card__value" id="energyImpact">0</span>
+                <span class="dashboard-impact-card__label">Clean Energy (kWh)</span>
+              </div>
+            </div>
+            <div class="dashboard-impact-card">
+              <div class="dashboard-impact-card__icon">
+                <i class="fas fa-globe"></i>
+              </div>
+              <div class="dashboard-impact-card__content">
+                <span class="dashboard-impact-card__value" id="carbonImpact">0</span>
+                <span class="dashboard-impact-card__label">CO₂ Offset (tons)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="dashboard-actions">
+        <h2>Quick Actions</h2>
+        <div class="dashboard-actions__grid">
+          <a href="donate.html" class="dashboard-action-card">
+            <div class="dashboard-action-card__icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h3>Make a Donation</h3>
+            <p>Support environmental causes and earn ECO tokens</p>
+          </a>
+          <a href="history.html" class="dashboard-action-card">
+            <div class="dashboard-action-card__icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>View History</h3>
+            <p>Track all your donations and impact metrics</p>
+          </a>
+          <a href="foundation.html" class="dashboard-action-card">
+            <div class="dashboard-action-card__icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h3>Explore Foundations</h3>
+            <p>Learn about environmental organizations</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wallet Connection Prompt -->
+    <div id="walletPrompt" class="dashboard-wallet-prompt">
+      <div class="dashboard-wallet-prompt__content">
+        <i class="fas fa-wallet"></i>
+        <h2>Connect Your Wallet</h2>
+        <p>Connect your wallet to view your personal dashboard and track your environmental impact.</p>
+        <button onclick="connectWallet()" class="dashboard-wallet-prompt__button">
+          <i class="fas fa-link"></i>
+          Connect Wallet
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- App logic -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

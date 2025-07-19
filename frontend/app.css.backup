@@ -1,0 +1,2794 @@
+/**
+ * Eco Donations - Complete CSS Styles
+ * @author Eco Donations Team
+ * @version 3.0.0
+ * Unified single file approach - all sections working
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+/* BASE STYLES & RESET */
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+:root {
+  /* Brand Colors */
+  --brand-1: #28c76f;
+  --brand-2: #0066ff;
+  --brand-primary: #28c76f;
+  --brand-secondary: #0066ff;
+  --brand-success: #22c55e;
+  --brand-warning: #f59e0b;
+  --brand-error: #ef4444;
+  --brand-info: #3b82f6;
+
+  /* Background Colors */
+  --bg-light: #e5fbea;
+  --bg-dark: #e8f1ff;
+  --bg-white: #ffffff;
+  --bg-gray-50: #f9fafb;
+  --bg-gray-100: #f3f4f6;
+  --bg-gray-200: #e5e7eb;
+
+  /* Text Colors */
+  --text-primary: #1b1e25;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --text-light: #e8ecf1;
+  --text-white: #ffffff;
+  --text-dark: #1b1e25;
+
+  /* Interactive Colors */
+  --interactive-primary: var(--brand-primary);
+  --interactive-secondary: var(--brand-secondary);
+  --interactive-hover: #1ca25e;
+  --interactive-disabled: #d1d5db;
+
+  /* UI Elements */
+  --border-radius: 14px;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 20px;
+  --border-radius-full: 9999px;
+  --radius: 14px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-primary: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+  /* Glass Effect */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: blur(18px);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.3s ease;
+  --transition-bounce: 0.25s cubic-bezier(0.4, 0.2, 0.2, 1);
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Legacy variable aliases for compatibility */
+  --brand-1: var(--brand-primary);
+  --brand-2: var(--brand-secondary);
+  --radius: var(--border-radius);
+  --shadow: var(--shadow-primary);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(18px);
+  --transition: var(--transition-base);
+  --text-dark: var(--text-primary);
+  --text-light: var(--text-white);
+
+  /* Additional UI Variables */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+  /* TRANSITIONS & ANIMATIONS */
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+  --transition-base: all 0.25s cubic-bezier(0.4, 0.2, 0.2, 1);
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0.2, 0.2, 1);
+  --transition-slow: all 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+  /* SPACING SYSTEM */
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  --spacing-3xl: 4rem;     /* 64px */
+
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+  /* TYPOGRAPHY SYSTEM */
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+  --font-size-xs: 0.75rem;     /* 12px */
+  --font-size-sm: 0.875rem;    /* 14px */
+  --font-size-md: 1rem;        /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+  --font-size-3xl: 1.875rem;   /* 30px */
+  --font-size-4xl: 2.25rem;    /* 36px */
+  --font-size-5xl: 3rem;       /* 48px */
+  --font-size-6xl: 3.75rem;    /* 60px */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-loose: 1.75;
+
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+  /* SHADOW SYSTEM */
+  /* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+  --shadow-primary: 0 12px 32px rgba(0, 0, 0, 0.08);
+  --shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-tertiary: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  /* Dark Mode Variables */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-light: #0f172a;
+    --bg-dark: #111827;
+    --bg-white: #1f2937;
+    --bg-gray-50: #374151;
+    --bg-gray-100: #4b5563;
+    --bg-gray-200: #6b7280;
+
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+
+    --glass-bg: rgba(30, 41, 59, 0.55);
+    --shadow-primary: 0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  body {
+    color: var(--text-primary);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+/* RESET & BASE STYLES */
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* Global Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body Styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* HTML reset */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Links */
+a {
+  color: var(--interactive-primary);
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+
+a:hover {
+  color: var(--interactive-hover);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+}
+
+h4 {
+  font-size: var(--font-size-xl);
+}
+
+h5 {
+  font-size: var(--font-size-lg);
+}
+
+h6 {
+  font-size: var(--font-size-md);
+}
+
+/* Paragraph */
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Lists */
+ul, ol {
+  padding-left: var(--spacing-lg);
+}
+
+li {
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Focus States */
+:focus {
+  outline: 2px solid var(--interactive-primary);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--interactive-primary);
+  color: var(--text-white);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-gray-200);
+  border-radius: var(--border-radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+/* UTILITY CLASSES */
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* Display */
+.hidden { display: none !important; }
+.block { display: block !important; }
+.inline { display: inline !important; }
+.inline-block { display: inline-block !important; }
+.flex { display: flex !important; }
+.inline-flex { display: inline-flex !important; }
+.grid { display: grid !important; }
+
+/* Flexbox */
+.flex-row { flex-direction: row !important; }
+.flex-col { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-nowrap { flex-wrap: nowrap !important; }
+.items-start { align-items: flex-start !important; }
+.items-center { align-items: center !important; }
+.items-end { align-items: flex-end !important; }
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-around { justify-content: space-around !important; }
+
+/* Spacing */
+.m-0 { margin: 0 !important; }
+.m-1 { margin: var(--spacing-sm) !important; }
+.m-2 { margin: var(--spacing-md) !important; }
+.m-3 { margin: var(--spacing-lg) !important; }
+.m-4 { margin: var(--spacing-xl) !important; }
+.m-auto { margin: auto !important; }
+
+.p-0 { padding: 0 !important; }
+.p-1 { padding: var(--spacing-sm) !important; }
+.p-2 { padding: var(--spacing-md) !important; }
+.p-3 { padding: var(--spacing-lg) !important; }
+.p-4 { padding: var(--spacing-xl) !important; }
+
+/* Text */
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+.text-justify { text-align: justify !important; }
+
+.text-xs { font-size: var(--font-size-xs) !important; }
+.text-sm { font-size: var(--font-size-sm) !important; }
+.text-base { font-size: var(--font-size-base) !important; }
+.text-lg { font-size: var(--font-size-lg) !important; }
+.text-xl { font-size: var(--font-size-xl) !important; }
+.text-2xl { font-size: var(--font-size-2xl) !important; }
+.text-3xl { font-size: var(--font-size-3xl) !important; }
+.text-4xl { font-size: var(--font-size-4xl) !important; }
+.text-5xl { font-size: var(--font-size-5xl) !important; }
+
+.font-normal { font-weight: var(--font-weight-normal) !important; }
+.font-medium { font-weight: var(--font-weight-medium) !important; }
+.font-semibold { font-weight: var(--font-weight-semibold) !important; }
+.font-bold { font-weight: var(--font-weight-bold) !important; }
+.font-extrabold { font-weight: var(--font-weight-extrabold) !important; }
+
+.text-primary { color: var(--text-primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+.text-muted { color: var(--text-muted) !important; }
+.text-white { color: var(--text-white) !important; }
+
+/* Borders */
+.rounded-none { border-radius: 0 !important; }
+.rounded-sm { border-radius: var(--border-radius-sm) !important; }
+.rounded { border-radius: var(--border-radius) !important; }
+.rounded-lg { border-radius: var(--border-radius-lg) !important; }
+.rounded-full { border-radius: var(--border-radius-full) !important; }
+
+/* Shadows */
+.shadow-none { box-shadow: none !important; }
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+.shadow-xl { box-shadow: var(--shadow-xl) !important; }
+.shadow-2xl { box-shadow: var(--shadow-2xl) !important; }
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  .show-mobile-flex { display: flex !important; }
+  .show-mobile-grid { display: grid !important; }
+}
+
+@media (min-width: 769px) {
+  .hide-desktop { display: none !important; }
+  .show-desktop { display: block !important; }
+  .show-desktop-flex { display: flex !important; }
+  .show-desktop-grid { display: grid !important; }
+}
+/**
+ * Button Component Styles
+ * @description Reusable button styles for the Eco Donations DApp
+ */
+
+/* Base button styles */
+button,
+.cta,
+.cta-primary,
+.cta-secondary,
+.foundation-cta,
+.mini-cta,
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Primary button */
+.cta,
+.cta-primary {
+  background: var(--brand-1);
+  color: white;
+}
+
+.cta:hover,
+.cta-primary:hover {
+  background: #1ca25e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary button */
+.cta-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Default button */
+button {
+  background: var(--brand-2);
+  color: white;
+}
+
+button:hover {
+  background: #0050d4;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+button:disabled {
+  background: #95a5b4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Foundation card buttons */
+.foundation-cta,
+.mini-cta {
+  background: var(--brand-2);
+  color: white;
+  font-size: 0.9rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  margin-top: auto;
+}
+
+.foundation-cta:hover,
+.mini-cta:hover {
+  background: #0050d4;
+  transform: translateY(-2px);
+}
+
+/* Refresh button */
+.refresh-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Quick amount buttons */
+.quick-amount {
+  background: var(--glass-bg);
+  color: var(--text-dark);
+  border: 2px solid var(--brand-2);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: var(--radius);
+  backdrop-filter: var(--glass-blur);
+}
+
+.quick-amount:hover,
+.quick-amount.active {
+  background: var(--brand-2);
+  color: white;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  button,
+  .cta,
+  .foundation-cta,
+  .quick-amount {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .quick-amount {
+    background: var(--glass-bg);
+    color: var(--text-light);
+    border-color: var(--brand-2);
+  }
+
+  .quick-amount:hover,
+  .quick-amount.active {
+    background: var(--brand-2);
+    color: white;
+  }
+}
+/**
+ * Card Component Styles
+ * @description Reusable card styles for the Eco Donations DApp
+ */
+
+/* Base card */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius);
+  padding: 2.4rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 2.4rem;
+  position: relative;
+  animation: fadeUp 0.5s ease-out;
+}
+
+/* Foundation cards */
+.foundation {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.8rem 1.4rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+.foundation:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+}
+
+.foundation img {
+  width: 76px;
+  height: 76px;
+  margin-bottom: 1.1rem;
+  border-radius: 50%;
+  object-fit: contain;
+  border: 5px solid transparent;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.foundation:hover img {
+  border-color: var(--brand-2);
+  transform: scale(1.06);
+}
+
+.foundation h4 {
+  margin: 0.3rem 0 0.6rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.foundation p {
+  font-size: 0.92rem;
+  color: #475569;
+  margin: 0 0 1.4rem;
+  line-height: 1.5;
+}
+
+/* Metric cards */
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 1.6rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+.metric i {
+  font-size: 1.7rem;
+  color: var(--brand-2);
+}
+
+.metric .num {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.metric .label {
+  font-size: 0.8rem;
+  letter-spacing: 0.6px;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Stat cards */
+.stat-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Impact cards */
+.impact-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.impact-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.impact-icon {
+  font-size: 3rem;
+  color: var(--brand-1);
+  margin-bottom: 1.5rem;
+}
+
+.impact-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+
+.impact-card p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Stat item for banners */
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.stat-item .stat-icon {
+  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: none;
+}
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.stat-item .stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+}
+
+/* Badges */
+.badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--brand-1);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Card animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .metric,
+  .stat-card,
+  .impact-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .foundation {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .metric .num,
+  .stat-value,
+  .impact-card h3,
+  .foundation h4 {
+    color: var(--text-light);
+  }
+
+  .metric .label,
+  .stat-label {
+    color: #cbd5e1;
+  }
+
+  .foundation p {
+    color: #cbd5e1;
+  }
+
+  .impact-card p {
+    color: #9ca3af;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .foundation {
+    padding: 1.5rem 1rem;
+  }
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stat-icon {
+    margin-bottom: 0.5rem;
+  }
+
+  .impact-card {
+    padding: 2rem;
+  }
+}
+/* ------------ Eco Coin  (scoped) ------------ */
+.eco-coin{ --d:220px;--t:28px;--edge:80;--deg:4.5deg;--spin:4s;
+  --g1:#d4af37;--g2:#f0c24e;--g3:#a67c00;--g4:#ffd700;
+  --rim:#8b6b00;--detail:#f7e1b5;--tilt-x:0deg;--tilt-y:0deg;
+  width:var(--d);height:var(--d);position:relative;perspective:1000px;
+  transform-style:preserve-3d;animation:spin var(--spin) linear infinite;
+}
+@keyframes spin{to{transform:perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) rotateY(360deg);}}
+
+/* faces */
+.eco-coin .oval,.eco-coin .oval-back{position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(145deg,var(--g2),var(--g1),var(--g3));
+  display:flex;align-items:center;justify-content:center;backface-visibility:hidden;
+  box-shadow:0 4px 10px rgb(0 0 0 /.25);
+}
+.eco-coin .oval      {transform:translateZ(calc(var(--t)/2));}
+.eco-coin .oval-back {transform:translateZ(calc(-1*var(--t)/2)) rotateY(180deg);}
+
+.eco-coin .inner-oval{width:78%;height:78%;border-radius:50%;
+  background:radial-gradient(circle at 50% 35%,var(--g4) 0%,var(--g2) 65%,var(--g1) 100%);
+  box-shadow:inset 0 2px 6px rgb(0 0 0 /.35),inset 0 -1px 3px rgb(255 255 255 /.2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+
+.eco-coin .coin-icon,
+.eco-coin .coin-icon-back{font-size:2.8rem;margin-bottom:4px;color:#28a745;
+  filter:drop-shadow(0 2px 2px rgb(0 0 0 /.35));}
+.eco-coin .coin-label{font:700 1.25rem/1.1 "Poppins",sans-serif;letter-spacing:2px;
+  text-transform:uppercase;-webkit-background-clip:text;color:transparent;
+  background:linear-gradient(90deg,#1e7e34 0%,#34eb6a 100%);text-shadow:0 1px 3px rgb(0 0 0 /.35);}
+
+/* edge */
+.eco-coin .coin__edge{position:absolute;inset:0;transform-style:preserve-3d;}
+.eco-coin .coin__edge div{--h:calc(3.1416*var(--d)/var(--edge));position:absolute;
+  width:var(--t);height:var(--h);
+  transform:translateY(calc(var(--d)/2 - var(--h)/2))
+            translateX(calc(var(--d)/2 - var(--t)/2))
+            rotateZ(calc(var(--i)*var(--deg) + 90deg))
+            translateX(calc(var(--d)/2)) rotateY(90deg);
+  background:linear-gradient(90deg,var(--rim)0 20%,var(--detail)20% 35%,var(--rim)35% 100%);
+  background-size:8px 100%;border-right:1px solid rgb(0 0 0 /.1);
+}
+
+/* optional front highlight */
+.eco-coin .oval::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgb(255 255 255 /.9)0%,transparent 70%);
+  filter:blur(4px);pointer-events:none;}
+/**
+ * Footer Component Styles
+ * @description Footer styles for the Eco Donations DApp
+ */
+
+footer {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow);
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+footer a {
+  color: var(--brand-2);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+footer a:hover {
+  text-decoration: underline;
+  color: var(--brand-1);
+}
+
+footer p {
+  margin: 0;
+  color: var(--text-dark);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  footer p {
+    color: var(--text-light);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  footer {
+    padding: 1.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+/**
+ * Form Component Styles
+ * @description Form elements and input styles for the Eco Donations DApp
+ */
+
+/* Form labels */
+label {
+  font-weight: 600;
+  margin: 0.5rem 0;
+  display: block;
+  color: var(--text-dark);
+}
+
+/* Form inputs */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem 0.95rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius);
+  margin-bottom: 1.2rem;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.9);
+  color: inherit;
+  transition: var(--transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--brand-2);
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
+}
+
+/* Progress bars */
+.progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.3rem;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.progress-bar {
+  height: 0.85rem;
+  border-radius: var(--radius);
+  background: #e4eaf1;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #4ade80, #22c55e);
+  transition: width 0.5s ease;
+}
+
+/* Quick amount selector */
+.quick-amounts {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.quick-amount {
+  background: var(--glass-bg);
+  color: var(--text-dark);
+  border: 2px solid var(--brand-2);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: var(--radius);
+  backdrop-filter: var(--glass-blur);
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 60px;
+}
+
+.quick-amount:hover,
+.quick-amount.active {
+  background: var(--brand-2);
+  color: white;
+}
+
+/* Form validation */
+.form-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-success {
+  color: var(--brand-1);
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Input groups */
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.input-group input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.input-group .input-addon {
+  background: var(--glass-bg);
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius);
+  padding: 0.75rem 0.95rem;
+  font-size: 1rem;
+  color: var(--text-dark);
+  backdrop-filter: var(--glass-blur);
+  white-space: nowrap;
+}
+
+/* Form sections */
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h3 {
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* Donation amount input */
+.donation-amount {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid var(--brand-2);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.donation-amount:focus {
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 8px;
+  }
+
+  .quick-amounts {
+    justify-content: center;
+  }
+
+  .quick-amount {
+    min-width: 50px;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .input-group {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .input-group .input-addon {
+    text-align: center;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  label {
+    color: var(--text-light);
+  }
+
+  input,
+  select,
+  textarea {
+    background: var(--glass-bg);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--brand-2);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
+  }
+
+  .progress-label {
+    color: var(--text-light);
+  }
+
+  .progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .form-section h3 {
+    color: var(--text-light);
+  }
+
+  .input-group .input-addon {
+    background: var(--glass-bg);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+  }
+
+  .donation-amount {
+    background: var(--glass-bg);
+    color: var(--text-light);
+  }
+
+  .quick-amount {
+    background: var(--glass-bg);
+    color: var(--text-light);
+    border-color: var(--brand-2);
+  }
+}
+/**
+ * Header Component Styles
+ * @author Eco Donations Team
+ * @version 1.0.0
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+/* HEADER COMPONENT */
+/* ═══════════════════════════════════════════════════════════════════════════════════════════ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+  color: var(--text-white);
+  box-shadow: var(--shadow-primary);
+  backdrop-filter: blur(10px);
+}
+
+.header__logo {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.6px;
+  color: var(--text-white);
+}
+
+.header__logo:hover {
+  opacity: 0.9;
+}
+
+/* Navigation */
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.header__nav-link {
+  position: relative;
+  color: var(--text-white);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-normal);
+}
+
+.header__nav-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--text-white);
+  border-radius: var(--border-radius-sm);
+  transform: translateX(-50%);
+  transition: var(--transition-normal);
+}
+
+.header__nav-link:hover::after,
+.header__nav-link.active::after {
+  width: 100%;
+}
+
+.header__nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.header__nav-link.active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Wallet Section */
+.header__wallet {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.header__wallet-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+}
+
+.header__wallet-address {
+  font-weight: var(--font-weight-medium);
+  opacity: 0.9;
+}
+
+.header__wallet-balance {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--brand-primary);
+  background: rgba(255, 255, 255, 0.2);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-full);
+  backdrop-filter: blur(5px);
+}
+
+.header__connect-button {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-white);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.header__connect-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.header__connect-button:active {
+  transform: translateY(0);
+}
+
+.header__connect-button.connected {
+  background: rgba(40, 199, 111, 0.3);
+  border-color: rgba(40, 199, 111, 0.5);
+}
+
+.header__connect-button.connected:hover {
+  background: rgba(40, 199, 111, 0.4);
+}
+
+/* Loading State */
+.header__connect-button.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  position: relative;
+  overflow: hidden;
+}
+
+.header__connect-button.loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Mobile Header */
+@media (max-width: 768px) {
+  .header {
+    padding: var(--spacing-md) var(--spacing-md);
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .header__logo {
+    font-size: var(--font-size-lg);
+  }
+
+  .header__nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .header__nav-link {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    flex: 1;
+  }
+
+  .header__wallet {
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .header__wallet-info {
+    display: none;
+  }
+
+  .header__connect-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .header__logo {
+    font-size: var(--font-size-base);
+  }
+
+  .header__nav {
+    gap: var(--spacing-xs);
+  }
+
+  .header__nav-link {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .header__connect-button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Header Animations */
+@keyframes headerSlideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.header {
+  animation: headerSlideIn 0.3s ease-out;
+}
+
+/* Accessibility */
+.header__nav-link:focus,
+.header__connect-button:focus {
+  outline: 2px solid var(--text-white);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .header {
+    border-bottom: 2px solid var(--text-white);
+  }
+
+  .header__nav-link,
+  .header__connect-button {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .header__nav-link,
+  .header__connect-button {
+    transition: none;
+  }
+
+  .header__nav-link::after {
+    transition: none;
+  }
+
+  .header {
+    animation: none;
+  }
+}
+/**
+ * Table Component Styles
+ * @description Table styles for the Eco Donations DApp
+ */
+
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: white;
+}
+
+table,
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+thead {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-dark);
+}
+
+th,
+td {
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dark);
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+tbody tr:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Table cell types */
+.table-cell-center {
+  text-align: center;
+}
+
+.table-cell-right {
+  text-align: right;
+}
+
+.table-cell-nowrap {
+  white-space: nowrap;
+}
+
+/* Status indicators */
+.status-success {
+  color: var(--brand-1);
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.status-failed {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Amount styling */
+.amount-cell {
+  font-weight: 600;
+  color: var(--brand-2);
+}
+
+/* Date styling */
+.date-cell {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .table-container {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  thead {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-light);
+  }
+
+  th {
+    color: var(--text-light);
+  }
+
+  td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    color: var(--text-light);
+  }
+
+  tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .date-cell {
+    color: #9ca3af;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .modern-table {
+    min-width: 600px;
+  }
+
+  th,
+  td {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.875rem;
+  }
+
+  .table-container {
+    margin: 0 -1rem;
+    border-radius: 0;
+  }
+}
+
+/* Empty state */
+.table-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.table-empty i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #9ca3af;
+}
+
+@media (prefers-color-scheme: dark) {
+  .table-empty {
+    color: #9ca3af;
+  }
+
+  .table-empty i {
+    color: #6b7280;
+  }
+}
+/**
+ * Donation Page Styles
+ * @description Styles specific to the donation page of the Eco Donations DApp
+ */
+
+/* Donation hero section */
+.donation-hero {
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: var(--radius);
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.donation-hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.donation-hero p {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Donation form container */
+.donation-form-container {
+  background: white;
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.donation-form-container h2 {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-dark);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Foundation selection */
+.foundation-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.foundation-option {
+  background: var(--glass-bg);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  backdrop-filter: var(--glass-blur);
+}
+
+.foundation-option:hover {
+  border-color: var(--brand-2);
+  transform: translateY(-2px);
+}
+
+.foundation-option.selected {
+  border-color: var(--brand-2);
+  background: rgba(0, 102, 255, 0.1);
+}
+
+.foundation-option img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  object-fit: contain;
+}
+
+.foundation-option h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.foundation-option p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Donation amount section */
+.donation-amount-section {
+  margin-bottom: 2rem;
+}
+
+.donation-amount-section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.amount-input-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.amount-input-wrapper .currency-symbol {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--brand-2);
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.donation-amount-input {
+  padding-left: 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid var(--brand-2);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.donation-amount-input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+}
+
+/* Impact preview */
+.impact-preview {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  backdrop-filter: var(--glass-blur);
+}
+
+.impact-preview h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.impact-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.impact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.impact-item i {
+  font-size: 1.5rem;
+  color: var(--brand-1);
+}
+
+.impact-details {
+  flex: 1;
+}
+
+.impact-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.impact-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Message input */
+.message-section {
+  margin-bottom: 2rem;
+}
+
+.message-section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.message-input {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+/* Donation summary */
+.donation-summary {
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: white;
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.donation-summary h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.summary-row:last-child {
+  margin-bottom: 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Submit button */
+.submit-donation {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: var(--brand-1);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.submit-donation:hover {
+  background: #1ca25e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.submit-donation:disabled {
+  background: #95a5b4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.loading .spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Success message */
+.success-message {
+  background: var(--brand-1);
+  color: white;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.success-message i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.success-message h3 {
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+}
+
+.success-message p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .donation-hero {
+    padding: 2rem 1rem;
+  }
+
+  .donation-hero h1 {
+    font-size: 2rem;
+  }
+
+  .donation-form-container {
+    padding: 1.5rem;
+  }
+
+  .foundation-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .foundation-option {
+    padding: 1rem;
+  }
+
+  .foundation-option img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .impact-items {
+    grid-template-columns: 1fr;
+  }
+
+  .impact-item {
+    padding: 0.75rem;
+  }
+
+  .donation-summary {
+    padding: 1.5rem;
+  }
+
+  .submit-donation {
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .donation-form-container {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .donation-form-container h2 {
+    color: var(--text-light);
+  }
+
+  .foundation-option {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .foundation-option.selected {
+    background: rgba(0, 102, 255, 0.2);
+  }
+
+  .foundation-option h3 {
+    color: var(--text-light);
+  }
+
+  .foundation-option p {
+    color: #9ca3af;
+  }
+
+  .donation-amount-section h3,
+  .message-section h3 {
+    color: var(--text-light);
+  }
+
+  .donation-amount-input {
+    background: var(--glass-bg);
+    color: var(--text-light);
+  }
+
+  .impact-preview {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .impact-preview h3 {
+    color: var(--text-light);
+  }
+
+  .impact-item {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .impact-value {
+    color: var(--text-light);
+  }
+
+  .impact-label {
+    color: #9ca3af;
+  }
+}
+/**
+ * History Page Styles
+ * @description Styles specific to the history page of the Eco Donations DApp
+ */
+
+/* History hero section */
+.history-hero {
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: white;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hero-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.hero-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.hero-icon i {
+  font-size: 2.5rem;
+  color: white;
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-text h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.hero-text p {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.refresh-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.refresh-btn i {
+  margin-right: 0.5rem;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* History specific stat icon styles */
+.total-donations .stat-icon {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+}
+
+.your-impact .stat-icon {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.eco-coins .stat-icon {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.rank .stat-icon {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* History sections */
+.history-section {
+  background: white;
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.history-section h2 {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-dark);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.history-section .section-subtitle {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+/* Filter controls */
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-controls label {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.filter-controls select {
+  margin: 0;
+  min-width: 150px;
+}
+
+.filter-controls button {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* Timeline styles */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--brand-1), var(--brand-2));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 2rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  background: var(--brand-2);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px white, 0 0 0 6px var(--brand-2);
+}
+
+.timeline-content {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.timeline-title {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.timeline-date {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.timeline-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--brand-1);
+  margin: 0.5rem 0;
+}
+
+.timeline-foundation {
+  color: var(--brand-2);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-message {
+  color: #6b7280;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6b7280;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #9ca3af;
+}
+
+.empty-state h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-dark);
+}
+
+.empty-state p {
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .hero-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .hero-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .hero-icon i {
+    font-size: 2rem;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .refresh-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .history-section {
+    padding: 1.5rem;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-controls select {
+    min-width: auto;
+  }
+
+  .timeline {
+    padding-left: 1rem;
+  }
+
+  .timeline-item {
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item::before {
+    left: -1rem;
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
+  .timeline-content {
+    padding: 1rem;
+  }
+
+  .timeline-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .timeline-amount {
+    font-size: 1.1rem;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .history-section {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .history-section h2 {
+    color: var(--text-light);
+  }
+
+  .history-section .section-subtitle {
+    color: #9ca3af;
+  }
+
+  .filter-controls label {
+    color: var(--text-light);
+  }
+
+  .timeline-item::before {
+    box-shadow: 0 0 0 3px var(--glass-bg), 0 0 0 6px var(--brand-2);
+  }
+
+  .timeline-content {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .timeline-title {
+    color: var(--text-light);
+  }
+
+  .timeline-date {
+    color: #9ca3af;
+  }
+
+  .timeline-message {
+    color: #9ca3af;
+  }
+
+  .empty-state {
+    color: #9ca3af;
+  }
+
+  .empty-state h3 {
+    color: var(--text-light);
+  }
+
+  .empty-state i {
+    color: #6b7280;
+  }
+}
+/**
+ * Home Page Styles
+ * @description Styles specific to the home page of the Eco Donations DApp
+ */
+
+/* Home container */
+.home-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+/* Hero section */
+.home-hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7) saturate(1.2);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(40, 199, 111, 0.3), rgba(0, 102, 255, 0.3));
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: white;
+  max-width: 800px;
+  padding: 2rem;
+}
+
+.hero-content h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0 0 2rem 0;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Stats banner */
+.stats-banner {
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: white;
+  padding: 4rem 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Impact section */
+.impact-section {
+  padding: 6rem 2rem;
+  background: var(--bg-light);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+
+.section-header p {
+  font-size: 1.2rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.impact-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.impact-stat {
+  text-align: center;
+  flex: 1;
+}
+
+.impact-stat-number {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--brand-1);
+  display: block;
+}
+
+.impact-stat-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Foundations section */
+.foundations-section {
+  padding: 6rem 2rem;
+  background: white;
+}
+
+.foundations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Tokenomics section */
+.tokenomics-section {
+  padding: 6rem 2rem;
+  background: var(--bg-dark);
+}
+
+.tokenomics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tokenomics-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.tokenomics-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.tokenomics-icon {
+  font-size: 2.5rem;
+  color: var(--brand-2);
+  margin-bottom: 1rem;
+}
+
+.tokenomics-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+
+.tokenomics-card p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stats-banner {
+    padding: 3rem 1rem;
+  }
+
+  .impact-section,
+  .foundations-section,
+  .tokenomics-section {
+    padding: 4rem 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .impact-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .impact-stat {
+    text-align: left;
+  }
+
+  .impact-stat-number {
+    font-size: 1.2rem;
+  }
+
+  .foundations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tokenomics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .impact-section {
+    background: var(--bg-dark);
+  }
+
+  .foundations-section {
+    background: var(--bg-light);
+  }
+
+  .tokenomics-section {
+    background: var(--bg-dark);
+  }
+
+  .section-header h2 {
+    color: var(--text-light);
+  }
+
+  .section-header p {
+    color: #9ca3af;
+  }
+
+  .impact-stats {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .impact-stat-label {
+    color: #9ca3af;
+  }
+
+  .tokenomics-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .tokenomics-card h3 {
+    color: var(--text-light);
+  }
+
+  .tokenomics-card p {
+    color: #9ca3af;
+  }
+}
