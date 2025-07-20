@@ -31,7 +31,8 @@
   <link rel="stylesheet" href="/css/home.css" id="page-css">
   <script>
     // Dynamic cache busting - always load fresh CSS
-    document.getElementById('main-css').href = '/styles.css?t=' + Date.now();
+    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/css/home.css?t=' + Date.now();
   </script>
 </head>
 <body class="homepage">
