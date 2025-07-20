@@ -433,17 +433,63 @@
   opacity: 0.3;
 }
 
-/* ACHIEVEMENTS SECTION */
+/* ACHIEVEMENTS SECTION - PROFESSIONAL REDESIGN */
 .dashboard-achievements {
   padding: 4rem 2rem;
   margin-bottom: 4rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.02), rgba(59, 130, 246, 0.02));
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-achievements::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.3), transparent);
+}
+
+.dashboard-achievements .section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-achievements .section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-shadow: none;
+}
+
+.dashboard-achievements .section-title i {
+  color: #10b981;
+  font-size: 2rem;
+}
+
+.dashboard-achievements .section-subtitle {
+  font-size: 1.1rem;
+  color: #6b7280;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .achievements-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -451,97 +497,157 @@
   position: relative;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.achievement-card:nth-child(1) { animation-delay: 0.1s; }
+.achievement-card:nth-child(2) { animation-delay: 0.2s; }
+.achievement-card:nth-child(3) { animation-delay: 0.3s; }
+.achievement-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .achievement-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 60px rgba(16, 185, 129, 0.2),
+    0 8px 32px rgba(16, 185, 129, 0.1);
 }
 
-.achievement-card.unlocked {
-  border: 2px solid #10b981;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.1));
+.achievement-card.locked:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 
+    0 15px 45px rgba(0, 0, 0, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.05);
 }
 
-.achievement-card.locked {
-  opacity: 0.7;
-  background: linear-gradient(135deg, rgba(107, 114, 128, 0.05), rgba(75, 85, 99, 0.1));
+.achievement-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.achievement-glow {
+.achievement-icon::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #10b981, #059669);
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), transparent);
+  border-radius: 16px;
 }
 
-.achievement-card.locked .achievement-glow {
-  background: linear-gradient(90deg, #6b7280, #4b5563);
+.achievement-card:hover .achievement-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
-.achievement-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  filter: grayscale(0);
-}
-
-.achievement-card.locked .achievement-icon {
-  filter: grayscale(1);
-  opacity: 0.6;
-}
-
-.achievement-card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-}
-
-.achievement-card p {
-  color: #6b7280;
-  margin-bottom: 1rem;
-  line-height: 1.5;
-}
-
-.achievement-status {
-  background: #10b981;
+.achievement-tier-badge {
+  background: linear-gradient(135deg, #1f2937, #374151);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
   font-weight: 600;
-  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.achievement-progress {
-  text-align: left;
+.achievement-tier-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.achievement-card:hover .achievement-tier-badge::before {
+  left: 100%;
+}
+
+.progress-container {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .progress-bar {
+  position: relative;
   background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  height: 8px;
-  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  height: 12px;
+  margin-bottom: 0.75rem;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10b981, #059669);
-  border-radius: 10px;
-  transition: width 0.5s ease;
+  background: linear-gradient(90deg, #10b981, #059669, #047857);
+  border-radius: 12px;
+  position: relative;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
 
-.achievement-progress span {
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: progressShimmer 2s ease-in-out infinite;
+}
+
+@keyframes progressShimmer {
+  0% { transform: translateX(-20px); }
+  100% { transform: translateX(calc(100vw)); }
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 0.9rem;
+}
+
+.progress-current {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.progress-target {
   color: #6b7280;
   font-weight: 500;
 }
