@@ -14,7 +14,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/styles.css?v=1.7.0">
+  <link rel="stylesheet" href="/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/css/dashboard.css" id="page-css">
+  <script>
+    // Dynamic cache busting - always load fresh CSS
+    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/css/dashboard.css?t=' + Date.now();
+  </script>
 </head>
 <body onload="loadDashboard()">
   <!-- Header -->
@@ -29,6 +35,7 @@
       <a href="history.html" class="header__nav-link">History</a>
       <a href="foundation.html" class="header__nav-link">Foundations</a>
       <a href="dashboard.html" class="header__nav-link active">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
     </nav>
     <div class="header__wallet">
       <div class="header__wallet-info">
@@ -44,67 +51,181 @@
 
   <!-- Main Content -->
   <main class="dashboard-container">
-    <!-- Hero Section -->
+    <!-- Enhanced Hero Section -->
     <div class="dashboard-hero">
+      <div class="hero-background-animation">
+        <div class="floating-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="floating-icon"><i class="fas fa-leaf"></i></div>
+        <div class="floating-icon"><i class="fas fa-coins"></i></div>
+      </div>
       <div class="dashboard-hero__content">
+        <div class="hero-icon-wrapper">
+          <div class="hero-icon">
+            <i class="fas fa-tachometer-alt"></i>
+          </div>
+        </div>
         <h1 class="dashboard-hero__title">Your Impact Dashboard</h1>
-        <p class="dashboard-hero__subtitle">Track your donations, ECO tokens, and environmental impact in one place</p>
+        <p class="dashboard-hero__subtitle">Track your donations, ECO tokens, and environmental impact in one comprehensive view</p>
+        <div class="hero-metrics-preview">
+          <div class="metric-preview">
+            <i class="fas fa-fire"></i>
+            <span>Impact Score: <strong id="impactScore">0</strong></span>
+          </div>
+          <div class="metric-preview">
+            <i class="fas fa-award"></i>
+            <span>Rank: <strong id="globalRank">#--</strong></span>
+          </div>
+          <div class="metric-preview">
+            <i class="fas fa-calendar"></i>
+            <span>Member since: <strong id="memberSince">--</strong></span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Welcome Section -->
+    <!-- Enhanced Welcome Section -->
     <div class="dashboard-welcome" id="dashboardWelcome">
+      <div class="welcome-glow"></div>
       <div class="dashboard-welcome__content">
         <div class="dashboard-welcome__text">
-          <h2>Welcome back!</h2>
-          <p>Here's your environmental impact at a glance</p>
+          <div class="welcome-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="welcome-info">
+            <h2>Welcome back, Environmental Champion!</h2>
+            <p>Here's your environmental impact at a glance</p>
+            <div class="welcome-streak">
+              <i class="fas fa-fire"></i>
+              <span>5-day donation streak</span>
+            </div>
+          </div>
         </div>
         <div class="dashboard-welcome__actions">
           <button onclick="loadDashboard()" class="dashboard-refresh-button">
-            <i class="fas fa-sync-alt"></i>
-            Refresh Data
+            <div class="refresh-content">
+              <i class="fas fa-sync-alt"></i>
+              <span>Refresh Data</span>
+            </div>
+            <div class="button-shine"></div>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Stats Overview -->
+    <!-- Enhanced Stats Overview -->
     <div class="dashboard-stats">
+      <div class="section-header">
+        <h2 class="section-title">Personal Statistics</h2>
+        <p class="section-subtitle">Your environmental impact metrics</p>
+      </div>
       <div class="dashboard-stats__grid">
-        <div class="dashboard-stat-card">
+        <div class="dashboard-stat-card eco-tokens">
+          <div class="stat-card-glow"></div>
           <div class="dashboard-stat-card__icon">
             <i class="fas fa-coins"></i>
           </div>
           <div class="dashboard-stat-card__content">
             <div class="dashboard-stat-card__value" id="ecoBalance">0</div>
             <div class="dashboard-stat-card__label">ECO Tokens</div>
+            <div class="dashboard-stat-card__trend">
+              <i class="fas fa-arrow-up"></i>
+              <span>+50 this week</span>
+            </div>
           </div>
+          <div class="stat-card-pattern"></div>
         </div>
-        <div class="dashboard-stat-card">
+
+        <div class="dashboard-stat-card donations">
+          <div class="stat-card-glow"></div>
           <div class="dashboard-stat-card__icon">
             <i class="fas fa-heart"></i>
           </div>
           <div class="dashboard-stat-card__content">
             <div class="dashboard-stat-card__value" id="totalDonations">0</div>
             <div class="dashboard-stat-card__label">ETH Donated</div>
+            <div class="dashboard-stat-card__trend">
+              <i class="fas fa-heart"></i>
+              <span>Making a difference</span>
+            </div>
           </div>
+          <div class="stat-card-pattern"></div>
         </div>
-        <div class="dashboard-stat-card">
+
+        <div class="dashboard-stat-card foundation">
+          <div class="stat-card-glow"></div>
           <div class="dashboard-stat-card__icon">
             <i class="fas fa-leaf"></i>
           </div>
           <div class="dashboard-stat-card__content">
             <div class="dashboard-stat-card__value" id="topFoundation">N/A</div>
             <div class="dashboard-stat-card__label">Top Foundation</div>
+            <div class="dashboard-stat-card__trend">
+              <i class="fas fa-star"></i>
+              <span>Preferred cause</span>
+            </div>
           </div>
+          <div class="stat-card-pattern"></div>
         </div>
-        <div class="dashboard-stat-card">
+
+        <div class="dashboard-stat-card rank">
+          <div class="stat-card-glow"></div>
           <div class="dashboard-stat-card__icon">
             <i class="fas fa-trophy"></i>
           </div>
           <div class="dashboard-stat-card__content">
             <div class="dashboard-stat-card__value" id="impactRank">#--</div>
             <div class="dashboard-stat-card__label">Impact Rank</div>
+            <div class="dashboard-stat-card__trend">
+              <i class="fas fa-medal"></i>
+              <span>Keep climbing!</span>
+            </div>
+          </div>
+          <div class="stat-card-pattern"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievements Section -->
+    <div class="dashboard-achievements">
+      <div class="section-header">
+        <h2 class="section-title">Achievements & Badges</h2>
+        <p class="section-subtitle">Unlock rewards for your environmental contributions</p>
+      </div>
+      <div class="achievements-grid">
+        <div class="achievement-card unlocked">
+          <div class="achievement-glow"></div>
+          <div class="achievement-icon">🌊</div>
+          <h3>Ocean Guardian</h3>
+          <p>Made 5 donations to ocean causes</p>
+          <div class="achievement-status">Unlocked</div>
+        </div>
+        <div class="achievement-card unlocked">
+          <div class="achievement-glow"></div>
+          <div class="achievement-icon">🌱</div>
+          <h3>Eco Starter</h3>
+          <p>Made your first donation</p>
+          <div class="achievement-status">Unlocked</div>
+        </div>
+        <div class="achievement-card locked">
+          <div class="achievement-icon">🏆</div>
+          <h3>Eco Champion</h3>
+          <p>Donate 10 ETH total</p>
+          <div class="achievement-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 35%"></div>
+            </div>
+            <span>3.5 / 10 ETH</span>
+          </div>
+        </div>
+        <div class="achievement-card locked">
+          <div class="achievement-icon">🔥</div>
+          <h3>Streak Master</h3>
+          <p>Maintain 30-day donation streak</p>
+          <div class="achievement-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 16%"></div>
+            </div>
+            <span>5 / 30 days</span>
           </div>
         </div>
       </div>
@@ -112,21 +233,31 @@
 
     <!-- Main Dashboard Content -->
     <div class="dashboard-main">
-      <!-- Recent Donations -->
+      <!-- Enhanced Recent Donations -->
       <div class="dashboard-section">
         <div class="dashboard-section__header">
-          <h2><i class="fas fa-history"></i> Recent Donations</h2>
-          <a href="history.html" class="dashboard-section__link">View All</a>
+          <div class="section-icon">
+            <i class="fas fa-history"></i>
+          </div>
+          <div class="section-text">
+            <h2>Recent Donations</h2>
+            <p>Your latest environmental contributions</p>
+          </div>
+          <a href="history.html" class="dashboard-section__link">
+            <i class="fas fa-external-link-alt"></i>
+            View All
+          </a>
         </div>
         <div class="dashboard-section__content">
           <div class="dashboard-table-container">
-            <table id="donationTable" class="dashboard-table">
+            <table id="donationTable" class="dashboard-table enhanced-table">
               <thead>
                 <tr>
                   <th><i class="fas fa-leaf"></i> Foundation</th>
                   <th><i class="fas fa-ethereum"></i> Amount</th>
                   <th><i class="fas fa-comment"></i> Message</th>
                   <th><i class="fas fa-calendar"></i> Date</th>
+                  <th><i class="fas fa-award"></i> Impact</th>
                 </tr>
               </thead>
               <tbody>
@@ -134,104 +265,203 @@
               </tbody>
             </table>
             <div id="noDonationsMessage" class="dashboard-empty-state">
-              <i class="fas fa-heart"></i>
+              <div class="empty-state-icon">
+                <i class="fas fa-heart"></i>
+              </div>
               <h3>No donations yet</h3>
               <p>Start making a difference by donating to environmental causes</p>
               <a href="donate.html" class="dashboard-cta-button">
-                <i class="fas fa-plus"></i>
-                Make Your First Donation
+                <div class="button-content">
+                  <i class="fas fa-plus"></i>
+                  <span>Make Your First Donation</span>
+                </div>
+                <div class="button-shine"></div>
               </a>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Impact Metrics -->
+      <!-- Enhanced Impact Metrics -->
       <div class="dashboard-section">
         <div class="dashboard-section__header">
-          <h2><i class="fas fa-seedling"></i> Your Environmental Impact</h2>
+          <div class="section-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <div class="section-text">
+            <h2>Your Environmental Impact</h2>
+            <p>Tangible results from your contributions</p>
+          </div>
         </div>
         <div class="dashboard-section__content">
           <div class="dashboard-impact-grid">
-            <div class="dashboard-impact-card">
+            <div class="dashboard-impact-card ocean">
+              <div class="impact-card-glow"></div>
               <div class="dashboard-impact-card__icon">
                 <i class="fas fa-water"></i>
               </div>
               <div class="dashboard-impact-card__content">
                 <span class="dashboard-impact-card__value" id="oceanImpact">0</span>
-                <span class="dashboard-impact-card__label">Ocean Areas Protected</span>
+                <span class="dashboard-impact-card__label">Ocean Areas Protected (m²)</span>
+                <div class="impact-visual">
+                  <div class="impact-bar">
+                    <div class="impact-fill ocean-fill" style="width: 45%"></div>
+                  </div>
+                  <span class="impact-percentage">45% of goal</span>
+                </div>
               </div>
             </div>
-            <div class="dashboard-impact-card">
+
+            <div class="dashboard-impact-card forest">
+              <div class="impact-card-glow"></div>
               <div class="dashboard-impact-card__icon">
                 <i class="fas fa-tree"></i>
               </div>
               <div class="dashboard-impact-card__content">
                 <span class="dashboard-impact-card__value" id="forestImpact">0</span>
                 <span class="dashboard-impact-card__label">Trees Planted</span>
+                <div class="impact-visual">
+                  <div class="impact-bar">
+                    <div class="impact-fill forest-fill" style="width: 67%"></div>
+                  </div>
+                  <span class="impact-percentage">67% of goal</span>
+                </div>
               </div>
             </div>
-            <div class="dashboard-impact-card">
+
+            <div class="dashboard-impact-card energy">
+              <div class="impact-card-glow"></div>
               <div class="dashboard-impact-card__icon">
                 <i class="fas fa-bolt"></i>
               </div>
               <div class="dashboard-impact-card__content">
                 <span class="dashboard-impact-card__value" id="energyImpact">0</span>
                 <span class="dashboard-impact-card__label">Clean Energy (kWh)</span>
+                <div class="impact-visual">
+                  <div class="impact-bar">
+                    <div class="impact-fill energy-fill" style="width: 78%"></div>
+                  </div>
+                  <span class="impact-percentage">78% of goal</span>
+                </div>
               </div>
             </div>
-            <div class="dashboard-impact-card">
+
+            <div class="dashboard-impact-card carbon">
+              <div class="impact-card-glow"></div>
               <div class="dashboard-impact-card__icon">
                 <i class="fas fa-globe"></i>
               </div>
               <div class="dashboard-impact-card__content">
                 <span class="dashboard-impact-card__value" id="carbonImpact">0</span>
                 <span class="dashboard-impact-card__label">CO₂ Offset (tons)</span>
+                <div class="impact-visual">
+                  <div class="impact-bar">
+                    <div class="impact-fill carbon-fill" style="width: 56%"></div>
+                  </div>
+                  <span class="impact-percentage">56% of goal</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Actions -->
+      <!-- Enhanced Quick Actions -->
       <div class="dashboard-actions">
-        <h2>Quick Actions</h2>
+        <div class="section-header">
+          <h2 class="section-title">Quick Actions</h2>
+          <p class="section-subtitle">Continue your environmental journey</p>
+        </div>
         <div class="dashboard-actions__grid">
-          <a href="donate.html" class="dashboard-action-card">
+          <a href="donate.html" class="dashboard-action-card primary">
+            <div class="action-card-glow"></div>
             <div class="dashboard-action-card__icon">
               <i class="fas fa-heart"></i>
             </div>
-            <h3>Make a Donation</h3>
-            <p>Support environmental causes and earn ECO tokens</p>
+            <div class="action-card-content">
+              <h3>Make a Donation</h3>
+              <p>Support environmental causes and earn ECO tokens</p>
+            </div>
+            <div class="action-card-arrow">
+              <i class="fas fa-arrow-right"></i>
+            </div>
           </a>
+
           <a href="history.html" class="dashboard-action-card">
+            <div class="action-card-glow"></div>
             <div class="dashboard-action-card__icon">
               <i class="fas fa-chart-line"></i>
             </div>
-            <h3>View History</h3>
-            <p>Track all your donations and impact metrics</p>
+            <div class="action-card-content">
+              <h3>View History</h3>
+              <p>Track all your donations and impact metrics</p>
+            </div>
+            <div class="action-card-arrow">
+              <i class="fas fa-arrow-right"></i>
+            </div>
           </a>
+
           <a href="foundation.html" class="dashboard-action-card">
+            <div class="action-card-glow"></div>
             <div class="dashboard-action-card__icon">
               <i class="fas fa-leaf"></i>
             </div>
-            <h3>Explore Foundations</h3>
-            <p>Learn about environmental organizations</p>
+            <div class="action-card-content">
+              <h3>Explore Foundations</h3>
+              <p>Learn about environmental organizations</p>
+            </div>
+            <div class="action-card-arrow">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </a>
+
+          <a href="governance.html" class="dashboard-action-card">
+            <div class="action-card-glow"></div>
+            <div class="dashboard-action-card__icon">
+              <i class="fas fa-vote-yea"></i>
+            </div>
+            <div class="action-card-content">
+              <h3>DAO Governance</h3>
+              <p>Participate in platform decisions</p>
+            </div>
+            <div class="action-card-arrow">
+              <i class="fas fa-arrow-right"></i>
+            </div>
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Wallet Connection Prompt -->
-    <div id="walletPrompt" class="dashboard-wallet-prompt">
+    <!-- Enhanced Wallet Connection Prompt -->
+    <div id="walletPrompt" class="dashboard-wallet-prompt enhanced-wallet-prompt">
+      <div class="prompt-background"></div>
       <div class="dashboard-wallet-prompt__content">
-        <i class="fas fa-wallet"></i>
+        <div class="prompt-icon">
+          <i class="fas fa-wallet"></i>
+        </div>
         <h2>Connect Your Wallet</h2>
-        <p>Connect your wallet to view your personal dashboard and track your environmental impact.</p>
+        <p>Connect your wallet to view your personal dashboard and track your environmental impact journey.</p>
         <button onclick="connectWallet()" class="dashboard-wallet-prompt__button">
-          <i class="fas fa-link"></i>
-          Connect Wallet
+          <div class="button-content">
+            <i class="fas fa-link"></i>
+            <span>Connect Wallet</span>
+          </div>
+          <div class="button-shine"></div>
         </button>
+        <div class="prompt-features">
+          <div class="feature-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Secure & Private</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Track Impact</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-coins"></i>
+            <span>Earn Rewards</span>
+          </div>
+        </div>
       </div>
     </div>
   </main>

@@ -123,9 +123,8 @@ async function connectWallet() {
     const addr = await signer.getAddress();
     localStorage.setItem('walletAddress', addr);
 
-    document.getElementById('connectButton').textContent = clip(addr);
-    document.getElementById('connectButton').classList.add('connected');
-    document.getElementById('walletAddress').textContent = clip(addr);
+    // Update wallet UI
+    updateWalletUI(addr, true);
 
     await updateBalance();
 
@@ -146,6 +145,11 @@ async function connectWallet() {
 
 /* ───────── PERSIST WALLET CONNECTION ───────── */
 async function reconnectWallet() {
+  // Ensure app is initialized first
+  if (!contracts) {
+    await initializeApp();
+  }
+
   const savedAddress = localStorage.getItem('walletAddress');
   console.log('[reconnectWallet] Saved address:', savedAddress);
 
@@ -173,21 +177,24 @@ async function reconnectWallet() {
         });
 
         // Update UI
-        document.getElementById('connectButton').textContent = clip(addr);
-        document.getElementById('connectButton').classList.add('connected');
-        document.getElementById('walletAddress').textContent = clip(addr);
+        updateWalletUI(addr, true);
 
         await updateBalance();
         console.log('[reconnectWallet] Wallet reconnected successfully:', addr);
       } else {
         console.warn('[reconnectWallet] Address mismatch. Clearing saved address.');
         localStorage.removeItem('walletAddress');
+        updateWalletUI(null, false);
       }
     } catch (error) {
       console.error('[reconnectWallet] Error reconnecting wallet:', error);
+      localStorage.removeItem('walletAddress');
+      updateWalletUI(null, false);
     }
   } else {
     console.warn('[reconnectWallet] No saved address or Ethereum provider detected.');
+    // Initialize wallet UI in disconnected state
+    updateWalletUI(null, false);
   }
 }
 
@@ -1224,488 +1231,117 @@ async function loadHomePage() {
   }
 }
 
-// Animate value function for smooth number transitions
-function animateValue(element, start, end, duration, suffix = '') {
-  const startTime = performance.now();
-  const range = end - start;
-
-  function update(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    // Easing function for smooth animation
-    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-    const currentValue = start + (range * easeOutQuart);
-
-    element.textContent = Math.floor(currentValue).toLocaleString() + suffix;
-
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    }
-  }
-
-  requestAnimationFrame(update);
-}
-
-/* ───────── VIDEO CONTROLS ───────── */
-// Control hero video to avoid shaky ending
-function setupHeroVideo() {
-  const video = document.getElementById('heroVideo');
-  if (video) {
-    video.addEventListener('loadedmetadata', function() {
-      // Get video duration and subtract 2 seconds
-      const videoDuration = video.duration;
-      const cutoffTime = videoDuration - 2; // Remove last 2 seconds
-
-      console.log(`Video duration: ${videoDuration}s, will loop at: ${cutoffTime}s`);
-
-      // Set up time monitoring
-      video.addEventListener('timeupdate', function() {
-        if (video.currentTime >= cutoffTime) {
-          video.currentTime = 0; // Reset to beginning
-        }
-      });
-    });
-
-    // Handle loading errors
-    video.addEventListener('error', function(e) {
-      console.warn('Hero video failed to load:', e);
-    });
-  }
-}
-
-// Quick donate function
-function quickDonate(amount) {
-  // Pre-fill donation form with amount
-  const amountInput = document.getElementById('amount');
-  if (amountInput) {
-    amountInput.value = amount.toString();
-  }
-
-  // Navigate to donate page if not already there
-  if (!window.location.pathname.includes('donate.html')) {
-    window.location.href = `donate.html?amount=${amount}`;
-  } else {
-    // If already on donate page, just update the amount
-    if (amountInput) {
-      amountInput.focus();
-    }
-  }
-}
-
-// Prefill donation form based on URL parameters
-function prefillDonationForm() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const amount = urlParams.get('amount');
-  const foundation = urlParams.get('foundation');
-
-  if (amount) {
-    const amountInput = document.getElementById('amount');
-    if (amountInput) {
-      amountInput.value = amount;
-    }
-  }
-
-  if (foundation) {
-    const foundationSelect = document.getElementById('foundation');
-    if (foundationSelect) {
-      foundationSelect.value = foundation;
-    }
-  }
-}
-
-// Initialize video controls when DOM is ready
-document.addEventListener('DOMContentLoaded', async () => {
-  await initializeApp();
-  setupHeroVideo();
-
-  // Check if we're on the home page
-  if (window.location.pathname === '/index.html' || window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
-    loadHomePage();
-  }
-});
-
-// Utility function to clip wallet addresses
-function clip(address) {
-  if (!address || address.length < 10) return address;
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
-}
-
-// Make functions globally available
-window.connectWallet = connectWallet;
-window.sendDonation = sendDonation;
-window.loadHistory = loadHistory;
-window.loadDashboard = loadDashboard;
-window.loadFoundationProfile = loadFoundationProfile;
-window.loadHomePage = loadHomePage;
-window.quickDonate = quickDonate;
-window.prefillDonationForm = prefillDonationForm;
-window.calculateImpactPreview = calculateImpactPreview;
-window.selectFoundation = selectFoundation;
-window.loadFoundationProfileData = loadFoundationProfileData;
-window.loadFoundationDonationData = loadFoundationDonationData;
-window.initializeFoundationPage = initializeFoundationPage;
-window.showDefaultFoundationState = showDefaultFoundationState;
-window.initializeDonationPage = initializeDonationPage;
-window.clip = clip;
-
-// Foundation selection and profile management
-function selectFoundation(foundationId) {
-  console.log('[selectFoundation] Foundation selected:', foundationId);
-
-  // Update URL with selected foundation
-  const url = new URL(window.location);
-  url.searchParams.set('id', foundationId);
-  history.pushState({}, '', url);
-
-  // Hide foundation selection and show profile
-  const foundationSelection = document.querySelector('.foundation-selection');
-  const foundationProfile = document.querySelector('.foundation-profile');
-
-  if (foundationSelection) {
-    foundationSelection.style.display = 'none';
-  }
-
-  if (foundationProfile) {
-    foundationProfile.style.display = 'block';
-  }
-
-  // Highlight selected foundation card
-  const foundationCards = document.querySelectorAll('.foundation-card');
-  foundationCards.forEach(card => card.classList.remove('selected'));
-
-  const selectedCard = document.querySelector(`[data-foundation="${foundationId}"]`);
-  if (selectedCard) {
-    selectedCard.classList.add('selected');
-  }
-
-  // Load foundation profile data
-  loadFoundationProfileData(foundationId);
-}
-
-async function loadFoundationProfileData(foundationId) {
-  console.log('[loadFoundationProfileData] Loading data for foundation:', foundationId);
-
-  // Foundation data
-  const foundationData = [
-    {
-      name: 'Save The Oceans',
-      mission: 'Save The Oceans is dedicated to preserving marine ecosystems and protecting the biodiversity of our oceans. Our mission encompasses removing plastic pollution, protecting endangered marine species, supporting sustainable fishing practices, and restoring coral reefs.',
-      impactCards: [
-        { icon: 'fas fa-trash', title: 'Plastic Removed', value: '0', unit: 'Tons', id: 'plasticRemoved' },
-        { icon: 'fas fa-fish', title: 'Marine Life Saved', value: '0', unit: 'Animals', id: 'marineLifeSaved' },
-        { icon: 'fas fa-water', title: 'Ocean Area Cleaned', value: '0', unit: 'km²', id: 'oceanAreaCleaned' },
-        { icon: 'fas fa-leaf', title: 'Carbon Offset', value: '0', unit: 'Tons CO₂', id: 'carbonOffset' }
-      ]
-    },
-    {
-      name: 'Protect The Rainforest',
-      mission: 'Protect The Rainforest focuses on conserving the world\'s most biodiverse ecosystems. We work to prevent deforestation, support indigenous communities, and promote sustainable land use practices that protect these vital carbon sinks.',
-      impactCards: [
-        { icon: 'fas fa-tree', title: 'Trees Planted', value: '0', unit: 'Trees', id: 'treesPlanted' },
-        { icon: 'fas fa-seedling', title: 'Forest Preserved', value: '0', unit: 'Acres', id: 'forestPreserved' },
-        { icon: 'fas fa-paw', title: 'Wildlife Protected', value: '0', unit: 'Animals', id: 'wildlifeProtected' },
-        { icon: 'fas fa-leaf', title: 'Carbon Offset', value: '0', unit: 'Tons CO₂', id: 'carbonOffset' }
-      ]
-    },
-    {
-      name: 'Protect The Sequoias',
-      mission: 'Protect The Sequoias is committed to preserving ancient forest ecosystems and the world\'s largest trees. Our conservation efforts protect these natural monuments while promoting forest health through scientific research.',
-      impactCards: [
-        { icon: 'fas fa-mountain', title: 'Acres Protected', value: '0', unit: 'Acres', id: 'acresProtected' },
-        { icon: 'fas fa-tree', title: 'Old Growth Saved', value: '0', unit: 'Trees', id: 'oldGrowthSaved' },
-        { icon: 'fas fa-home', title: 'Wildlife Habitat', value: '0', unit: 'km²', id: 'wildlifeHabitat' },
-        { icon: 'fas fa-leaf', title: 'Carbon Offset', value: '0', unit: 'Tons CO₂', id: 'carbonOffset' }
-      ]
-    },
-    {
-      name: 'Clean Energy',
-      mission: 'Clean Energy initiative accelerates the transition to sustainable energy systems. We support solar, wind, and other renewable technologies while advocating for policies that reduce carbon emissions.',
-      impactCards: [
-        { icon: 'fas fa-solar-panel', title: 'Solar Panels', value: '0', unit: 'Installed', id: 'solarPanelsInstalled' },
-        { icon: 'fas fa-bolt', title: 'Clean Energy', value: '0', unit: 'MWh', id: 'cleanEnergyGenerated' },
-        { icon: 'fas fa-smog', title: 'CO₂ Prevented', value: '0', unit: 'Tons', id: 'co2Prevented' },
-        { icon: 'fas fa-home', title: 'Houses Powered', value: '0', unit: 'Homes', id: 'housespowered' }
-      ]
-    }
-  ];
-
-  const foundation = foundationData[foundationId];
-  if (!foundation) {
-    console.error('[loadFoundationProfileData] Foundation not found:', foundationId);
-    return;
-  }
-
-  // Update foundation title and mission
-  const foundationTitle = document.getElementById('foundationTitle');
-  const foundationMission = document.getElementById('foundationMission');
-  const foundationHero = document.getElementById('foundationHero');
-  const foundationDonateButton = document.getElementById('foundationDonateButton');
-
-  if (foundationTitle) {
-    foundationTitle.textContent = foundation.name;
-  }
-
-  if (foundationMission) {
-    foundationMission.textContent = foundation.mission;
-  }
-
-  // Update hero section theme
-  if (foundationHero) {
-    const heroClasses = ['oceans', 'rainforest', 'sequoias', 'energy'];
-    foundationHero.classList.remove(...heroClasses);
-    foundationHero.classList.add(heroClasses[foundationId]);
-  }
-
-  // Update donate button link
-  if (foundationDonateButton) {
-    foundationDonateButton.href = `donate.html?foundation=${foundationId}`;
-  }
-
-  // Update impact cards
-  const impactGrid = document.getElementById('impactGrid');
-  if (impactGrid) {
-    impactGrid.innerHTML = '';
-    foundation.impactCards.forEach(card => {
-      impactGrid.innerHTML += `
-        <div class="impact-card">
-          <div class="impact-card__icon">
-            <i class="${card.icon}"></i>
-          </div>
-          <div class="impact-card__content">
-            <div class="impact-card__value" id="${card.id}">${card.value}</div>
-            <div class="impact-card__label">${card.title}</div>
-            <div class="impact-card__unit">${card.unit}</div>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  // Load donation data and update metrics
-  await loadFoundationDonationData(foundationId);
-}
-
-async function loadFoundationDonationData(foundationId) {
-  console.log('[loadFoundationDonationData] Loading donation data for foundation:', foundationId);
-
+// ───────── LIVE STATS ─────────
+async function updateLiveStats() {
   try {
-    // Ensure contracts are loaded
-    await ensureContract(donationAddress, rpcProvider);
+    // Connect to donation contract
+    const donationContract = new ethers.Contract(donationAddress, donationAbi, rpcProvider);
 
-    const read = new ethers.Contract(donationAddress, donationAbi, rpcProvider);
+    // Fetch total ETH donated (sum of all donations)
+    // For demo: assume contract has a public variable totalDonatedETH
+    let totalEth = 0;
+    if (donationContract.totalDonatedETH) {
+      totalEth = await donationContract.totalDonatedETH();
+      totalEth = ethers.utils.formatEther(totalEth);
+    }
+    document.getElementById('statTotalEth').textContent = totalEth ? `${totalEth} ETH` : 'N/A';
 
-    // Fetch donation events for the selected foundation
-    const evs = await read.queryFilter(read.filters.DonationMade(), 0);
-    console.log(`[loadFoundationDonationData] All events:`, evs);
+    // Fetch number of donors (assume contract has public donorCount)
+    let donorCount = 0;
+    if (donationContract.donorCount) {
+      donorCount = await donationContract.donorCount();
+    }
+    document.getElementById('statDonorCount').textContent = donorCount ? donorCount : 'N/A';
 
-    const filteredEvents = evs.filter(e => {
-      if (!e.args) return false;
-      return parseInt(e.args.f) === foundationId;
-    });
+    // Fetch total ECO minted (assume contract has public totalEcoMinted)
+    let ecoMinted = 0;
+    if (donationContract.totalEcoMinted) {
+      ecoMinted = await donationContract.totalEcoMinted();
+      ecoMinted = ethers.utils.formatEther(ecoMinted);
+    }
+    document.getElementById('statEcoMinted').textContent = ecoMinted ? `${ecoMinted} ECO` : 'N/A';
 
-    console.log(`[loadFoundationDonationData] Filtered events for foundation ${foundationId}:`, filteredEvents);
-
-    let totalDonations = ethers.BigNumber.from(0);
-    const donors = new Set();
-    const recentDonations = [];
-
-    // Process donation events
-    filteredEvents.forEach(e => {
-      const { sender, amount, msg_ } = e.args;
-      console.log(`[loadFoundationDonationData] Processing donation: ${ethers.utils.formatEther(amount)} ETH from ${sender}`);
-
-      totalDonations = totalDonations.add(amount);
-      donors.add(sender);
-
-      recentDonations.push({
-        sender,
-        amount: ethers.utils.formatEther(amount),
-        message: msg_,
-        timestamp: Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000 // Random time in last 7 days
+    // Fetch recent donations (assume contract has a function getRecentDonations)
+    let recentDonations = [];
+    if (donationContract.getRecentDonations) {
+      recentDonations = await donationContract.getRecentDonations();
+    }
+    const recentList = document.getElementById('recentDonationsList');
+    recentList.innerHTML = '';
+    if (recentDonations && recentDonations.length > 0) {
+      recentDonations.slice(0, 3).forEach(donation => {
+        const li = document.createElement('li');
+        li.textContent = `${donation.sender.slice(0,6)}... donated ${ethers.utils.formatEther(donation.amount)} ETH to ${names[donation.foundation]}: "${donation.message}"`;
+        recentList.appendChild(li);
       });
-    });
-
-    // Sort by timestamp (newest first)
-    recentDonations.sort((a, b) => b.timestamp - a.timestamp);
-
-    // Update metrics
-    const totalEthDonated = parseFloat(ethers.utils.formatEther(totalDonations));
-    const averageDonation = filteredEvents.length > 0 ? totalEthDonated / filteredEvents.length : 0;
-
-    const totalDonationsElem = document.getElementById('totalDonations');
-    const donorCountElem = document.getElementById('donorCount');
-    const averageDonationElem = document.getElementById('averageDonation');
-
-    if (totalDonationsElem) totalDonationsElem.textContent = totalEthDonated.toFixed(2);
-    if (donorCountElem) donorCountElem.textContent = donors.size;
-    if (averageDonationElem) averageDonationElem.textContent = averageDonation.toFixed(3);
-
-    // Update recent donations
-    const recentDonationsElem = document.getElementById('recentDonations');
-    if (recentDonationsElem) {
-      recentDonationsElem.innerHTML = '';
-
-      if (recentDonations.length === 0) {
-        recentDonationsElem.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-heart"></i>
-            <h3>No donations yet</h3>
-            <p>Be the first to support this foundation!</p>
-          </div>
-        `;
-      } else {
-        recentDonations.slice(0, 5).forEach(donation => {
-          const timeAgo = Math.floor((Date.now() - donation.timestamp) / (1000 * 60 * 60 * 24));
-          recentDonationsElem.innerHTML += `
-            <div class="donation-item">
-              <div class="donation-item__info">
-                <div class="donation-item__sender">${clip(donation.sender)}</div>
-                <div class="donation-item__message">${donation.message}</div>
-                <div class="donation-item__time">${timeAgo} day${timeAgo !== 1 ? 's' : ''} ago</div>
-              </div>
-              <div class="donation-item__amount">${parseFloat(donation.amount).toFixed(3)} ETH</div>
-            </div>
-          `;
-        });
-      }
+    } else {
+      recentList.innerHTML = '<li>No recent donations.</li>';
     }
-
-    // Calculate and animate impact metrics
-    calculateFoundationImpact(totalEthDonated, foundationId);
-
-  } catch (error) {
-    console.error('[loadFoundationDonationData] Error loading donation data:', error);
+  } catch (err) {
+    console.error('Error updating live stats:', err);
   }
 }
 
-function calculateFoundationImpact(totalEthDonated, foundationId) {
-  console.log(`[calculateFoundationImpact] Calculating impact for foundation ${foundationId} with ${totalEthDonated} ETH`);
-
-  // Foundation-specific impact conversion rates (per 1 ETH donated)
-  const impactRates = [
-    { // Save The Oceans (ID: 0)
-      plasticRemoved: 15,
-      marineLifeSaved: 50,
-      oceanAreaCleaned: 2.5,
-      carbonOffset: 8
-    },
-    { // Protect The Rainforest (ID: 1)
-      treesPlanted: 200,
-      forestPreserved: 5,
-      wildlifeProtected: 75,
-      carbonOffset: 12
-    },
-    { // Protect The Sequoias (ID: 2)
-      acresProtected: 8,
-      oldGrowthSaved: 3,
-      wildlifeHabitat: 15,
-      carbonOffset: 20
-    },
-    { // Clean Energy (ID: 3)
-      solarPanelsInstalled: 25,
-      cleanEnergyGenerated: 100,
-      co2Prevented: 35,
-      housespowered: 12
-    }
-  ];
-
-  const rates = impactRates[foundationId] || impactRates[0];
-
-  // Calculate impact values
-  const impactValues = {};
-  Object.keys(rates).forEach(key => {
-    impactValues[key] = (totalEthDonated * rates[key]).toFixed(1);
-  });
-
-  // Animate impact counters
-  Object.keys(impactValues).forEach(key => {
-    const element = document.getElementById(key);
-    if (element) {
-      animateValue(element, 0, parseFloat(impactValues[key]), 1500, true);
-    }
-  });
+// Poll live stats every 15 seconds
+if (document.body.classList.contains('homepage')) {
+  updateLiveStats();
+  setInterval(updateLiveStats, 15000);
 }
 
-function initializeFoundationPage() {
-  console.log('[initializeFoundationPage] Initializing foundation page');
-
-  // Check if there's a foundation ID in the URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const foundationId = urlParams.get('id');
-
-  if (foundationId !== null) {
-    const id = parseInt(foundationId, 10);
-    if (!isNaN(id) && id >= 0 && id <= 3) {
-      console.log('[initializeFoundationPage] Loading foundation from URL:', id);
-      selectFoundation(id);
-      return;
-    }
-  }
-
-  // If no valid foundation ID in URL, show default state
-  console.log('[initializeFoundationPage] No valid foundation ID in URL, showing default state');
-  showDefaultFoundationState();
+// Placeholder to prevent ReferenceError on donate.html
+function prefillDonationForm() {
+  // TODO: Implement autofill logic if needed
 }
-
-function showDefaultFoundationState() {
-  console.log('[showDefaultFoundationState] Showing default foundation state');
-
-  // Clear URL parameters
-  const url = new URL(window.location);
-  url.searchParams.delete('id');
-  history.pushState({}, '', url);
-
-  // Show the foundation selection section
-  const foundationSelection = document.querySelector('.foundation-selection');
-  const foundationProfile = document.querySelector('.foundation-profile');
-
-  if (foundationSelection) {
-    foundationSelection.style.display = 'block';
-  }
-
-  if (foundationProfile) {
-    foundationProfile.style.display = 'none';
-  }
-
-  // Clear selected state from foundation cards
-  const foundationCards = document.querySelectorAll('.foundation-card');
-  foundationCards.forEach(card => card.classList.remove('selected'));
-
-  // Update hero section
-  const foundationTitle = document.getElementById('foundationTitle');
-  const foundationHero = document.getElementById('foundationHero');
-
-  if (foundationTitle) {
-    foundationTitle.textContent = 'Environmental Foundations';
-  }
-
-  if (foundationHero) {
-    const heroClasses = ['oceans', 'rainforest', 'sequoias', 'energy'];
-    foundationHero.classList.remove(...heroClasses);
-  }
-}
-
 function initializeDonationPage() {
-  console.log('[initializeDonationPage] Initializing donation page');
+  // TODO: Implement page initialization logic if needed
+}
 
-  // Check for foundation parameter in URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const foundationParam = urlParams.get('foundation');
+/* ───────── WALLET UI MANAGEMENT ───────── */
+function updateWalletUI(address, isConnected) {
+  const walletContainer = document.querySelector('.header__wallet');
+  const connectButton = document.getElementById('connectButton');
+  const walletAddressElement = document.getElementById('walletAddress');
+  const walletBalanceElement = document.getElementById('walletBalance');
 
-  if (foundationParam !== null) {
-    const foundationId = parseInt(foundationParam, 10);
-    if (!isNaN(foundationId) && foundationId >= 0 && foundationId <= 3) {
-      console.log('[initializeDonationPage] Pre-selecting foundation:', foundationId);
+  if (!connectButton) return;
 
-      const foundationSelect = document.getElementById('foundation');
-      if (foundationSelect) {
-        foundationSelect.value = foundationId;
+  if (isConnected && address) {
+    // Update wallet container state
+    walletContainer?.classList.add('connected');
 
-        // Trigger change event to update any related UI
-        const changeEvent = new Event('change');
-        foundationSelect.dispatchEvent(changeEvent);
-      }
+    // Update connect button
+    connectButton.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      ${clip(address)}
+    `;
+    connectButton.classList.add('connected');
+
+    // Update wallet address display
+    if (walletAddressElement) {
+      walletAddressElement.textContent = clip(address);
     }
+
+    // Show wallet info (CSS will handle this with :not(.connected) rule)
+    console.log('[updateWalletUI] Wallet connected:', address);
+  } else {
+    // Update wallet container state
+    walletContainer?.classList.remove('connected');
+
+    // Reset connect button
+    connectButton.innerHTML = `
+      <i class="fas fa-wallet"></i>
+      Connect Wallet
+    `;
+    connectButton.classList.remove('connected');
+
+    // Clear wallet displays
+    if (walletAddressElement) {
+      walletAddressElement.textContent = '';
+    }
+    if (walletBalanceElement) {
+      walletBalanceElement.textContent = '';
+    }
+
+    console.log('[updateWalletUI] Wallet disconnected');
   }
 }

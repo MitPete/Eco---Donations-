@@ -27,20 +27,27 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/styles.css?v=1.7.0">
+  <link rel="stylesheet" href="/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/css/home.css" id="page-css">
+  <script>
+    // Dynamic cache busting - always load fresh CSS
+    document.getElementById('main-css').href = '/styles.css?t=' + Date.now();
+  </script>
 </head>
 <body class="homepage">
   <!-- Header -->
   <header class="header">
-    <h1 class="header__logo">
+    <a href="index.html" class="header__logo">
       <i class="fas fa-leaf"></i>
       Eco Donations
-    </h1>
+    </a>
     <nav class="header__nav">
       <a href="index.html" class="header__nav-link active">Home</a>
       <a href="donate.html" class="header__nav-link">Donate</a>
       <a href="history.html" class="header__nav-link">History</a>
       <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
     </nav>
     <div class="header__wallet">
       <div class="header__wallet-info">
@@ -54,9 +61,8 @@
     </div>
   </header>
 
-  <!-- Main -->
+  <!-- Hero Section -->
   <main class="home-container">
-    <!-- Hero Section -->
     <section class="home-hero">
       <div class="hero-background">
         <video id="heroVideo" class="hero-video" autoplay muted loop playsinline>
@@ -65,58 +71,154 @@
         <div class="hero-overlay"></div>
       </div>
       <div class="hero-content">
-        <h1>Protect Our Planet, Earn Rewards</h1>
-        <p class="hero-subtitle">Join the world's first blockchain-powered environmental donation platform. Make a difference while earning ECO tokens.</p>
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Powered by Blockchain Technology</span>
+        </div>
+        <h1>Environmental Impact<br><span class="gradient-text">Through Web3</span></h1>
+        <p class="hero-subtitle">Join the future of sustainable giving. Every donation creates measurable environmental impact while earning you ECO governance tokens on the Ethereum blockchain.</p>
         <div class="hero-actions">
-          <a class="cta-primary" href="donate.html">
-            <i class="fa-solid fa-heart"></i>
-            Start Donating
+          <a class="btn btn-primary" href="donate.html">
+            <span>Start Your Impact Journey</span>
+            <i class="fas fa-arrow-right"></i>
           </a>
-          <a class="cta-secondary" href="foundation.html">
-            <i class="fa-solid fa-building"></i>
-            View Foundations
+          <a class="btn btn-secondary" href="foundation.html">
+            <span>Explore Projects</span>
+            <i class="fas fa-external-link-alt"></i>
           </a>
+        </div>
+
+        <!-- Live Impact Ticker -->
+        <div class="impact-ticker">
+          <div class="ticker-item">
+            <span class="ticker-value" id="liveTotal">$0</span>
+            <span class="ticker-label">Total Impact</span>
+          </div>
+          <div class="ticker-separator"></div>
+          <div class="ticker-item">
+            <span class="ticker-value" id="liveChampions">0</span>
+            <span class="ticker-label">Eco Champions</span>
+          </div>
+          <div class="ticker-separator"></div>
+          <div class="ticker-item">
+            <span class="ticker-value" id="liveCO2">0t</span>
+            <span class="ticker-label">CO₂ Offset</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Stats Banner -->
-    <section class="stats-banner">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-icon">
-            <i class="fa-solid fa-hand-holding-dollar"></i>
+    <!-- Impact Metrics Dashboard -->
+    <section class="metrics-dashboard">
+      <div class="container">
+        <div class="dashboard-header">
+          <div class="header-content">
+            <h2>Real-Time Environmental Impact</h2>
+            <p>Every transaction creates measurable change for our planet</p>
           </div>
-          <div class="stat-content">
-            <div class="stat-number" id="kpiTotalDonated">0</div>
-            <div class="stat-label">Total Donated</div>
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-icon">
-            <i class="fa-solid fa-leaf"></i>
-          </div>
-          <div class="stat-content">
-            <div class="stat-number" id="kpiCarbon">0</div>
-            <div class="stat-label">CO₂ Offset</div>
+          <div class="header-actions">
+            <button class="refresh-btn" onclick="updateLiveStats()">
+              <i class="fas fa-sync-alt"></i>
+              <span>Live Data</span>
+            </button>
           </div>
         </div>
-        <div class="stat-item">
-          <div class="stat-icon">
-            <i class="fa-solid fa-user-group"></i>
+
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-hand-holding-usd"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+12.5%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="totalFunding">$0</div>
+              <div class="metric-label">Environmental Funding</div>
+              <div class="metric-subtitle">Total value directed to conservation</div>
+            </div>
+            <div class="metric-chart">
+              <div class="chart-bar" style="height: 60%"></div>
+              <div class="chart-bar" style="height: 80%"></div>
+              <div class="chart-bar" style="height: 45%"></div>
+              <div class="chart-bar" style="height: 90%"></div>
+              <div class="chart-bar" style="height: 75%"></div>
+            </div>
           </div>
-          <div class="stat-content">
-            <div class="stat-number" id="kpiDonors">0</div>
-            <div class="stat-label">Active Donors</div>
+
+          <div class="metric-card secondary">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+8.2%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="carbonOffset">0</div>
+              <div class="metric-label">CO₂ Offset (Tons)</div>
+              <div class="metric-subtitle">Carbon emissions prevented</div>
+            </div>
+            <div class="metric-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 73%"></div>
+              </div>
+              <span class="progress-text">73% of monthly goal</span>
+            </div>
           </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-icon">
-            <i class="fa-solid fa-coins"></i>
+
+          <div class="metric-card accent">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+15.7%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="areasProtected">0</div>
+              <div class="metric-label">Protected Areas</div>
+              <div class="metric-subtitle">Acres under conservation</div>
+            </div>
+            <div class="metric-visual">
+              <div class="protection-rings">
+                <div class="ring ring-1"></div>
+                <div class="ring ring-2"></div>
+                <div class="ring ring-3"></div>
+              </div>
+            </div>
           </div>
-          <div class="stat-content">
-            <div class="stat-number" id="kpiEcoMinted">0</div>
-            <div class="stat-label">ECO Minted</div>
+
+          <div class="metric-card success">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+24.1%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="activeChampions">0</div>
+              <div class="metric-label">Eco Champions</div>
+              <div class="metric-subtitle">Active community members</div>
+            </div>
+            <div class="metric-avatars">
+              <div class="avatar-stack">
+                <div class="avatar">🌱</div>
+                <div class="avatar">🌍</div>
+                <div class="avatar">♻️</div>
+                <div class="avatar-more">+<span id="moreCount">97</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -167,37 +269,56 @@
 
     <!-- How It Works -->
     <section class="how-it-works">
-      <div class="section-header">
-        <h2>How It Works</h2>
-        <p>Simple steps to make a difference</p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Connect Wallet</h3>
-            <p>Link your Ethereum wallet to get started</p>
-          </div>
+      <div class="container">
+        <div class="section-header">
+          <h2>How Eco Donations Works</h2>
+          <p>Four simple steps to maximize your environmental impact</p>
         </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Choose Foundation</h3>
-            <p>Select from our vetted environmental organizations</p>
-          </div>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Make Donation</h3>
-            <p>Contribute any amount to your chosen cause</p>
-          </div>
-        </div>
-        <div class="step-card">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Earn ECO Tokens</h3>
-            <p>Receive 10 ECO tokens for every 1 ETH donated</p>
+        <div class="steps-container">
+          <div class="steps-grid">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <div class="step-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="step-content">
+                <h3>Connect Your Wallet</h3>
+                <p>Securely link your Ethereum wallet to get started with blockchain donations</p>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <div class="step-icon">
+                <i class="fas fa-globe"></i>
+              </div>
+              <div class="step-content">
+                <h3>Choose Your Cause</h3>
+                <p>Select from our vetted environmental organizations making real impact</p>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <div class="step-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <div class="step-content">
+                <h3>Make Your Donation</h3>
+                <p>Contribute any amount to your chosen environmental project</p>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <div class="step-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="step-content">
+                <h3>Earn ECO Rewards</h3>
+                <p>Receive 10 ECO tokens for every 1 ETH donated and track your impact</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

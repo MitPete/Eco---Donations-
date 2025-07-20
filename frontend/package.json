@@ -37,7 +37,8 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "ethers": "^5.7.2"
+    "ethers": "^5.7.2",
+    "express": "^5.1.0"
   },
   "browserslist": [
     "> 1%",

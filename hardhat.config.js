@@ -15,7 +15,7 @@ module.exports = {
       url: "https://sepolia.infura.io/v3/YOUR_INFURA_KEY", // You'll need to replace this
       accounts: [
         // Add your private key here for deployment (keep it secure!)
-        "0xYOUR_PRIVATE_KEY_HERE"
+        "0x1234567890123456789012345678901234567890123456789012345678901234"
       ],
       chainId: 11155111
     }
