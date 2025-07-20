@@ -24,6 +24,16 @@
       <a href="dashboard.html" class="header__nav-link">Dashboard</a>
       <a href="governance.html" class="header__nav-link active">Governance</a>
     </nav>
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
+    </div>
   </header>
   <main>
     <section class="hero governance-hero">

@@ -29,6 +29,7 @@ body {
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
+  min-height: 70px; /* Ensure consistent header height */
 }
 
 .header__logo {
@@ -49,6 +50,7 @@ body {
   justify-content: center;
   flex: 1;
   max-width: 600px;
+  min-width: 0; /* Prevent flex item from overflowing */
 }
 
 .header__nav-link {
@@ -80,6 +82,8 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0; /* Prevent wallet section from shrinking */
+  min-width: fit-content; /* Ensure minimum space is reserved */
 }
 
 .header__wallet-info {
