@@ -43,26 +43,37 @@ body {
 
 .header__nav {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 600px;
 }
 
 .header__nav-link {
   text-decoration: none;
   color: #374151;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   white-space: nowrap;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  position: relative;
+  min-width: fit-content;
 }
 
 .header__nav-link:hover {
   color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+  transform: translateY(-1px);
 }
 
 .header__nav-link.active {
   color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
 .header__wallet {
@@ -137,9 +148,9 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(16, 185, 129, 0.5), 
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(16, 185, 129, 0.5),
     transparent
   );
 }
