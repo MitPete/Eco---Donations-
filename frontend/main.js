@@ -44,8 +44,16 @@ async function initializeApp() {
   // Support both local and testnet
   const isLocal = contracts.chainId === 31337;
   RPC_URL = isLocal ? 'http://localhost:8545' : 'https://sepolia.infura.io/v3/YOUR_INFURA_KEY';
-  ecoCoinAddress = contracts.ecoCoin;
-  donationAddress = contracts.donationContract;
+  
+  // Validate contract addresses
+  ecoCoinAddress = getContractAddress(contracts, 'ecoCoin');
+  donationAddress = getContractAddress(contracts, 'donationContract');
+  
+  if (!ecoCoinAddress || !donationAddress) {
+    console.error('Invalid contract addresses. Cannot initialize app.');
+    return;
+  }
+  
   chainIdExpected = contracts.chainId.toString();
 
   /* ───────── PROVIDERS ───────── */
@@ -83,6 +91,13 @@ async function connectWallet() {
   }
 
   try {
+    // Validate that contract addresses are available
+    if (!donationAddress || !ecoCoinAddress) {
+      console.error('Contract addresses not properly initialized');
+      alert('Application not properly initialized. Please refresh the page.');
+      return;
+    }
+
     // Get current network
     const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
     const currentChainIdDecimal = parseInt(currentChainId, 16);
@@ -155,11 +170,19 @@ async function reconnectWallet() {
 
   if (savedAddress && window.ethereum) {
     try {
+      // Validate that contract addresses are available
+      if (!donationAddress || !ecoCoinAddress) {
+        console.error('Contract addresses not properly initialized for reconnection');
+        return;
+      }
+
       browserProvider = new ethers.providers.Web3Provider(window.ethereum);
       signer = await browserProvider.getSigner();
 
       const addr = await signer.getAddress();
-      console.log('[reconnectWallet] Retrieved address:', addr);      if (addr.toLowerCase() === savedAddress.toLowerCase()) {
+      console.log('[reconnectWallet] Retrieved address:', addr);
+      
+      if (addr.toLowerCase() === savedAddress.toLowerCase()) {
         // Ensure contracts are deployed before initializing
         await ensureContract(donationAddress, browserProvider);
 
@@ -264,6 +287,12 @@ async function loadHistory() {
   if (!contracts || !rpcProvider) {
     console.log('[loadHistory] Initializing app first...');
     await initializeApp();
+  }
+
+  // Validate contract address
+  if (!donationAddress || !isValidAddress(donationAddress)) {
+    console.error('Invalid donation contract address for history');
+    return;
   }
 
   await ensureContract(donationAddress, rpcProvider);
@@ -430,6 +459,12 @@ async function loadHistory() {
 
 /* ───────── DASHBOARD ───────── */
 async function loadDashboard() {
+  // Validate contract address
+  if (!donationAddress || !isValidAddress(donationAddress)) {
+    console.error('Invalid donation contract address for dashboard');
+    return;
+  }
+
   await ensureContract(donationAddress, rpcProvider);
 
   const read = new ethers.Contract(donationAddress, donationAbi, rpcProvider);
@@ -529,6 +564,12 @@ async function loadFoundationProfile() {
   const foundationId = parseInt(urlParams.get('id'), 10);
   if (isNaN(foundationId) || foundationId < 0 || foundationId > 3) {
     alert('Invalid foundation specified.');
+    return;
+  }
+
+  // Validate contract address
+  if (!donationAddress || !isValidAddress(donationAddress)) {
+    console.error('Invalid donation contract address for foundation profile');
     return;
   }
 
@@ -1234,6 +1275,17 @@ async function loadHomePage() {
 // ───────── LIVE STATS ─────────
 async function updateLiveStats() {
   try {
+    // Validate contract address before creating contract instance
+    if (!donationAddress || !isValidAddress(donationAddress)) {
+      console.error('Invalid donation contract address:', donationAddress);
+      return;
+    }
+
+    if (!rpcProvider) {
+      console.error('RPC provider not initialized');
+      return;
+    }
+
     // Connect to donation contract
     const donationContract = new ethers.Contract(donationAddress, donationAbi, rpcProvider);
 
