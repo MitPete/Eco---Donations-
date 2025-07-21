@@ -4,9 +4,9 @@ const path = require('path');
 const app = express();
 const PORT = 8000;
 
-// Middleware to prevent caching for CSS files
+// Middleware to prevent caching for CSS and JS files
 app.use((req, res, next) => {
-  if (req.url.endsWith('.css')) {
+  if (req.url.endsWith('.css') || req.url.endsWith('.js')) {
     res.set({
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
