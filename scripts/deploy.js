@@ -35,13 +35,21 @@ async function main() {
   console.log("✅ DonationContract :", donation.address);
 
   /* ------------------------------------------------------------------
-     4. Transfer EcoCoin ownership to DonationContract
+     4. Deploy AutoDonationService
+  ------------------------------------------------------------------ */
+  const AutoDonation = await hre.ethers.getContractFactory("AutoDonationService");
+  const autoDonation = await AutoDonation.deploy(donation.address);
+  await autoDonation.deployed();
+  console.log("✅ AutoDonationService :", autoDonation.address);
+
+  /* ------------------------------------------------------------------
+     5. Transfer EcoCoin ownership to DonationContract
   ------------------------------------------------------------------ */
   await (await eco.transferOwnership(donation.address)).wait();
   console.log("🔑 EcoCoin owner    → DonationContract");
 
   /* ------------------------------------------------------------------
-     5. Persist addresses for the front-end
+     6. Persist addresses for the front-end
   ------------------------------------------------------------------ */
   const frontDir = path.join(__dirname, "../frontend/src");
   fs.mkdirSync(frontDir, { recursive: true });
@@ -49,6 +57,7 @@ async function main() {
   const out = {
     ecoCoin:          eco.address,
     donationContract: donation.address,
+    autoDonationService: autoDonation.address,
     chainId:          hre.network.config.chainId || 31337
   };
   fs.writeFileSync(

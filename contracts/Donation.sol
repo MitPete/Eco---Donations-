@@ -5,13 +5,18 @@ import "./EcoCoin.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract DonationContract is ERC721URIStorage {
-    enum Foundation { SaveTheOceans, ProtectTheRainforest, ProtectTheSequoias, CleanEnergy }
+    enum Foundation {
+        SaveTheOceans,
+        ProtectTheRainforest,
+        ProtectTheSequoias,
+        CleanEnergy
+    }
 
     EcoCoin public eco;
     address public owner;
     mapping(Foundation => address) public foundationAddresses;
     mapping(uint256 => Foundation) private _tokenFoundation;
-    string[4] private _uris;       // one URI per foundation
+    string[4] private _uris; // one URI per foundation
     uint256 public nextId = 1;
 
     event DonationMade(Foundation f, address sender, uint amount, string msg_);
@@ -23,16 +28,14 @@ contract DonationContract is ERC721URIStorage {
         address rainAddr,
         address sequoiasAddr,
         address energyAddr
-    )
-        ERC721("Eco Donation Badge", "ECO-BADGE")
-    {
+    ) ERC721("Eco Donation Badge", "ECO-BADGE") {
         owner = msg.sender;
-        eco   = EcoCoin(ecoAddr);
+        eco = EcoCoin(ecoAddr);
 
-        foundationAddresses[Foundation.SaveTheOceans]        = oceansAddr;
+        foundationAddresses[Foundation.SaveTheOceans] = oceansAddr;
         foundationAddresses[Foundation.ProtectTheRainforest] = rainAddr;
-        foundationAddresses[Foundation.ProtectTheSequoias]   = sequoiasAddr;
-        foundationAddresses[Foundation.CleanEnergy]          = energyAddr;
+        foundationAddresses[Foundation.ProtectTheSequoias] = sequoiasAddr;
+        foundationAddresses[Foundation.CleanEnergy] = energyAddr;
 
         // for now EVERY foundation returns the Oceans badge
         _uris[0] = "/badges/oceans.json";
@@ -46,7 +49,9 @@ contract DonationContract is ERC721URIStorage {
         eco.mintTokens(msg.sender, msg.value * 10);
         emit TokenBalanceUpdated(msg.sender, eco.balanceOf(msg.sender));
 
-        (bool ok,) = payable(foundationAddresses[f]).call{value: msg.value}("");
+        (bool ok, ) = payable(foundationAddresses[f]).call{value: msg.value}(
+            ""
+        );
         require(ok, "Transfer failed");
 
         uint256 id = nextId++;
@@ -54,6 +59,30 @@ contract DonationContract is ERC721URIStorage {
         _tokenFoundation[id] = f;
 
         emit DonationMade(f, msg.sender, msg.value, message);
+    }
+
+    // Special donation function for auto-donations (accepts donor address)
+    function donateOnBehalf(
+        Foundation f,
+        string calldata message,
+        address donor
+    ) external payable {
+        require(msg.value > 0, "Send ETH");
+        require(donor != address(0), "Invalid donor address");
+
+        eco.mintTokens(donor, msg.value * 10);
+        emit TokenBalanceUpdated(donor, eco.balanceOf(donor));
+
+        (bool ok, ) = payable(foundationAddresses[f]).call{value: msg.value}(
+            ""
+        );
+        require(ok, "Transfer failed");
+
+        uint256 id = nextId++;
+        _safeMint(donor, id);
+        _tokenFoundation[id] = f;
+
+        emit DonationMade(f, donor, msg.value, message);
     }
 
     // every tokenId returns URI based on its foundation

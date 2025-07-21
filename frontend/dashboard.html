@@ -492,104 +492,448 @@
             <div class="action-card-arrow">
               <i class="fas fa-arrow-right"></i>
             </div>
-          </a>
+          </a>        </div>
+      </div>
+
+      <!-- Auto-Donation Management Section -->
+      <div class="dashboard-auto-donation" id="autoDonationSection" style="display: none;">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-magic"></i>
+            Auto-Donation
+          </h2>
+          <p class="section-subtitle">Effortless giving with every transaction</p>
+        </div>
+
+        <div class="auto-donation-container">
+          <!-- Auto-Donation Status Card -->
+          <div class="auto-donation-status-card">
+            <div class="status-header">
+              <div class="status-icon" id="autoStatusIcon">
+                <i class="fas fa-pause-circle"></i>
+              </div>
+              <div class="status-info">
+                <h3 id="autoStatusTitle">Auto-Donation Inactive</h3>
+                <p id="autoStatusDesc">Set up automatic micro-donations</p>
+              </div>
+              <div class="status-toggle">
+                <button class="toggle-button" id="autoToggleBtn" onclick="toggleAutoDonation()">
+                  <span id="toggleText">Enable</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="status-stats" id="autoStats" style="display: none;">
+              <div class="stat-item">
+                <div class="stat-label">This Month</div>
+                <div class="stat-value" id="monthlyDonated">0 ETH</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Total Donated</div>
+                <div class="stat-value" id="totalAutoDonated">0 ETH</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Donations</div>
+                <div class="stat-value" id="autoDonationCount">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auto-Donation Settings -->
+          <div class="auto-donation-settings" id="autoSettings" style="display: none;">
+            <div class="settings-card">
+              <h4>Donation Settings</h4>
+
+              <div class="setting-group">
+                <label for="donationType">Donation Type</label>
+                <select id="donationType" onchange="updateDonationType()">
+                  <option value="fixed">Fixed Amount</option>
+                  <option value="percentage">Percentage of Transaction</option>
+                </select>
+              </div>
+
+              <div class="setting-group" id="fixedAmountGroup">
+                <label for="fixedAmount">Fixed Amount (ETH)</label>
+                <input type="number" id="fixedAmount" step="0.001" min="0.001" placeholder="0.001">
+              </div>
+
+              <div class="setting-group" id="percentageGroup" style="display: none;">
+                <label for="percentage">Percentage (%)</label>
+                <input type="number" id="percentage" step="0.1" min="0.1" max="10" placeholder="1.0">
+              </div>
+
+              <div class="setting-group">
+                <label for="monthlyLimit">Monthly Limit (ETH)</label>
+                <input type="number" id="monthlyLimit" step="0.01" min="0.01" placeholder="0.1">
+              </div>
+
+              <div class="setting-group">
+                <label for="preferredCause">Preferred Cause</label>
+                <select id="preferredCause">
+                  <option value="0">Ocean Cleanup</option>
+                  <option value="1">Reforestation</option>
+                  <option value="2">Wildlife Conservation</option>
+                  <option value="3">Renewable Energy</option>
+                  <option value="4">Climate Research</option>
+                </select>
+              </div>
+
+              <div class="setting-actions">
+                <button class="save-button" id="saveSettingsBtn" onclick="saveAutoSettings()">
+                  <i class="fas fa-save"></i>
+                  Save Settings
+                </button>
+                <button class="cancel-button" onclick="cancelAutoSettings()">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Setup Auto-Donation -->
+          <div class="auto-donation-setup" id="autoSetup">
+            <div class="setup-card">
+              <div class="setup-icon">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <h3>Set Up Auto-Donation</h3>
+              <p>Automatically donate a small amount with every blockchain transaction you make. Help the environment effortlessly!</p>
+
+              <div class="setup-benefits">
+                <div class="benefit-item">
+                  <i class="fas fa-check-circle"></i>
+                  <span>Effortless giving</span>
+                </div>
+                <div class="benefit-item">
+                  <i class="fas fa-check-circle"></i>
+                  <span>Transparent tracking</span>
+                </div>
+                <div class="benefit-item">
+                  <i class="fas fa-check-circle"></i>
+                  <span>Cancel anytime</span>
+                </div>
+              </div>
+
+              <button class="setup-button" onclick="showAutoSettings()">
+                <i class="fas fa-magic"></i>
+                Set Up Auto-Donation
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Enhanced Wallet Connection Prompt -->
-    <div id="walletPrompt" class="dashboard-wallet-prompt enhanced-wallet-prompt">
-      <div class="prompt-background"></div>
-      <div class="dashboard-wallet-prompt__content">
-        <div class="prompt-icon">
-          <i class="fas fa-wallet"></i>
-        </div>
-        <h2>Connect Your Wallet</h2>
-        <p>Connect your wallet to view your personal dashboard and track your environmental impact journey.</p>
-        <button onclick="connectWallet()" class="dashboard-wallet-prompt__button">
-          <div class="button-content">
-            <i class="fas fa-link"></i>
-            <span>Connect Wallet</span>
+      <div id="walletPrompt" class="dashboard-wallet-prompt enhanced-wallet-prompt">
+        <div class="prompt-background"></div>
+        <div class="dashboard-wallet-prompt__content">
+          <div class="prompt-icon">
+            <i class="fas fa-wallet"></i>
           </div>
-          <div class="button-shine"></div>
-        </button>
-        <div class="prompt-features">
-          <div class="feature-item">
-            <i class="fas fa-shield-alt"></i>
-            <span>Secure & Private</span>
+          <h2>Connect Your Wallet</h2>
+          <p>Connect your wallet to view your personal dashboard and track your environmental impact journey.</p>
+          <button onclick="connectWallet()" class="dashboard-wallet-prompt__button">
+            <div class="button-content">
+              <i class="fas fa-link"></i>
+              <span>Connect Wallet</span>
+            </div>
+            <div class="button-shine"></div>
+          </button>
+          <div class="prompt-features">
+            <div class="feature-item">
+              <i class="fas fa-shield-alt"></i>
+              <span>Secure & Private</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-chart-line"></i>
+              <span>Track Impact</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-coins"></i>
+              <span>Earn Rewards</span>
+            </div>
           </div>
-          <div class="feature-item">
-            <i class="fas fa-chart-line"></i>
-            <span>Track Impact</span>
-          </div>
-          <div class="feature-item">
-            <i class="fas fa-coins"></i>
-            <span>Earn Rewards</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer__content">
-      <div class="footer__section">
-        <h3><i class="fa-solid fa-leaf"></i> Eco Donations</h3>
-        <p>Empowering environmental change through blockchain technology and transparent donations.</p>
-        <div class="footer__social">
-          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
-            <i class="fa-brands fa-twitter"></i>
-          </a>
-          <a href="https://discord.com" target="_blank" rel="noopener" aria-label="Discord">
-            <i class="fa-brands fa-discord"></i>
-          </a>
-          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
-            <i class="fa-brands fa-github"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="footer__section">
-        <h3>Platform</h3>
-        <a href="donate.html">Make a Donation</a>
-        <a href="foundation.html">Browse Foundations</a>
-        <a href="governance.html">DAO Governance</a>
-        <a href="dashboard.html">Dashboard</a>
-      </div>
-
-      <div class="footer__section">
-        <h3>Resources</h3>
-        <a href="history.html">Transaction History</a>
-        <a href="#whitepaper">Whitepaper</a>
-        <a href="#api">API Documentation</a>
-        <a href="#support">Support Center</a>
-      </div>
-
-      <div class="footer__section">
-        <h3>Legal</h3>
-        <a href="#terms">Terms of Service</a>
-        <a href="#privacy">Privacy Policy</a>
-        <a href="#disclaimer">Disclaimer</a>
-        <a href="#cookies">Cookie Policy</a>
-      </div>
-    </div>
-
-    <div class="footer__bottom">
-      <div class="footer__bottom-content">
-        <p>© 2025 Eco Donations. Built with 💚 for the planet.</p>
-        <div class="footer__stats">
-          <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
-          <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
-          <span><i class="fa-solid fa-leaf"></i> 100% Environmental Focus</span>
         </div>
       </div>
     </div>
-  </footer>
 
-  <!-- App logic -->
-  <script src="ethers.umd.min.js"></script>
-  <script src="contract-fix.js?v=1753062000"></script>
-  <script src="main-wallet.js?v=1753062000"></script>
-</body>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer__content">
+        <div class="footer__section">
+          <h3><i class="fa-solid fa-leaf"></i> Eco Donations</h3>
+          <p>Empowering environmental change through blockchain technology and transparent donations.</p>
+          <div class="footer__social">
+            <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+            <a href="https://discord.com" target="_blank" rel="noopener" aria-label="Discord">
+              <i class="fa-brands fa-discord"></i>
+            </a>
+            <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+              <i class="fa-brands fa-github"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer__section">
+          <h3>Platform</h3>
+          <a href="donate.html">Make a Donation</a>
+          <a href="foundation.html">Browse Foundations</a>
+          <a href="governance.html">DAO Governance</a>
+          <a href="dashboard.html">Dashboard</a>
+        </div>
+
+        <div class="footer__section">
+          <h3>Resources</h3>
+          <a href="history.html">Transaction History</a>
+          <a href="#whitepaper">Whitepaper</a>
+          <a href="#api">API Documentation</a>
+          <a href="#support">Support Center</a>
+        </div>
+
+        <div class="footer__section">
+          <h3>Legal</h3>
+          <a href="#terms">Terms of Service</a>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#disclaimer">Disclaimer</a>
+          <a href="#cookies">Cookie Policy</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div class="footer__bottom-content">
+          <p>© 2025 Eco Donations. Built with 💚 for the planet.</p>
+          <div class="footer__stats">
+            <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
+            <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
+            <span><i class="fa-solid fa-leaf"></i> 100% Environmental Focus</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- App logic -->
+    <script src="ethers.umd.min.js"></script>
+    <script src="contract-fix.js?v=1753062000"></script>
+    <script src="main-wallet.js?v=1753062000"></script>
+    <script src="js/modules/auto-donation.js?v=1753062000"></script>
+
+    <script>
+      // Auto-donation UI management
+      let isEditingAutoSettings = false;
+
+      async function loadAutoDonationStatus() {
+        if (!window.autoDonationManager || !window.userAddress) return;
+
+        try {
+          await window.autoDonationManager.initialize();
+          const settings = await window.autoDonationManager.loadUserSettings();
+          const stats = await window.autoDonationManager.getStats();
+
+          const autoDonationSection = document.getElementById('autoDonationSection');
+          const autoSetup = document.getElementById('autoSetup');
+          const autoStatusCard = document.querySelector('.auto-donation-status-card');
+          const autoStats = document.getElementById('autoStats');
+
+          autoDonationSection.style.display = 'block';
+
+          if (settings && settings.isActive) {
+            // User has active auto-donation
+            autoSetup.style.display = 'none';
+            autoStatusCard.style.display = 'block';
+            autoStats.style.display = 'block';
+
+            // Update status
+            document.getElementById('autoStatusIcon').className = 'status-icon active';
+            document.getElementById('autoStatusIcon').innerHTML = '<i class="fas fa-check-circle"></i>';
+            document.getElementById('autoStatusTitle').textContent = 'Auto-Donation Active';
+            document.getElementById('autoStatusDesc').textContent = 'Micro-donations enabled for transactions';
+            document.getElementById('autoToggleBtn').textContent = 'Settings';
+            document.getElementById('autoToggleBtn').className = 'toggle-button';
+
+            // Update stats
+            const formatted = window.autoDonationManager.formatSettings();
+            document.getElementById('monthlyDonated').textContent = `${formatted.monthlyDonatedETH} ETH`;
+            document.getElementById('totalAutoDonated').textContent = stats ? `${parseFloat(stats.totalDonated).toFixed(6)} ETH` : '0 ETH';
+            document.getElementById('autoDonationCount').textContent = stats ? stats.donationCount : '0';
+
+          } else {
+            // User doesn't have auto-donation set up
+            autoSetup.style.display = 'block';
+            autoStatusCard.style.display = 'none';
+            autoStats.style.display = 'none';
+          }
+
+        } catch (error) {
+          console.error('Failed to load auto-donation status:', error);
+        }
+      }
+
+      function showAutoSettings() {
+        document.getElementById('autoSetup').style.display = 'none';
+        document.getElementById('autoSettings').style.display = 'block';
+        isEditingAutoSettings = true;
+
+        // Set default values
+        document.getElementById('donationType').value = 'fixed';
+        document.getElementById('fixedAmount').value = '0.001';
+        document.getElementById('percentage').value = '1.0';
+        document.getElementById('monthlyLimit').value = '0.1';
+        document.getElementById('preferredCause').value = '0';
+
+        updateDonationType();
+      }
+
+      function updateDonationType() {
+        const donationType = document.getElementById('donationType').value;
+        const fixedGroup = document.getElementById('fixedAmountGroup');
+        const percentageGroup = document.getElementById('percentageGroup');
+
+        if (donationType === 'fixed') {
+          fixedGroup.style.display = 'block';
+          percentageGroup.style.display = 'none';
+        } else {
+          fixedGroup.style.display = 'none';
+          percentageGroup.style.display = 'block';
+        }
+      }
+
+      async function saveAutoSettings() {
+        const saveBtn = document.getElementById('saveSettingsBtn');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        try {
+          const donationType = document.getElementById('donationType').value;
+          const fixedAmount = document.getElementById('fixedAmount').value || '0';
+          const percentage = document.getElementById('percentage').value || '0';
+          const monthlyLimit = document.getElementById('monthlyLimit').value;
+          const preferredCause = document.getElementById('preferredCause').value;
+
+          const settings = {
+            fixedAmount: donationType === 'fixed' ? fixedAmount : '0',
+            percentage: donationType === 'percentage' ? Math.floor(parseFloat(percentage) * 100) : 0,
+            monthlyLimit: monthlyLimit,
+            preferredCause: parseInt(preferredCause)
+          };
+
+          if (window.autoDonationManager.userSettings && window.autoDonationManager.userSettings.isActive) {
+            await window.autoDonationManager.updateSettings(settings);
+          } else {
+            await window.autoDonationManager.subscribe(settings);
+          }
+
+          document.getElementById('autoSettings').style.display = 'none';
+          isEditingAutoSettings = false;
+
+          // Reload the status
+          await loadAutoDonationStatus();
+
+          // Show success message
+          showNotification('Auto-donation settings saved successfully!', 'success');
+
+        } catch (error) {
+          console.error('Failed to save auto-donation settings:', error);
+          showNotification('Failed to save settings. Please try again.', 'error');
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Settings';
+        }
+      }
+
+      function cancelAutoSettings() {
+        document.getElementById('autoSettings').style.display = 'none';
+        isEditingAutoSettings = false;
+
+        if (window.autoDonationManager.userSettings && window.autoDonationManager.userSettings.isActive) {
+          document.querySelector('.auto-donation-status-card').style.display = 'block';
+          document.getElementById('autoStats').style.display = 'block';
+        } else {
+          document.getElementById('autoSetup').style.display = 'block';
+        }
+      }
+
+      async function toggleAutoDonation() {
+        if (!window.autoDonationManager.userSettings || !window.autoDonationManager.userSettings.isActive) {
+          showAutoSettings();
+          return;
+        }
+
+        // Show settings for active users
+        const settings = window.autoDonationManager.formatSettings();
+
+        // Populate current settings
+        document.getElementById('donationType').value = settings.percentage > 0 ? 'percentage' : 'fixed';
+        document.getElementById('fixedAmount').value = settings.fixedAmount;
+        document.getElementById('percentage').value = (settings.percentage / 100).toString();
+        document.getElementById('monthlyLimit').value = settings.monthlyLimit;
+        document.getElementById('preferredCause').value = settings.preferredCause;
+
+        updateDonationType();
+
+        document.querySelector('.auto-donation-status-card').style.display = 'none';
+        document.getElementById('autoStats').style.display = 'none';
+        document.getElementById('autoSettings').style.display = 'block';
+        isEditingAutoSettings = true;
+      }
+
+      function showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+          color: white;
+          padding: 1rem 1.5rem;
+          border-radius: 10px;
+          z-index: 1000;
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+          animation: slideIn 0.3s ease;
+        `;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.style.animation = 'slideOut 0.3s ease';
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }
+
+      // Enhanced loadDashboard function to include auto-donation
+      const originalLoadDashboard = window.loadDashboard;
+      window.loadDashboard = async function() {
+        if (originalLoadDashboard) {
+          await originalLoadDashboard();
+        }
+
+        // Load auto-donation status after wallet connection
+        if (window.userAddress) {
+          await loadAutoDonationStatus();
+        }
+      };
+
+      // Listen for wallet connection events
+      document.addEventListener('walletConnected', async () => {
+        await loadAutoDonationStatus();
+      });
+    </script>
+
+    <style>
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    </style>
+  </body>
 </html>

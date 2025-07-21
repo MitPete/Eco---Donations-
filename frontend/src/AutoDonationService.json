@@ -1,0 +1,536 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_donationContract",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "AutoDonationSettingsUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "percentage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum DonationContract.Foundation",
+        "name": "foundation",
+        "type": "uint8"
+      }
+    ],
+    "name": "AutoDonationSubscribed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "donationAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum DonationContract.Foundation",
+        "name": "foundation",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "transactionValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "AutoDonationTriggered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "AutoDonationUnsubscribed",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "autoTransactionCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "transactionValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateDonationAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "donationContract",
+    "outputs": [
+      {
+        "internalType": "contract DonationContract",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "emergencyPause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getRemainingMonthlyAllowance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserSettings",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "isActive",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "donationAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "donationPercentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum DonationContract.Foundation",
+            "name": "preferredFoundation",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "monthlyLimit",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "currentMonthSpent",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastResetMonth",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "usePercentage",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minTransactionValue",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct AutoDonationService.AutoDonationSettings",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserStats",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalDonated",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "donationCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "monthlyDonated",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastDonation",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "transactionValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "previewDonationAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "_active",
+        "type": "bool"
+      }
+    ],
+    "name": "setActive",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_donationAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_donationPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_monthlyLimit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum DonationContract.Foundation",
+        "name": "_foundation",
+        "type": "uint8"
+      }
+    ],
+    "name": "subscribe",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_donationAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum DonationContract.Foundation",
+        "name": "_foundation",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_monthlyLimit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minTransactionValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "subscribeFixedAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_donationPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum DonationContract.Foundation",
+        "name": "_foundation",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_monthlyLimit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minTransactionValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "subscribePercentage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "totalAutoDonated",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "transactionValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "triggerAutoDonation",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unsubscribe",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_donationAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_donationPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_monthlyLimit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum DonationContract.Foundation",
+        "name": "_foundation",
+        "type": "uint8"
+      }
+    ],
+    "name": "updateSettings",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "userSettings",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "donationAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "donationPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum DonationContract.Foundation",
+        "name": "preferredFoundation",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "monthlyLimit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentMonthSpent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastResetMonth",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "usePercentage",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minTransactionValue",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

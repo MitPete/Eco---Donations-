@@ -366,10 +366,25 @@ async function sendDonation(ev) {
   const val = document.getElementById('amount').value;
   if (!val || Number(val) <= 0) { alert('Enter a valid amount'); return false; }
 
+  // Main donation transaction
   const tx = await donateWrite.donate(f, msg, { value: ethers.utils.parseEther(val) });
   document.getElementById('txStatus').textContent = 'Waiting for confirmation…';
   await tx.wait();
-  document.getElementById('txStatus').textContent = '✅ Donation confirmed!';
+
+  // Trigger auto-donation if enabled
+  try {
+    if (window.autoDonationManager && window.autoDonationManager.userSettings && window.autoDonationManager.userSettings.isActive) {
+      document.getElementById('txStatus').textContent = '✅ Donation confirmed! Processing auto-donation...';
+      await window.autoDonationManager.triggerAutoDonation(Number(val));
+      document.getElementById('txStatus').textContent = '✅ Donation and auto-donation confirmed!';
+    } else {
+      document.getElementById('txStatus').textContent = '✅ Donation confirmed!';
+    }
+  } catch (error) {
+    console.error('Auto-donation failed:', error);
+    document.getElementById('txStatus').textContent = '✅ Donation confirmed! (Auto-donation skipped)';
+  }
+
   await updateBalance();
 
   // Calculate ECO coins received
@@ -588,7 +603,7 @@ async function loadHistory() {
 /* ───────── DASHBOARD ───────── */
 async function loadDashboard() {
   // Validate contract address
-  if (!donationAddress || !isValidAddress(donationAddress)) {
+  if (!donationAddress || !safeIsValidAddress(donationAddress)) {
     console.error('Invalid donation contract address for dashboard');
     return;
   }
@@ -623,8 +638,28 @@ async function loadDashboard() {
     totalDonations = totalDonations.add(amount);
 
     donationTable.insertAdjacentHTML('beforeend', `
-      <tr><td>${names[f]}</td><td>${ethers.utils.formatEther(amount)}</td><td>${msg_}</td></tr>`);
+      <tr>
+        <td>${names[f]}</td>
+        <td class="amount-cell">${ethers.utils.formatEther(amount)} ETH</td>
+        <td class="message-cell">${msg_}</td>
+        <td class="date-cell">${new Date().toLocaleDateString()}</td>
+        <td class="impact-cell">
+          <span class="impact-badge">High Impact</span>
+        </td>
+      </tr>`);
     });
+
+  // Show/hide empty state
+  const noDonationsMessage = document.getElementById('noDonationsMessage');
+  const donationTableContainer = document.querySelector('.dashboard-table-container table');
+
+  if (evs.length === 0) {
+    if (donationTableContainer) donationTableContainer.style.display = 'none';
+    if (noDonationsMessage) noDonationsMessage.style.display = 'block';
+  } else {
+    if (donationTableContainer) donationTableContainer.style.display = 'table';
+    if (noDonationsMessage) noDonationsMessage.style.display = 'none';
+  }
 
   // Update total donations and top foundation
   totalDonationsElem.textContent = ethers.utils.formatEther(totalDonations);
@@ -682,6 +717,20 @@ async function loadDashboard() {
       }
     }
   });
+
+  // Show auto-donation section when wallet is connected
+  const autoDonationSection = document.getElementById('autoDonationSection');
+  if (autoDonationSection && signer) {
+    autoDonationSection.style.display = 'block';
+    // Set window.userAddress for auto-donation manager
+    if (!window.userAddress) {
+      try {
+        window.userAddress = await signer.getAddress();
+      } catch (error) {
+        console.error('Failed to get user address:', error);
+      }
+    }
+  }
 }
 
 /* ───────── FOUNDATION PROFILE ───────── */
@@ -694,7 +743,7 @@ async function loadFoundationProfile() {
   }
 
   // Validate contract address
-  if (!donationAddress || !isValidAddress(donationAddress)) {
+  if (!donationAddress || !safeIsValidAddress(donationAddress)) {
     console.error('Invalid donation contract address for foundation profile');
     return;
   }
@@ -776,7 +825,15 @@ Impact: Over 50,000 tons of plastic removed from oceans, 15 marine protected are
     });
 
     donationTable.insertAdjacentHTML('beforeend', `
-      <tr><td>${safeClip(sender)}</td><td>${ethers.utils.formatEther(amount)}</td><td>${msg_}</td></tr>`);
+      <tr>
+        <td>${safeClip(sender)}</td>
+        <td class="amount-cell">${ethers.utils.formatEther(amount)} ETH</td>
+        <td class="message-cell">${msg_}</td>
+        <td class="date-cell">${new Date().toLocaleDateString()}</td>
+        <td class="impact-cell">
+          <span class="impact-badge">Verified</span>
+        </td>
+      </tr>`);
   });
 
   // Update metrics
@@ -1545,6 +1602,13 @@ function updateWalletUI(address, isConnected) {
 
       // Show wallet info (CSS will handle this with :not(.connected) rule)
       console.log('[updateWalletUI] Wallet connected:', address);
+
+      // Show auto-donation section on dashboard when wallet is connected
+      const autoDonationSection = document.getElementById('autoDonationSection');
+      if (autoDonationSection && window.location.pathname.includes('dashboard')) {
+        autoDonationSection.style.display = 'block';
+        window.userAddress = address;
+      }
     } catch (error) {
       console.error('[updateWalletUI] Error updating wallet UI:', error);
       // Fallback to basic display
@@ -1568,6 +1632,13 @@ function updateWalletUI(address, isConnected) {
     if (walletBalanceElement) {
       walletBalanceElement.textContent = '';
     }
+
+    // Hide auto-donation section when wallet is disconnected
+    const autoDonationSection = document.getElementById('autoDonationSection');
+    if (autoDonationSection) {
+      autoDonationSection.style.display = 'none';
+    }
+    window.userAddress = null;
 
     console.log('[updateWalletUI] Wallet disconnected');
   }
