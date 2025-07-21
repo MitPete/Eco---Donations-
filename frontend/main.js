@@ -7,6 +7,44 @@ if (!ethers) {
   console.error('Ethers library not loaded. Please ensure the CDN script is loaded before this script.');
 }
 
+// Fallback functions in case utility functions aren't loaded yet
+function fallbackClip(address, startChars = 6, endChars = 4) {
+  if (!address || typeof address !== 'string') return '0x...';
+  if (!address.startsWith('0x') || address.length !== 42) return address;
+  if (address.length <= startChars + endChars) return address;
+  return `${address.slice(0, startChars)}...${address.slice(-endChars)}`;
+}
+
+function fallbackIsValidAddress(address) {
+  return address &&
+         typeof address === 'string' &&
+         address.startsWith('0x') &&
+         address.length === 42 &&
+         /^0x[0-9a-fA-F]{40}$/.test(address);
+}
+
+function fallbackGetContractAddress(contracts, contractName) {
+  const address = contracts[contractName];
+  if (!fallbackIsValidAddress(address)) {
+    console.error(`Invalid ${contractName} address:`, address);
+    return null;
+  }
+  return address;
+}
+
+// Helper function to use utility functions with fallback
+function safeClip(...args) {
+  return typeof clip === 'function' ? clip(...args) : fallbackClip(...args);
+}
+
+function safeIsValidAddress(...args) {
+  return typeof isValidAddress === 'function' ? isValidAddress(...args) : fallbackIsValidAddress(...args);
+}
+
+function safeGetContractAddress(...args) {
+  return typeof getContractAddress === 'function' ? getContractAddress(...args) : fallbackGetContractAddress(...args);
+}
+
 // Load contracts configuration
 let contracts;
 
@@ -44,16 +82,16 @@ async function initializeApp() {
   // Support both local and testnet
   const isLocal = contracts.chainId === 31337;
   RPC_URL = isLocal ? 'http://localhost:8545' : 'https://sepolia.infura.io/v3/YOUR_INFURA_KEY';
-  
-  // Validate contract addresses
-  ecoCoinAddress = getContractAddress(contracts, 'ecoCoin');
-  donationAddress = getContractAddress(contracts, 'donationContract');
-  
+
+  // Validate contract addresses using utility functions
+  ecoCoinAddress = safeGetContractAddress(contracts, 'ecoCoin');
+  donationAddress = safeGetContractAddress(contracts, 'donationContract');
+
   if (!ecoCoinAddress || !donationAddress) {
     console.error('Invalid contract addresses. Cannot initialize app.');
     return;
   }
-  
+
   chainIdExpected = contracts.chainId.toString();
 
   /* ───────── PROVIDERS ───────── */
@@ -181,7 +219,7 @@ async function reconnectWallet() {
 
       const addr = await signer.getAddress();
       console.log('[reconnectWallet] Retrieved address:', addr);
-      
+
       if (addr.toLowerCase() === savedAddress.toLowerCase()) {
         // Ensure contracts are deployed before initializing
         await ensureContract(donationAddress, browserProvider);
@@ -289,8 +327,8 @@ async function loadHistory() {
     await initializeApp();
   }
 
-  // Validate contract address
-  if (!donationAddress || !isValidAddress(donationAddress)) {
+  // Validate contract address using utility functions
+  if (!donationAddress || !safeIsValidAddress(donationAddress)) {
     console.error('Invalid donation contract address for history');
     return;
   }
@@ -372,7 +410,7 @@ async function loadHistory() {
     allTB.insertAdjacentHTML('beforeend', `
       <tr>
         <td><a href="foundation.html?id=${f}" class="foundation-link">${names[f]}</a></td>
-        <td>${clip(sender)}</td>
+        <td>${safeClip(sender)}</td>
         <td><strong>${parseFloat(ethers.utils.formatEther(amount)).toFixed(3)} ETH</strong></td>
         <td>${msg_}</td>
         <td>${formattedDate}</td>
@@ -441,7 +479,7 @@ async function loadHistory() {
       .slice(0, 5)
       .forEach(([addr, tot], index) => {
         const isCurrentUser = me && addr.toLowerCase() === me;
-        const displayAddr = isCurrentUser ? 'You' : clip(addr);
+        const displayAddr = isCurrentUser ? 'You' : safeClip(addr);
         const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
 
         topDonorsList.insertAdjacentHTML('beforeend', `
@@ -658,7 +696,7 @@ Impact: Over 50,000 tons of plastic removed from oceans, 15 marine protected are
     });
 
     donationTable.insertAdjacentHTML('beforeend', `
-      <tr><td>${clip(sender)}</td><td>${ethers.utils.formatEther(amount)}</td><td>${msg_}</td></tr>`);
+      <tr><td>${safeClip(sender)}</td><td>${ethers.utils.formatEther(amount)}</td><td>${msg_}</td></tr>`);
   });
 
   console.log(`[loadFoundationProfile] Total donations: ${ethers.utils.formatEther(totalDonations)} ETH, Donors: ${donors.size}`);
@@ -1275,14 +1313,15 @@ async function loadHomePage() {
 // ───────── LIVE STATS ─────────
 async function updateLiveStats() {
   try {
-    // Validate contract address before creating contract instance
-    if (!donationAddress || !isValidAddress(donationAddress)) {
-      console.error('Invalid donation contract address:', donationAddress);
+    // Ensure app is initialized first
+    if (!donationAddress || !rpcProvider) {
+      console.log('[updateLiveStats] App not initialized yet, waiting...');
       return;
     }
 
-    if (!rpcProvider) {
-      console.error('RPC provider not initialized');
+    // Validate contract address before creating contract instance
+    if (!safeIsValidAddress(donationAddress)) {
+      console.error('Invalid donation contract address:', donationAddress);
       return;
     }
 
@@ -1336,8 +1375,16 @@ async function updateLiveStats() {
 
 // Poll live stats every 15 seconds
 if (document.body.classList.contains('homepage')) {
-  updateLiveStats();
-  setInterval(updateLiveStats, 15000);
+  // Wait for app initialization before starting live stats
+  const startLiveStats = async () => {
+    // Wait until app is initialized
+    while (!donationAddress || !rpcProvider) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    updateLiveStats();
+    setInterval(updateLiveStats, 15000);
+  };
+  startLiveStats();
 }
 
 // Placeholder to prevent ReferenceError on donate.html
@@ -1364,13 +1411,13 @@ function updateWalletUI(address, isConnected) {
     // Update connect button
     connectButton.innerHTML = `
       <i class="fas fa-check-circle"></i>
-      ${clip(address)}
+      ${safeClip(address)}
     `;
     connectButton.classList.add('connected');
 
-    // Update wallet address display
+    // Hide the separate wallet address display (since button shows address)
     if (walletAddressElement) {
-      walletAddressElement.textContent = clip(address);
+      walletAddressElement.style.display = 'none';
     }
 
     // Show wallet info (CSS will handle this with :not(.connected) rule)
@@ -1386,9 +1433,10 @@ function updateWalletUI(address, isConnected) {
     `;
     connectButton.classList.remove('connected');
 
-    // Clear wallet displays
+    // Clear wallet displays and show address element again
     if (walletAddressElement) {
       walletAddressElement.textContent = '';
+      walletAddressElement.style.display = '';
     }
     if (walletBalanceElement) {
       walletBalanceElement.textContent = '';
