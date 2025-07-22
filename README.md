@@ -12,28 +12,33 @@ A comprehensive decentralized application (dApp) that revolutionizes environment
 ## 🚀 **Key Features**
 
 ### 💚 **Smart Donation System**
+
 - **Direct Impact Donations**: Support verified environmental foundations with transparent fund allocation
 - **ECO Token Rewards**: Earn governance tokens for every donation (10 ECO per 1 ETH)
 - **Auto-Donation Technology**: Revolutionary micro-donation system that automatically contributes to causes with every blockchain transaction
 - **Multi-Foundation Support**: Choose from Ocean Cleanup, Reforestation, Wildlife Conservation, and Renewable Energy initiatives
 
 ### 🏛️ **DAO Governance**
+
 - **Community-Driven Decisions**: Holders of ECO tokens can vote on platform improvements and fund allocations
 - **Proposal System**: Submit and vote on new environmental initiatives
 - **Transparent Governance**: All decisions recorded on-chain for complete transparency
 
 ### 📊 **Professional Dashboard**
+
 - **Real-Time Impact Tracking**: Visual progress indicators showing your environmental contributions
 - **Donation History**: Comprehensive transaction history with professional table styling
 - **Achievement System**: Unlock badges and milestones based on your giving patterns
 - **Statistics Overview**: Track total donations, ECO balance, and environmental impact metrics
 
 ### 🔐 **Advanced Wallet Integration**
+
 - **Persistent Connection**: Seamless wallet connectivity across all platform pages
 - **Multi-Network Support**: Works with Ethereum mainnet, testnets, and local development networks
 - **MetaMask Optimization**: Enhanced integration with the most popular Web3 wallet
 
 ### 🎨 **Modern User Experience**
+
 - **Professional UI/UX**: Modern design with smooth animations and responsive layouts
 - **Mobile-First Design**: Optimized for all devices and screen sizes
 - **Accessibility**: WCAG compliant interface ensuring inclusive access
@@ -42,6 +47,7 @@ A comprehensive decentralized application (dApp) that revolutionizes environment
 ## 🏗️ **Architecture Overview**
 
 ### **Smart Contract Layer**
+
 ```
 📦 Smart Contracts
 ├── 🪙 EcoCoin.sol                 # ERC20 governance token with minting controls
@@ -51,6 +57,7 @@ A comprehensive decentralized application (dApp) that revolutionizes environment
 ```
 
 ### **Frontend Architecture**
+
 ```
 📦 Frontend Application
 ├── 🏠 index.html                 # Landing page with hero section
@@ -65,6 +72,7 @@ A comprehensive decentralized application (dApp) that revolutionizes environment
 ```
 
 ### **Backend Infrastructure**
+
 ```
 📦 Development Environment
 ├── ⚙️ hardhat.config.js          # Blockchain development configuration
@@ -77,18 +85,21 @@ A comprehensive decentralized application (dApp) that revolutionizes environment
 ## 🛠️ **Technology Stack**
 
 ### **Blockchain & Smart Contracts**
+
 - **Solidity ^0.8.0**: Latest security features and gas optimizations
 - **Hardhat**: Professional Ethereum development environment
 - **OpenZeppelin**: Battle-tested smart contract libraries
 - **Ethers.js v5**: Modern Ethereum library for blockchain interactions
 
 ### **Frontend Technologies**
+
 - **Vanilla JavaScript**: Lightweight, fast, and SEO-friendly
 - **Modern CSS3**: Advanced animations, grid layouts, and responsive design
 - **Progressive Enhancement**: Works without JavaScript, enhanced with it
 - **Vite**: Lightning-fast development server and build tool
 
 ### **Development Tools**
+
 - **ESLint**: Code quality and consistency enforcement
 - **Prettier**: Automated code formatting
 - **GitHub Actions**: Continuous integration and deployment
@@ -97,11 +108,13 @@ A comprehensive decentralized application (dApp) that revolutionizes environment
 ## 🚀 **Quick Start Guide**
 
 ### **Prerequisites**
+
 - Node.js 18+ and npm
 - MetaMask browser extension
 - Git for version control
 
 ### **1. Installation**
+
 ```bash
 # Clone the repository
 git clone https://github.com/MitPete/Eco---Donations-
@@ -116,6 +129,7 @@ npm install
 ```
 
 ### **2. Local Development Setup**
+
 ```bash
 # Start local blockchain (Terminal 1)
 npx hardhat node
@@ -129,12 +143,15 @@ npm start
 ```
 
 ### **3. Access the Application**
+
 - **Frontend**: http://localhost:5173
 - **Local Blockchain**: http://127.0.0.1:8545
 - **Chain ID**: 31337 (for MetaMask configuration)
 
 ### **4. MetaMask Configuration**
+
 Add local network to MetaMask:
+
 - **Network Name**: Hardhat Local
 - **RPC URL**: http://127.0.0.1:8545
 - **Chain ID**: 31337
@@ -143,6 +160,7 @@ Add local network to MetaMask:
 ## 📖 **User Guide**
 
 ### **Making Your First Donation**
+
 1. **Connect Wallet**: Click "Connect Wallet" on any page
 2. **Choose Foundation**: Select from our verified environmental partners
 3. **Set Amount**: Enter your donation amount in ETH
@@ -151,6 +169,7 @@ Add local network to MetaMask:
 6. **Earn Rewards**: Receive ECO tokens automatically
 
 ### **Setting Up Auto-Donations**
+
 1. **Access Dashboard**: Navigate to your personal dashboard
 2. **Find Auto-Donation Section**: Scroll to the automated giving section
 3. **Configure Settings**: Choose fixed amount or percentage-based donations
@@ -159,6 +178,7 @@ Add local network to MetaMask:
 6. **Activate**: Save settings and start effortless giving
 
 ### **Participating in Governance**
+
 1. **Hold ECO Tokens**: Ensure you have governance tokens from donations
 2. **View Proposals**: Check active proposals on the governance page
 3. **Research & Discuss**: Review proposal details and community feedback
@@ -168,6 +188,7 @@ Add local network to MetaMask:
 ## 🧪 **Testing & Quality Assurance**
 
 ### **Running Tests**
+
 ```bash
 # Run all smart contract tests
 npx hardhat test
@@ -183,12 +204,14 @@ npx hardhat test --network localhost
 ```
 
 ### **Test Coverage**
+
 - ✅ **Unit Tests**: Individual contract function testing
 - ✅ **Integration Tests**: Cross-contract interaction testing
 - ✅ **Edge Case Testing**: Boundary condition and error handling
 - ✅ **Gas Optimization**: Cost analysis and optimization verification
 
 ### **Security Auditing**
+
 - **Slither Analysis**: Automated vulnerability detection
 - **OpenZeppelin Standards**: Industry-standard security practices
 - **Manual Review**: Line-by-line security assessment
@@ -197,12 +220,14 @@ npx hardhat test --network localhost
 ## 🔐 **Security Features**
 
 ### **Smart Contract Security**
+
 - **Reentrancy Protection**: OpenZeppelin's ReentrancyGuard implementation
 - **Access Control**: Role-based permissions and ownership patterns
 - **Input Validation**: Comprehensive parameter checking and sanitization
 - **Safe Math Operations**: Overflow/underflow protection with Solidity 0.8+
 
 ### **Frontend Security**
+
 - **CSP Headers**: Content Security Policy for XSS prevention
 - **Input Sanitization**: Client-side validation and encoding
 - **Secure Communication**: HTTPS enforcement and secure headers
@@ -211,6 +236,7 @@ npx hardhat test --network localhost
 ## 🌐 **Deployment Guide**
 
 ### **Testnet Deployment (Sepolia)**
+
 ```bash
 # Deploy to Sepolia testnet
 npx hardhat run scripts/deploy.js --network sepolia
@@ -220,6 +246,7 @@ npx hardhat verify --network sepolia <CONTRACT_ADDRESS>
 ```
 
 ### **Mainnet Deployment**
+
 ```bash
 # Deploy to Ethereum mainnet
 npx hardhat run scripts/deploy.js --network mainnet
@@ -230,6 +257,7 @@ npm run deploy:production
 ```
 
 ### **Environment Configuration**
+
 ```bash
 # Copy environment template
 cp .env.example .env
@@ -243,6 +271,7 @@ ETHERSCAN_API_KEY=your_etherscan_api_key
 ## 📊 **Platform Metrics**
 
 ### **Environmental Impact**
+
 - **Total Donations**: $XXX,XXX+ in environmental funding
 - **Foundations Supported**: 4 verified environmental organizations
 - **Trees Planted**: XXX,XXX+ through reforestation initiatives
@@ -250,6 +279,7 @@ ETHERSCAN_API_KEY=your_etherscan_api_key
 - **Carbon Offset**: XXX+ tons of CO₂ equivalent
 
 ### **Platform Statistics**
+
 - **Active Users**: XXX+ verified donors
 - **Transactions**: XXX,XXX+ completed donations
 - **ECO Tokens Distributed**: XXX,XXX+ governance tokens
@@ -261,6 +291,7 @@ ETHERSCAN_API_KEY=your_etherscan_api_key
 We welcome contributions from the community! Here's how you can help:
 
 ### **Development Contributions**
+
 1. **Fork the Repository**: Create your own copy for development
 2. **Create Feature Branch**: `git checkout -b feature/amazing-feature`
 3. **Make Changes**: Implement your improvements with tests
@@ -268,12 +299,14 @@ We welcome contributions from the community! Here's how you can help:
 5. **Submit Pull Request**: Describe your changes and their impact
 
 ### **Bug Reports & Feature Requests**
+
 - **Issues**: Use GitHub issues for bug reports and feature requests
 - **Documentation**: Help improve our documentation and guides
 - **Testing**: Participate in beta testing and provide feedback
 - **Community**: Join our Discord for discussions and support
 
 ### **Development Guidelines**
+
 - **Code Style**: Follow ESLint and Prettier configurations
 - **Testing**: Include tests for all new features and bug fixes
 - **Documentation**: Update relevant documentation for changes
@@ -282,32 +315,38 @@ We welcome contributions from the community! Here's how you can help:
 ## 📜 **License & Legal**
 
 ### **Open Source License**
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### **Third-Party Licenses**
+
 - **OpenZeppelin**: MIT License
 - **Ethers.js**: MIT License
 - **Hardhat**: MIT License
 - **Node.js**: MIT License
 
 ### **Disclaimer**
+
 This software is provided "as is" without warranty. Users are responsible for their own due diligence when interacting with smart contracts and blockchain technology.
 
 ## 🔗 **Links & Resources**
 
 ### **Official Links**
+
 - **Website**: https://eco-donations.vercel.app
 - **GitHub**: https://github.com/MitPete/Eco---Donations-
 - **Documentation**: Coming soon
 - **Community Discord**: Coming soon
 
 ### **Partner Organizations**
+
 - **Ocean Cleanup Foundation**: Ocean plastic removal initiatives
 - **Reforestation Alliance**: Global tree planting and forest restoration
 - **Wildlife Conservation Society**: Endangered species protection
 - **Renewable Energy Coalition**: Clean energy development projects
 
 ### **Technical Resources**
+
 - **Ethereum Documentation**: https://ethereum.org/developers
 - **Hardhat Documentation**: https://hardhat.org/docs
 - **OpenZeppelin**: https://openzeppelin.com/contracts
@@ -318,6 +357,7 @@ This software is provided "as is" without warranty. Users are responsible for th
 ## 🙏 **Acknowledgments**
 
 Special thanks to:
+
 - **Environmental Partners**: For their crucial work in protecting our planet
 - **Open Source Community**: For the tools and libraries that make this possible
 - **Early Contributors**: For testing, feedback, and improvements

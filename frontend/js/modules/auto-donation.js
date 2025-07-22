@@ -11,36 +11,99 @@ class AutoDonationManager {
     }
 
     async initialize() {
-        if (this.isInitialized) return;
+        if (this.isInitialized && this.contract) return;
 
         try {
-            if (!window.ethereum || !window.provider || !window.signer) {
-                throw new Error('Wallet not connected');
+            // Enhanced wallet component initialization with flexible detection
+            const maxAttempts = 10;
+            let attempts = 0;
+
+            while (attempts < maxAttempts) {
+                // Check for multiple ways the wallet might be available
+                const hasEthereum = !!window.ethereum;
+                const hasProvider = !!(window.provider || window.browserProvider);
+                const hasSigner = !!(window.signer);
+                const hasUserAddress = !!(window.userAddress);
+
+                if (hasEthereum && hasProvider && hasSigner && hasUserAddress) {
+                    console.log('Wallet components ready');
+                    break;
+                }
+
+                if (attempts === maxAttempts - 1) {
+                    console.log('Components status:', {
+                        ethereum: hasEthereum,
+                        provider: hasProvider,
+                        signer: hasSigner,
+                        userAddress: hasUserAddress,
+                        windowProvider: !!window.provider,
+                        windowBrowserProvider: !!window.browserProvider
+                    });
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                attempts++;
+                console.log('Waiting for wallet components... Attempt', attempts);
             }
 
-            // Load contract address
+            // Use the available provider/signer
+            const provider = window.provider || window.browserProvider;
+            const signer = window.signer;
+            const userAddress = window.userAddress;
+
+            if (!window.ethereum || !provider || !signer || !userAddress) {
+                throw new Error('Wallet components not fully initialized');
+            }            // Load contract address
             const response = await fetch('/src/contracts.json');
+            if (!response.ok) {
+                throw new Error('Failed to load contracts.json: ' + response.status);
+            }
             const contracts = await response.json();
+            if (!contracts.autoDonationService) {
+                throw new Error('autoDonationService address missing in contracts.json');
+            }
 
             // Load ABI
             const abiResponse = await fetch('/src/AutoDonationService.json');
-            const abi = await abiResponse.json();
+            if (!abiResponse.ok) {
+                throw new Error('Failed to load AutoDonationService.json: ' + abiResponse.status);
+            }
+            const abiData = await abiResponse.json();
+            let abi;
+            if (Array.isArray(abiData)) {
+                abi = abiData;
+            } else if (abiData.abi) {
+                abi = abiData.abi;
+            } else {
+                throw new Error('Invalid ABI format in AutoDonationService.json');
+            }
+            if (!abi || !Array.isArray(abi) || abi.length === 0) {
+                throw new Error('ABI is missing or empty');
+            }
 
-            // Initialize contract
+            // Initialize contract with the detected signer
             this.contract = new ethers.Contract(
                 contracts.autoDonationService,
                 abi,
-                window.signer
+                signer
             );
+            if (!this.contract) {
+                throw new Error('Failed to create contract instance');
+            }
 
             this.isInitialized = true;
-            console.log('AutoDonation service initialized');
+            console.log('AutoDonation service initialized with contract address:', contracts.autoDonationService);
 
             // Load user settings
             await this.loadUserSettings();
 
         } catch (error) {
             console.error('Failed to initialize auto-donation service:', error);
+            if (typeof showNotification === 'function') {
+                showNotification('Auto-donation init failed: ' + error.message, 'error');
+            }
+            this.isInitialized = false;
+            this.contract = null;
             throw error;
         }
     }
@@ -69,7 +132,14 @@ class AutoDonationManager {
 
     async subscribe(settings) {
         if (!this.contract) {
-            throw new Error('Auto-donation service not initialized');
+            try {
+                await this.initialize();
+            } catch (initErr) {
+                throw new Error('Auto-donation service not initialized: ' + initErr.message);
+            }
+            if (!this.contract) {
+                throw new Error('Auto-donation service not initialized (after forced init)');
+            }
         }
 
         try {
@@ -92,7 +162,14 @@ class AutoDonationManager {
 
     async updateSettings(settings) {
         if (!this.contract) {
-            throw new Error('Auto-donation service not initialized');
+            try {
+                await this.initialize();
+            } catch (initErr) {
+                throw new Error('Auto-donation service not initialized: ' + initErr.message);
+            }
+            if (!this.contract) {
+                throw new Error('Auto-donation service not initialized (after forced init)');
+            }
         }
 
         try {

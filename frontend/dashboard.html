@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard - Eco Donations</title>
   <meta name="description" content="Your personal dashboard for tracking donations, ECO tokens, and environmental impact.">
@@ -16,6 +16,13 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/css/base.css" id="base-css">
   <link rel="stylesheet" href="/css/dashboard.css" id="page-css">
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/ethers.umd.min.js"></script>
+  <script src="/contract-fix.js"></script>
+  <script src="/main-wallet.js"></script>
+  <script src="/js/modules/auto-donation.js"></script>
   <script>
     // Dynamic cache busting - always load fresh CSS
     document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
@@ -313,6 +320,9 @@
             View All
           </a>
         </div>
+        <div class="donation-chart-container">
+          <canvas id="donationChart" width="800" height="200"></canvas>
+        </div>
         <div class="dashboard-section__content">
           <div class="dashboard-table-container">
             <table id="donationTable" class="dashboard-table enhanced-table">
@@ -516,8 +526,8 @@
                 <h3 id="autoStatusTitle">Auto-Donation Inactive</h3>
                 <p id="autoStatusDesc">Set up automatic micro-donations</p>
               </div>
-              <div class="status-toggle">
-                <button class="toggle-button" id="autoToggleBtn" onclick="toggleAutoDonation()">
+              <div class="status-toggle" style="position: relative; z-index: 9999;">
+                <button class="toggle-button" id="autoToggleBtn" onclick="toggleAutoDonation();" style="position: relative; z-index: 10000; pointer-events: auto;">
                   <span id="toggleText">Enable</span>
                 </button>
               </div>
@@ -535,6 +545,46 @@
               <div class="stat-item">
                 <div class="stat-label">Donations</div>
                 <div class="stat-value" id="autoDonationCount">0</div>
+              </div>
+              <div class="stat-item">
+                <button onclick="refreshAutoStats()" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 0.8rem; position: relative; z-index: 10000; pointer-events: auto;">
+                  <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+              </div>
+            </div>
+
+            <!-- Current Settings Summary -->
+            <div class="current-settings-summary" id="currentSettingsSummary" style="display: none;">
+              <h4>Current Settings</h4>
+              <div class="settings-grid">
+                <div class="setting-item">
+                  <div class="setting-label">
+                    <i class="fas fa-coins"></i>
+                    Donation Amount
+                  </div>
+                  <div class="setting-value" id="currentDonationAmount">--</div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-label">
+                    <i class="fas fa-calendar-alt"></i>
+                    Monthly Limit
+                  </div>
+                  <div class="setting-value" id="currentMonthlyLimit">--</div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-label">
+                    <i class="fas fa-heart"></i>
+                    Preferred Cause
+                  </div>
+                  <div class="setting-value" id="currentPreferredCause">--</div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-label">
+                    <i class="fas fa-chart-pie"></i>
+                    Remaining This Month
+                  </div>
+                  <div class="setting-value" id="currentRemainingLimit">--</div>
+                </div>
               </div>
             </div>
           </div>
@@ -585,6 +635,10 @@
                 </button>
                 <button class="cancel-button" onclick="cancelAutoSettings()">
                   Cancel
+                </button>
+                <button class="disable-button" onclick="disableAutoDonation(event)">
+                  <i class="fas fa-times"></i>
+                  Disable Auto-Donation
                 </button>
               </div>
             </div>
@@ -715,11 +769,7 @@
     </footer>
 
     <!-- App logic -->
-    <script src="ethers.umd.min.js"></script>
     <script src="contract-fix.js?v=1753062000"></script>
-    <script src="main-wallet.js?v=1753062000"></script>
-    <script src="js/modules/auto-donation.js?v=1753062000"></script>
-
     <script>
       // Auto-donation UI management
       let isEditingAutoSettings = false;
@@ -732,38 +782,101 @@
           const settings = await window.autoDonationManager.loadUserSettings();
           const stats = await window.autoDonationManager.getStats();
 
+          console.log('📊 Auto-Donation Settings:', settings);
+          console.log('📈 Auto-Donation Stats:', stats);
+
           const autoDonationSection = document.getElementById('autoDonationSection');
           const autoSetup = document.getElementById('autoSetup');
           const autoStatusCard = document.querySelector('.auto-donation-status-card');
           const autoStats = document.getElementById('autoStats');
+          const currentSettingsSummary = document.getElementById('currentSettingsSummary');
 
           autoDonationSection.style.display = 'block';
 
           if (settings && settings.isActive) {
+            console.log('✅ Auto-Donation Active with settings:', {
+              fixedAmount: settings.fixedAmount + ' ETH',
+              percentage: settings.percentage + '%',
+              monthlyLimit: settings.monthlyLimit + ' ETH',
+              preferredCause: settings.preferredCause,
+              monthlyDonated: settings.monthlyDonated + ' ETH'
+            });
+
             // User has active auto-donation
             autoSetup.style.display = 'none';
             autoStatusCard.style.display = 'block';
             autoStats.style.display = 'block';
+            currentSettingsSummary.style.display = 'block';
+
+            console.log('📊 Showing currentSettingsSummary element:', currentSettingsSummary);
+            console.log('📊 currentSettingsSummary display style:', currentSettingsSummary.style.display);
 
             // Update status
             document.getElementById('autoStatusIcon').className = 'status-icon active';
             document.getElementById('autoStatusIcon').innerHTML = '<i class="fas fa-check-circle"></i>';
             document.getElementById('autoStatusTitle').textContent = 'Auto-Donation Active';
-            document.getElementById('autoStatusDesc').textContent = 'Micro-donations enabled for transactions';
-            document.getElementById('autoToggleBtn').textContent = 'Settings';
-            document.getElementById('autoToggleBtn').className = 'toggle-button';
+
+            // Show current settings in the description
+            const settingsDesc = `${settings.fixedAmount > 0 ? settings.fixedAmount + ' ETH per transaction' : settings.percentage + '% of each transaction'} • Monthly limit: ${settings.monthlyLimit} ETH • Supporting: ${['Ocean Cleanup', 'Reforestation', 'Wildlife Conservation', 'Renewable Energy', 'Climate Research'][settings.preferredCause]}`;
+            document.getElementById('autoStatusDesc').textContent = settingsDesc;
+
+            document.getElementById('toggleText').textContent = 'Settings';
+            document.getElementById('autoToggleBtn').className = 'toggle-button settings-active';
+            console.log('✅ Button updated to "Settings" for active auto-donation');
 
             // Update stats
-            const formatted = window.autoDonationManager.formatSettings();
-            document.getElementById('monthlyDonated').textContent = `${formatted.monthlyDonatedETH} ETH`;
-            document.getElementById('totalAutoDonated').textContent = stats ? `${parseFloat(stats.totalDonated).toFixed(6)} ETH` : '0 ETH';
-            document.getElementById('autoDonationCount').textContent = stats ? stats.donationCount : '0';
+            console.log('📊 Raw stats data:', {
+              monthlyDonated: settings.monthlyDonated,
+              totalDonated: stats?.totalDonated,
+              donationCount: stats?.donationCount
+            });
+
+            const monthlyAmount = parseFloat(settings.monthlyDonated) || 0;
+            const totalAmount = parseFloat(stats?.totalDonated) || 0;
+            const donationCount = parseInt(stats?.donationCount) || 0;
+
+            console.log('📊 Processed stats:', {
+              monthlyAmount,
+              totalAmount,
+              donationCount
+            });
+
+            document.getElementById('monthlyDonated').textContent = `${monthlyAmount.toFixed(6)} ETH`;
+            document.getElementById('totalAutoDonated').textContent = `${totalAmount.toFixed(6)} ETH`;
+            document.getElementById('autoDonationCount').textContent = donationCount.toString();
+
+            // Update current settings summary
+            const causeNames = ['Ocean Cleanup', 'Reforestation', 'Wildlife Conservation', 'Renewable Energy', 'Climate Research'];
+            const donationAmount = settings.fixedAmount > 0 ?
+              `${settings.fixedAmount} ETH per transaction` :
+              `${settings.percentage}% of each transaction`;
+            const remainingLimit = (parseFloat(settings.monthlyLimit) - parseFloat(settings.monthlyDonated)).toFixed(6);
+
+            console.log('📊 Updating current settings display:', {
+              donationAmount,
+              monthlyLimit: `${settings.monthlyLimit} ETH`,
+              preferredCause: causeNames[settings.preferredCause],
+              remainingLimit: `${remainingLimit} ETH`
+            });
+
+            document.getElementById('currentDonationAmount').textContent = donationAmount;
+            document.getElementById('currentMonthlyLimit').textContent = `${settings.monthlyLimit} ETH`;
+            document.getElementById('currentPreferredCause').textContent = causeNames[settings.preferredCause] || 'Unknown';
+            document.getElementById('currentRemainingLimit').textContent = `${remainingLimit} ETH`;
+
+            console.log('📊 Current settings summary should now be visible!');
 
           } else {
+            console.log('❌ Auto-Donation Not Active');
             // User doesn't have auto-donation set up
             autoSetup.style.display = 'block';
             autoStatusCard.style.display = 'none';
             autoStats.style.display = 'none';
+            currentSettingsSummary.style.display = 'none';
+
+            // Reset button text for inactive state
+            document.getElementById('toggleText').textContent = 'Enable';
+            document.getElementById('autoToggleBtn').className = 'toggle-button';
           }
 
         } catch (error) {
@@ -790,13 +903,25 @@
         const donationType = document.getElementById('donationType').value;
         const fixedGroup = document.getElementById('fixedAmountGroup');
         const percentageGroup = document.getElementById('percentageGroup');
+        const fixedAmountInput = document.getElementById('fixedAmount');
+        const percentageInput = document.getElementById('percentage');
 
         if (donationType === 'fixed') {
           fixedGroup.style.display = 'block';
           percentageGroup.style.display = 'none';
+
+          // Ensure fixed amount has a valid value
+          if (!fixedAmountInput.value || parseFloat(fixedAmountInput.value) <= 0) {
+            fixedAmountInput.value = '0.001';
+          }
         } else {
           fixedGroup.style.display = 'none';
           percentageGroup.style.display = 'block';
+
+          // Ensure percentage has a valid value
+          if (!percentageInput.value || parseFloat(percentageInput.value) <= 0) {
+            percentageInput.value = '1.0';
+          }
         }
       }
 
@@ -812,17 +937,51 @@
           const monthlyLimit = document.getElementById('monthlyLimit').value;
           const preferredCause = document.getElementById('preferredCause').value;
 
+          console.log('💾 Saving settings:', {
+            donationType,
+            fixedAmount,
+            percentage,
+            monthlyLimit,
+            preferredCause
+          });
+
+          // Improved validation and processing
+          let processedFixedAmount = '0';
+          let processedPercentage = 0;
+
+          if (donationType === 'fixed') {
+            processedFixedAmount = fixedAmount || '0.001'; // Default to 0.001 if empty
+            processedPercentage = 0;
+
+            // Validate fixed amount is not 0
+            if (parseFloat(processedFixedAmount) <= 0) {
+              throw new Error('Fixed amount must be greater than 0');
+            }
+          } else {
+            processedFixedAmount = '0';
+            processedPercentage = parseFloat(percentage) || 1.0; // Default to 1% if empty
+
+            // Validate percentage is not 0
+            if (processedPercentage <= 0) {
+              throw new Error('Percentage must be greater than 0');
+            }
+          }
+
           const settings = {
-            fixedAmount: donationType === 'fixed' ? fixedAmount : '0',
-            percentage: donationType === 'percentage' ? Math.floor(parseFloat(percentage) * 100) : 0,
+            fixedAmount: processedFixedAmount,
+            percentage: processedPercentage,
             monthlyLimit: monthlyLimit,
             preferredCause: parseInt(preferredCause)
           };
 
+          console.log('💾 Processed settings:', settings);
+
           if (window.autoDonationManager.userSettings && window.autoDonationManager.userSettings.isActive) {
             await window.autoDonationManager.updateSettings(settings);
+            console.log('✅ Settings updated successfully');
           } else {
             await window.autoDonationManager.subscribe(settings);
+            console.log('✅ Auto-donation subscribed successfully');
           }
 
           document.getElementById('autoSettings').style.display = 'none';
@@ -836,7 +995,7 @@
 
         } catch (error) {
           console.error('Failed to save auto-donation settings:', error);
-          showNotification('Failed to save settings. Please try again.', 'error');
+          showNotification('Failed to save settings: ' + error.message, 'error');
         } finally {
           saveBtn.disabled = false;
           saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Settings';
@@ -850,24 +1009,110 @@
         if (window.autoDonationManager.userSettings && window.autoDonationManager.userSettings.isActive) {
           document.querySelector('.auto-donation-status-card').style.display = 'block';
           document.getElementById('autoStats').style.display = 'block';
+          document.getElementById('currentSettingsSummary').style.display = 'block';
         } else {
           document.getElementById('autoSetup').style.display = 'block';
         }
       }
 
-      async function toggleAutoDonation() {
+      async function disableAutoDonation(event) {
+        if (!confirm('Are you sure you want to disable auto-donation? This will cancel all future automatic donations.')) {
+          return;
+        }
+
+        try {
+          const disableBtn = event ? event.target : document.querySelector('.disable-button');
+          const originalHTML = disableBtn.innerHTML;
+          disableBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Disabling...';
+          disableBtn.disabled = true;
+
+          if (!window.autoDonationManager) {
+            throw new Error('Auto-donation manager not initialized');
+          }
+
+          // Call the contract to disable auto-donation (correct method name is 'unsubscribe')
+          const tx = await window.autoDonationManager.contract.unsubscribe();
+          console.log('Disable transaction sent:', tx.hash);
+
+          await tx.wait();
+          console.log('Auto-donation disabled successfully');
+
+          // Reset the UI state
+          window.autoDonationManager.userSettings = null;
+
+          // Hide all auto-donation UI elements
+          document.getElementById('autoSettings').style.display = 'none';
+          document.querySelector('.auto-donation-status-card').style.display = 'none';
+          document.getElementById('autoStats').style.display = 'none';
+          document.getElementById('currentSettingsSummary').style.display = 'none';
+
+          // Show setup card
+          document.getElementById('autoSetup').style.display = 'block';
+
+          showNotification('Auto-donation has been disabled successfully', 'success');
+
+          // Reload status after a brief delay
+          setTimeout(() => {
+            loadAutoDonationStatus();
+          }, 1000);
+
+        } catch (error) {
+          console.error('Failed to disable auto-donation:', error);
+          showNotification('Failed to disable auto-donation: ' + error.message, 'error');
+
+          // Reset button
+          disableBtn.innerHTML = originalHTML;
+          disableBtn.disabled = false;
+        }
+      }
+
+      async function refreshAutoStats() {
+        console.log('🔄 Refreshing auto-donation stats...');
+        try {
+          const button = event ? event.target.closest('button') : document.querySelector('[onclick="refreshAutoStats()"]');
+          const originalHTML = button.innerHTML;
+          button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+          button.disabled = true;
+
+          // Force reload the auto-donation manager
+          console.log('🔄 Reinitializing auto-donation manager...');
+          await window.autoDonationManager.initialize();
+
+          console.log('🔄 Reloading auto-donation status...');
+          await loadAutoDonationStatus();
+
+          button.innerHTML = originalHTML;
+          button.disabled = false;
+          console.log('✅ Stats refreshed successfully');
+        } catch (error) {
+          console.error('❌ Failed to refresh stats:', error);
+          const button = event ? event.target.closest('button') : document.querySelector('[onclick="refreshAutoStats()"]');
+          button.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
+          setTimeout(() => {
+            button.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+            button.disabled = false;
+          }, 2000);
+        }
+      }      async function toggleAutoDonation() {
+        console.log('🔄 Toggle Auto-Donation clicked!');
+        console.log('Current userSettings:', window.autoDonationManager?.userSettings);
+
         if (!window.autoDonationManager.userSettings || !window.autoDonationManager.userSettings.isActive) {
+          console.log('➡️ Showing auto settings (setup mode)');
           showAutoSettings();
           return;
         }
 
-        // Show settings for active users
-        const settings = window.autoDonationManager.formatSettings();
+        console.log('➡️ Editing existing auto-donation settings');
+        // Load current settings for active users
+        const settings = window.autoDonationManager.userSettings;
+        console.log('🔧 Loading current settings for editing:', settings);
 
         // Populate current settings
-        document.getElementById('donationType').value = settings.percentage > 0 ? 'percentage' : 'fixed';
+        const donationType = settings.fixedAmount > 0 ? 'fixed' : 'percentage';
+        document.getElementById('donationType').value = donationType;
         document.getElementById('fixedAmount').value = settings.fixedAmount;
-        document.getElementById('percentage').value = (settings.percentage / 100).toString();
+        document.getElementById('percentage').value = settings.percentage;
         document.getElementById('monthlyLimit').value = settings.monthlyLimit;
         document.getElementById('preferredCause').value = settings.preferredCause;
 
@@ -875,6 +1120,7 @@
 
         document.querySelector('.auto-donation-status-card').style.display = 'none';
         document.getElementById('autoStats').style.display = 'none';
+        document.getElementById('currentSettingsSummary').style.display = 'none';
         document.getElementById('autoSettings').style.display = 'block';
         isEditingAutoSettings = true;
       }
@@ -918,9 +1164,78 @@
         }
       };
 
+      // Debug function to check current auto-donation settings
+      window.checkAutoSettings = async function() {
+        if (!window.autoDonationManager) {
+          console.log('❌ Auto-donation manager not initialized');
+          return;
+        }
+
+        try {
+          const settings = await window.autoDonationManager.loadUserSettings();
+          const stats = await window.autoDonationManager.getStats();
+
+          console.log('🔍 Current Auto-Donation Configuration:');
+          console.log('==========================================');
+
+          if (settings) {
+            console.log('✅ Settings loaded:');
+            console.log('   • Active:', settings.isActive);
+            console.log('   • Fixed Amount:', settings.fixedAmount, 'ETH');
+            console.log('   • Percentage:', settings.percentage, '%');
+            console.log('   • Monthly Limit:', settings.monthlyLimit, 'ETH');
+            console.log('   • Preferred Cause:', settings.preferredCause);
+            console.log('   • Monthly Donated:', settings.monthlyDonated, 'ETH');
+            console.log('   • Last Reset Month:', settings.lastResetMonth);
+          } else {
+            console.log('❌ No settings found - Auto-donation not configured');
+          }
+
+          if (stats) {
+            console.log('📈 Stats:');
+            console.log('   • Total Donated:', stats.totalDonated, 'ETH');
+            console.log('   • Donation Count:', stats.donationCount);
+          }
+
+          console.log('🔧 Contract Address:', window.autoDonationManager.contract?.address);
+          console.log('👤 User Address:', window.userAddress);
+
+          return { settings, stats };
+        } catch (error) {
+          console.error('❌ Error checking settings:', error);
+          return null;
+        }
+      };
+
       // Listen for wallet connection events
       document.addEventListener('walletConnected', async () => {
-        await loadAutoDonationStatus();
+        try {
+          // Wait a bit for wallet to be fully initialized
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          if (!window.autoDonationManager) {
+            window.autoDonationManager = new AutoDonationManager();
+          }
+
+          if (!window.ethereum || !window.provider || !window.signer) {
+            throw new Error('Wallet not properly initialized');
+          }
+
+          await window.autoDonationManager.initialize();
+          await loadAutoDonationStatus();
+
+          console.log('🎉 Auto-donation system initialized successfully');
+          console.log('💡 You can check current settings by running: checkAutoSettings()');
+
+          // Automatically check and display current settings
+          setTimeout(() => {
+            window.checkAutoSettings();
+          }, 500);
+
+        } catch (error) {
+          console.error('Failed to initialize auto-donation:', error);
+          showNotification('Failed to initialize auto-donation. Please try again.', 'error');
+        }
       });
     </script>
 
@@ -933,6 +1248,133 @@
       @keyframes slideOut {
         from { transform: translateX(0); opacity: 1; }
         to { transform: translateX(100%); opacity: 0; }
+      }
+
+      .donation-chart-container {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 1rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      #donationChart {
+        width: 100% !important;
+        max-height: 200px;
+        margin: 0 auto;
+      }
+
+      .current-settings-summary {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(34, 197, 94, 0.15));
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        border: 2px solid rgba(16, 185, 129, 0.5);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .current-settings-summary h4 {
+        margin: 0 0 1rem 0;
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .setting-item {
+        background: rgba(255, 255, 255, 0.12);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        backdrop-filter: blur(5px);
+      }
+
+      .setting-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #e5e7eb;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .setting-label i {
+        color: #10b981;
+        font-size: 1.1rem;
+      }
+
+      .setting-value {
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Disable Button Styling */
+      .disable-button {
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+      }
+
+      .disable-button:hover {
+        background: linear-gradient(135deg, #b91c1c, #dc2626);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+      }
+
+      .disable-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+      }
+
+      .disable-button:disabled {
+        background: #6b7280;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .disable-button i {
+        font-size: 0.85rem;
+      }
+
+      /* Setting actions container styling */
+      .setting-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 1.5rem;
+      }
+
+      /* Ensure consistent button styling */
+      .setting-actions button {
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
     </style>
   </body>

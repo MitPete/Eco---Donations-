@@ -218,6 +218,11 @@ async function connectWallet() {
     await browserProvider.send('eth_requestAccounts', []);
     signer = await browserProvider.getSigner();
 
+    // Set global variables for auto-donation
+    window.provider = browserProvider;
+    window.signer = signer;
+    window.userAddress = await signer.getAddress();
+
     await ensureContract(donationAddress, rpcProvider);
 
     donateWrite = new ethers.Contract(donationAddress, donationAbi, signer);
@@ -238,6 +243,11 @@ async function connectWallet() {
     updateWalletUI(addr, true);
 
     await updateBalance();
+
+    // Dispatch wallet connected event for auto-donation
+    document.dispatchEvent(new CustomEvent('walletConnected', {
+      detail: { address: addr, provider: browserProvider, signer: signer }
+    }));
 
     // Reload history if we're on the history page
     if (window.location.pathname.includes('history')) {
@@ -284,6 +294,11 @@ async function reconnectWallet() {
       browserProvider = new ethers.providers.Web3Provider(window.ethereum);
       signer = await browserProvider.getSigner();
 
+      // Set global variables for auto-donation
+      window.provider = browserProvider;
+      window.signer = signer;
+      window.userAddress = await signer.getAddress();
+
       const addr = await signer.getAddress();
       console.log('[reconnectWallet] Retrieved address:', addr);
 
@@ -328,6 +343,11 @@ async function reconnectWallet() {
         console.log('[reconnectWallet] Updating balance...');
         await updateBalance();
         console.log('[reconnectWallet] Wallet reconnected successfully:', addr);
+
+        // Dispatch wallet connected event for auto-donation
+        document.dispatchEvent(new CustomEvent('walletConnected', {
+          detail: { address: addr, provider: browserProvider, signer: signer }
+        }));
       } else {
         console.warn('[reconnectWallet] Address mismatch. Clearing saved address.');
         localStorage.removeItem('walletAddress');
@@ -675,48 +695,69 @@ async function loadDashboard() {
   }
 
   // Load and display donation trends chart
-  const ctx = document.getElementById('donationChart').getContext('2d');
-  const donationData = evs.map(e => ({
-    date: new Date(e.blockNumber * 1000), // Simulated date for demo purposes
-    amount: parseFloat(ethers.utils.formatEther(e.args.amount))
-  }));
+  try {
+    const chartElement = document.getElementById('donationChart');
+    if (!chartElement) {
+      console.warn('Donation chart element not found, skipping chart initialization');
+    } else {
+      const ctx = chartElement.getContext('2d');
+      if (!ctx) {
+        console.warn('Failed to get 2D context for donation chart');
+      } else {
 
-  const groupedData = donationData.reduce((acc, { date, amount }) => {
-    const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-    acc[month] = (acc[month] || 0) + amount;
-    return acc;
-  }, {});
+    const donationData = evs.map(e => ({
+      date: new Date(e.blockNumber * 1000), // Simulated date for demo purposes
+      amount: parseFloat(ethers.utils.formatEther(e.args.amount))
+    }));
 
-  const labels = Object.keys(groupedData);
-  const data = Object.values(groupedData);
+    const groupedData = donationData.reduce((acc, { date, amount }) => {
+      const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+      acc[month] = (acc[month] || 0) + amount;
+      return acc;
+    }, {});
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Monthly Donations (ETH)',
-        data,
-        backgroundColor: 'rgba(46, 125, 50, 0.7)',
-        borderColor: 'rgba(46, 125, 50, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top'
-        }
+    const labels = Object.keys(groupedData);
+    const data = Object.values(groupedData);
+
+    // Check if Chart.js is available
+    if (typeof Chart === 'undefined') {
+      console.error('Chart.js library not loaded');
+      return;
+    }
+
+    // Create new chart
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Monthly Donations (ETH)',
+          data,
+          backgroundColor: 'rgba(46, 125, 50, 0.7)',
+          borderColor: 'rgba(46, 125, 50, 1)',
+          borderWidth: 1
+        }]
       },
-      scales: {
-        y: {
-          beginAtZero: true
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
         }
       }
+    });
+      }
     }
-  });
+  } catch (error) {
+    console.error('Failed to initialize donation chart:', error);
+  }
 
   // Show auto-donation section when wallet is connected
   const autoDonationSection = document.getElementById('autoDonationSection');
@@ -1522,17 +1563,26 @@ async function updateLiveStats() {
 }
 
 // Poll live stats every 15 seconds
-if (document.body.classList.contains('homepage')) {
-  // Wait for app initialization before starting live stats
-  const startLiveStats = async () => {
-    // Wait until app is initialized
-    while (!donationAddress || !rpcProvider) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
-    updateLiveStats();
-    setInterval(updateLiveStats, 15000);
-  };
-  startLiveStats();
+function initializeLiveStats() {
+  if (document.body && document.body.classList && document.body.classList.contains('homepage')) {
+    // Wait for app initialization before starting live stats
+    const startLiveStats = async () => {
+      // Wait until app is initialized
+      while (!donationAddress || !rpcProvider) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      updateLiveStats();
+      setInterval(updateLiveStats, 15000);
+    };
+    startLiveStats();
+  }
+}
+
+// Initialize live stats when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeLiveStats);
+} else {
+  initializeLiveStats();
 }
 
 // Placeholder to prevent ReferenceError on donate.html
