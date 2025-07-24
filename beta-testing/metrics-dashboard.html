@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Beta Testing Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .metric { display: inline-block; margin: 10px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .metric h3 { margin-top: 0; color: #2E7D32; }
+        .progress { width: 200px; height: 20px; background: #f0f0f0; border-radius: 10px; overflow: hidden; }
+        .progress-bar { height: 100%; background: #4CAF50; transition: width 0.3s; }
+        .status-good { color: #4CAF50; }
+        .status-warning { color: #FF9800; }
+        .status-error { color: #F44336; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Beta Testing Dashboard</h1>
+    <p>Real-time tracking of beta user testing progress</p>
+    
+    <div class="metric">
+        <h3>User Registration</h3>
+        <div class="progress">
+            <div class="progress-bar" style="width: 0%" id="user-progress"></div>
+        </div>
+        <p><span id="user-count">0</span> / 100 users</p>
+    </div>
+    
+    <div class="metric">
+        <h3>Scenario Completion</h3>
+        <div class="progress">
+            <div class="progress-bar" style="width: 0%" id="scenario-progress"></div>
+        </div>
+        <p><span id="scenario-rate">0</span>% average completion</p>
+    </div>
+    
+    <div class="metric">
+        <h3>User Satisfaction</h3>
+        <div class="progress">
+            <div class="progress-bar" style="width: 0%" id="satisfaction-progress"></div>
+        </div>
+        <p><span id="satisfaction-rating">0.0</span> / 5.0 average rating</p>
+    </div>
+    
+    <div class="metric">
+        <h3>Active Issues</h3>
+        <p class="status-good" id="issues-count">0 critical issues</p>
+    </div>
+    
+    <h2>Segment Breakdown</h2>
+    <div id="segments">
+        <div class="metric">
+            <h3>🚀 Crypto-Native</h3>
+            <p><span id="crypto-count">0</span> / 50</p>
+        </div>
+        <div class="metric">
+            <h3>🌱 Environmental</h3>
+            <p><span id="env-count">0</span> / 25</p>
+        </div>
+        <div class="metric">
+            <h3>👨‍💻 Developers</h3>
+            <p><span id="dev-count">0</span> / 15</p>
+        </div>
+        <div class="metric">
+            <h3>🏛️ Foundations</h3>
+            <p><span id="foundation-count">0</span> / 10</p>
+        </div>
+    </div>
+    
+    <script>
+        // Simulated data - replace with real API calls
+        function updateDashboard() {
+            // This would connect to your feedback API
+            fetch('/api/feedback/summary')
+                .then(response => response.json())
+                .then(data => {
+                    // Update metrics based on real data
+                    console.log('Dashboard data:', data);
+                })
+                .catch(error => {
+                    console.log('Demo mode - using simulated data');
+                    
+                    // Demo progress simulation
+                    const progress = Math.min(100, (Date.now() % 100000) / 1000);
+                    document.getElementById('user-progress').style.width = progress + '%';
+                    document.getElementById('user-count').textContent = Math.floor(progress);
+                });
+        }
+        
+        // Update dashboard every 30 seconds
+        updateDashboard();
+        setInterval(updateDashboard, 30000);
+    </script>
+</body>
+</html>
