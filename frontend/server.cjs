@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const PORT = 8000;
+const PORT = 3000;
 
 // Middleware to prevent caching for CSS and JS files
 app.use((req, res, next) => {
@@ -14,6 +14,31 @@ app.use((req, res, next) => {
     });
   }
   next();
+});
+
+// Route handlers for clean URLs
+app.get('/donate', (req, res) => {
+  res.sendFile(path.join(__dirname, 'donate.html'));
+});
+
+app.get('/history', (req, res) => {
+  res.sendFile(path.join(__dirname, 'history.html'));
+});
+
+app.get('/foundation', (req, res) => {
+  res.sendFile(path.join(__dirname, 'foundation.html'));
+});
+
+app.get('/foundations', (req, res) => {
+  res.sendFile(path.join(__dirname, 'foundation.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dashboard.html'));
+});
+
+app.get('/governance', (req, res) => {
+  res.sendFile(path.join(__dirname, 'governance.html'));
 });
 
 // Serve static files
