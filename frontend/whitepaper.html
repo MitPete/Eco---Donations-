@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eco Donations Whitepaper - Decentralized Environmental Impact Platform</title>
+  <meta name="description" content="Official whitepaper for Eco Donations - A blockchain-based platform for transparent environmental donations and verifiable impact tracking.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/css/whitepaper.css" id="page-css">
+  <script>
+    // Dynamic cache busting
+    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/css/whitepaper.css?t=' + Date.now();
+  </script>
+</head>
+<body class="whitepaper-page">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      Eco Donations
+    </a>
+    <nav class="header__nav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
+    </nav>
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="whitepaper-container">
+    <!-- Hero Section -->
+    <div class="whitepaper-hero">
+      <div class="hero-background">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-file-alt"></i>
+          <span>Official Whitepaper</span>
+        </div>
+        <h1 class="hero-title">Eco Donations</h1>
+        <h2 class="hero-subtitle">Decentralized Environmental Impact Platform</h2>
+        <p class="hero-description">Revolutionizing environmental funding through blockchain transparency, verifiable impact tracking, and community governance</p>
+        <div class="hero-meta">
+          <div class="meta-item">
+            <i class="fas fa-calendar"></i>
+            <span>Version 1.0 - July 2025</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-users"></i>
+            <span>Eco Donations Team</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="download-btn" onclick="window.print()">
+            <i class="fas fa-download"></i>
+            <span>Download PDF</span>
+          </button>
+          <button class="share-btn" onclick="navigator.share ? navigator.share({title: 'Eco Donations Whitepaper', url: window.location.href}) : alert('Share: ' + window.location.href)">
+            <i class="fas fa-share"></i>
+            <span>Share</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="toc-section">
+      <div class="toc-container">
+        <h3 class="toc-title">Table of Contents</h3>
+        <nav class="toc-nav">
+          <a href="#abstract" class="toc-link">1. Abstract</a>
+          <a href="#introduction" class="toc-link">2. Introduction</a>
+          <a href="#problem" class="toc-link">3. Problem Statement</a>
+          <a href="#solution" class="toc-link">4. Our Solution</a>
+          <a href="#architecture" class="toc-link">5. Technical Architecture</a>
+          <a href="#tokenomics" class="toc-link">6. Tokenomics</a>
+          <a href="#governance" class="toc-link">7. Governance Model</a>
+          <a href="#impact" class="toc-link">8. Impact Verification</a>
+          <a href="#roadmap" class="toc-link">9. Roadmap</a>
+          <a href="#conclusion" class="toc-link">10. Conclusion</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Content Sections -->
+    <div class="content-wrapper">
+      <!-- Abstract -->
+      <section id="abstract" class="content-section">
+        <div class="section-header">
+          <span class="section-number">1</span>
+          <h2 class="section-title">Abstract</h2>
+        </div>
+        <div class="section-content">
+          <p class="lead-paragraph">
+            Eco Donations represents a paradigm shift in environmental funding, leveraging blockchain technology to create an unprecedented level of transparency, accountability, and measurable impact in environmental conservation efforts.
+          </p>
+          <p>
+            Our platform addresses critical inefficiencies in traditional environmental funding by implementing smart contracts for donation management, real-time impact tracking through IoT sensors and satellite data, and a decentralized autonomous organization (DAO) for community-driven decision making.
+          </p>
+          <div class="highlight-box">
+            <h4>Key Innovations</h4>
+            <ul>
+              <li><strong>Transparent Fund Distribution:</strong> 100% traceability from donor to environmental action</li>
+              <li><strong>Verifiable Impact Metrics:</strong> Real-time monitoring of environmental improvements</li>
+              <li><strong>Community Governance:</strong> Stakeholder-driven platform evolution and funding decisions</li>
+              <li><strong>Incentive Alignment:</strong> ECO token rewards for positive environmental contributions</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Introduction -->
+      <section id="introduction" class="content-section">
+        <div class="section-header">
+          <span class="section-number">2</span>
+          <h2 class="section-title">Introduction</h2>
+        </div>
+        <div class="section-content">
+          <p>
+            The environmental crisis demands immediate, scalable, and verifiable action. However, traditional environmental funding mechanisms suffer from opacity, inefficiency, and lack of measurable outcomes. Donors often cannot track where their contributions go or verify the actual environmental impact generated.
+          </p>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="stat-value">$3.5T</div>
+              <div class="stat-label">Annual environmental funding gap</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="stat-value">68%</div>
+              <div class="stat-label">Lack transparency in impact reporting</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-value">12-18</div>
+              <div class="stat-label">Months average funding delay</div>
+            </div>
+          </div>
+          <p>
+            Eco Donations emerged to bridge this gap by creating a decentralized platform where environmental impact is not just promised, but proven through immutable blockchain records and real-world verification systems.
+          </p>
+        </div>
+      </section>
+
+      <!-- Problem Statement -->
+      <section id="problem" class="content-section">
+        <div class="section-header">
+          <span class="section-number">3</span>
+          <h2 class="section-title">Problem Statement</h2>
+        </div>
+        <div class="section-content">
+          <h3>Current Environmental Funding Challenges</h3>
+
+          <div class="problem-grid">
+            <div class="problem-card">
+              <div class="problem-icon">
+                <i class="fas fa-eye-slash"></i>
+              </div>
+              <h4>Lack of Transparency</h4>
+              <p>Traditional environmental organizations often provide limited visibility into fund allocation and utilization, making it difficult for donors to verify impact.</p>
+            </div>
+
+            <div class="problem-card">
+              <div class="problem-icon">
+                <i class="fas fa-turtle"></i>
+              </div>
+              <h4>Inefficient Distribution</h4>
+              <p>Centralized systems create administrative overhead, delays in fund deployment, and potential for misallocation of resources.</p>
+            </div>
+
+            <div class="problem-card">
+              <div class="problem-icon">
+                <i class="fas fa-question-circle"></i>
+              </div>
+              <h4>Unverifiable Impact</h4>
+              <p>Absence of real-time monitoring systems makes it impossible to verify actual environmental improvements versus reported outcomes.</p>
+            </div>
+
+            <div class="problem-card">
+              <div class="problem-icon">
+                <i class="fas fa-users-slash"></i>
+              </div>
+              <h4>Limited Participation</h4>
+              <p>Traditional models exclude smaller donors and communities from meaningful participation in environmental decision-making processes.</p>
+            </div>
+          </div>
+
+          <div class="case-study">
+            <h4>Case Study: Traditional Environmental Funding</h4>
+            <p>
+              A typical environmental donation journey involves multiple intermediaries, each taking administrative fees.
+              By the time funds reach actual environmental projects, often 30-40% has been consumed by overhead costs,
+              and donors receive sporadic, unverifiable reports months after their contribution.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution -->
+      <section id="solution" class="content-section">
+        <div class="section-header">
+          <span class="section-number">4</span>
+          <h2 class="section-title">Our Solution</h2>
+        </div>
+        <div class="section-content">
+          <p class="lead-paragraph">
+            Eco Donations reimagines environmental funding through a comprehensive blockchain-based ecosystem that ensures transparency, efficiency, and verifiable impact.
+          </p>
+
+          <div class="solution-architecture">
+            <h3>Core Platform Components</h3>
+
+            <div class="component-grid">
+              <div class="component-card">
+                <div class="component-header">
+                  <i class="fas fa-coins"></i>
+                  <h4>Smart Contract System</h4>
+                </div>
+                <ul>
+                  <li>Automated fund distribution</li>
+                  <li>Milestone-based releases</li>
+                  <li>Transparent transaction records</li>
+                  <li>Built-in compliance checks</li>
+                </ul>
+              </div>
+
+              <div class="component-card">
+                <div class="component-header">
+                  <i class="fas fa-satellite"></i>
+                  <h4>Impact Verification</h4>
+                </div>
+                <ul>
+                  <li>Satellite imagery analysis</li>
+                  <li>IoT sensor networks</li>
+                  <li>Third-party auditing</li>
+                  <li>Real-time metrics dashboard</li>
+                </ul>
+              </div>
+
+              <div class="component-card">
+                <div class="component-header">
+                  <i class="fas fa-vote-yea"></i>
+                  <h4>DAO Governance</h4>
+                </div>
+                <ul>
+                  <li>Community proposal system</li>
+                  <li>Transparent voting mechanisms</li>
+                  <li>Stake-weighted decisions</li>
+                  <li>Decentralized fund allocation</li>
+                </ul>
+              </div>
+
+              <div class="component-card">
+                <div class="component-header">
+                  <i class="fas fa-award"></i>
+                  <h4>Incentive System</h4>
+                </div>
+                <ul>
+                  <li>ECO token rewards</li>
+                  <li>Impact-based multipliers</li>
+                  <li>Community recognition</li>
+                  <li>Governance participation rewards</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-diagram">
+            <h3>Donation Flow Process</h3>
+            <div class="flow-steps">
+              <div class="flow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Donation</h4>
+                  <p>User contributes ETH to verified environmental foundations</p>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Smart Contract</h4>
+                  <p>Funds locked in escrow with milestone conditions</p>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Implementation</h4>
+                  <p>Foundation executes environmental project</p>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h4>Verification</h4>
+                  <p>Impact measured and verified by multiple sources</p>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                  <h4>Release & Reward</h4>
+                  <p>Funds released, ECO tokens distributed to donors</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Architecture -->
+      <section id="architecture" class="content-section">
+        <div class="section-header">
+          <span class="section-number">5</span>
+          <h2 class="section-title">Technical Architecture</h2>
+        </div>
+        <div class="section-content">
+          <h3>Blockchain Infrastructure</h3>
+          <p>
+            Eco Donations is built on Ethereum, leveraging its mature ecosystem, robust security, and extensive tooling.
+            Our smart contract architecture emphasizes modularity, upgradability, and gas efficiency.
+          </p>
+
+          <div class="tech-stack">
+            <div class="stack-layer">
+              <h4>Application Layer</h4>
+              <div class="tech-items">
+                <span class="tech-item">React Frontend</span>
+                <span class="tech-item">Web3 Integration</span>
+                <span class="tech-item">IPFS Storage</span>
+                <span class="tech-item">Real-time Analytics</span>
+              </div>
+            </div>
+            <div class="stack-layer">
+              <h4>Smart Contract Layer</h4>
+              <div class="tech-items">
+                <span class="tech-item">Donation Contract</span>
+                <span class="tech-item">ECO Token (ERC-20)</span>
+                <span class="tech-item">Governance Contract</span>
+                <span class="tech-item">Auto-Donation Service</span>
+              </div>
+            </div>
+            <div class="stack-layer">
+              <h4>Blockchain Layer</h4>
+              <div class="tech-items">
+                <span class="tech-item">Ethereum Mainnet</span>
+                <span class="tech-item">Layer 2 Solutions</span>
+                <span class="tech-item">Oracle Networks</span>
+                <span class="tech-item">Cross-chain Bridges</span>
+              </div>
+            </div>
+          </div>
+
+          <h3>Smart Contract Architecture</h3>
+          <div class="contract-grid">
+            <div class="contract-card">
+              <h4>DonationContract.sol</h4>
+              <p>Core donation logic, foundation verification, and impact tracking</p>
+              <ul class="feature-list">
+                <li>Multi-foundation support</li>
+                <li>Donation history tracking</li>
+                <li>Emergency pause functionality</li>
+                <li>Gas-optimized operations</li>
+              </ul>
+            </div>
+
+            <div class="contract-card">
+              <h4>EcoCoin.sol</h4>
+              <p>ERC-20 token for rewards and governance participation</p>
+              <ul class="feature-list">
+                <li>Donation-based minting</li>
+                <li>Impact multiplier bonuses</li>
+                <li>Governance voting rights</li>
+                <li>Staking mechanisms</li>
+              </ul>
+            </div>
+
+            <div class="contract-card">
+              <h4>EcoGovernance.sol</h4>
+              <p>Decentralized decision-making and proposal management</p>
+              <ul class="feature-list">
+                <li>Proposal creation/voting</li>
+                <li>Quadratic voting system</li>
+                <li>Time-locked execution</li>
+                <li>Delegation support</li>
+              </ul>
+            </div>
+
+            <div class="contract-card">
+              <h4>AutoDonationService.sol</h4>
+              <p>Automated recurring donations and portfolio management</p>
+              <ul class="feature-list">
+                <li>Scheduled donations</li>
+                <li>Dynamic rebalancing</li>
+                <li>Conditional execution</li>
+                <li>Gas cost optimization</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>Security & Auditing</h3>
+          <div class="security-measures">
+            <div class="security-item">
+              <i class="fas fa-shield-alt"></i>
+              <div>
+                <h4>Multi-signature Wallets</h4>
+                <p>Critical operations require multiple signatures from verified team members</p>
+              </div>
+            </div>
+            <div class="security-item">
+              <i class="fas fa-bug"></i>
+              <div>
+                <h4>Bug Bounty Program</h4>
+                <p>Ongoing community-driven security testing with substantial rewards</p>
+              </div>
+            </div>
+            <div class="security-item">
+              <i class="fas fa-search"></i>
+              <div>
+                <h4>Third-party Audits</h4>
+                <p>Regular smart contract audits by leading blockchain security firms</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tokenomics -->
+      <section id="tokenomics" class="content-section">
+        <div class="section-header">
+          <span class="section-number">6</span>
+          <h2 class="section-title">Tokenomics</h2>
+        </div>
+        <div class="section-content">
+          <h3>ECO Token Utility</h3>
+          <p>
+            The ECO token serves as the cornerstone of our ecosystem, providing utility across governance,
+            rewards, and platform functionality while maintaining deflationary pressure through impact-based mechanisms.
+          </p>
+
+          <div class="token-utilities">
+            <div class="utility-card">
+              <div class="utility-icon">
+                <i class="fas fa-vote-yea"></i>
+              </div>
+              <h4>Governance Rights</h4>
+              <p>Vote on platform upgrades, foundation partnerships, and fund allocation strategies</p>
+            </div>
+
+            <div class="utility-card">
+              <div class="utility-icon">
+                <i class="fas fa-gift"></i>
+              </div>
+              <h4>Donation Rewards</h4>
+              <p>Earn ECO tokens based on donation amount and verified environmental impact</p>
+            </div>
+
+            <div class="utility-card">
+              <div class="utility-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h4>Staking Benefits</h4>
+              <p>Stake tokens for enhanced voting power and additional reward multipliers</p>
+            </div>
+
+            <div class="utility-card">
+              <div class="utility-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <h4>Impact Multipliers</h4>
+              <p>Higher impact projects generate increased token rewards for participants</p>
+            </div>
+          </div>
+
+          <h3>Token Distribution</h3>
+          <div class="tokenomics-chart">
+            <div class="distribution-item">
+              <div class="distribution-bar">
+                <div class="bar-fill" style="width: 40%; background: #10b981;"></div>
+              </div>
+              <div class="distribution-info">
+                <span class="percentage">40%</span>
+                <span class="category">Community Rewards</span>
+                <span class="description">Donation incentives and governance participation</span>
+              </div>
+            </div>
+
+            <div class="distribution-item">
+              <div class="distribution-bar">
+                <div class="bar-fill" style="width: 25%; background: #3b82f6;"></div>
+              </div>
+              <div class="distribution-info">
+                <span class="percentage">25%</span>
+                <span class="category">Foundation Partners</span>
+                <span class="description">Environmental organizations and impact validators</span>
+              </div>
+            </div>
+
+            <div class="distribution-item">
+              <div class="distribution-bar">
+                <div class="bar-fill" style="width: 20%; background: #f59e0b;"></div>
+              </div>
+              <div class="distribution-info">
+                <span class="percentage">20%</span>
+                <span class="category">Development Team</span>
+                <span class="description">Core team allocation with 2-year vesting</span>
+              </div>
+            </div>
+
+            <div class="distribution-item">
+              <div class="distribution-bar">
+                <div class="bar-fill" style="width: 10%; background: #ef4444;"></div>
+              </div>
+              <div class="distribution-info">
+                <span class="percentage">10%</span>
+                <span class="category">Treasury Reserve</span>
+                <span class="description">Platform development and emergency fund</span>
+              </div>
+            </div>
+
+            <div class="distribution-item">
+              <div class="distribution-bar">
+                <div class="bar-fill" style="width: 5%; background: #8b5cf6;"></div>
+              </div>
+              <div class="distribution-info">
+                <span class="percentage">5%</span>
+                <span class="category">Advisors & Partnerships</span>
+                <span class="description">Strategic advisors and key partnerships</span>
+              </div>
+            </div>
+          </div>
+
+          <h3>Deflationary Mechanisms</h3>
+          <div class="deflation-mechanisms">
+            <div class="mechanism">
+              <h4>Impact-Based Burning</h4>
+              <p>Tokens are permanently burned proportional to verified environmental impact, creating deflationary pressure tied to real-world outcomes.</p>
+            </div>
+            <div class="mechanism">
+              <h4>Transaction Fee Burns</h4>
+              <p>A portion of platform transaction fees are used to purchase and burn ECO tokens from the open market.</p>
+            </div>
+            <div class="mechanism">
+              <h4>Milestone Burns</h4>
+              <p>Major environmental milestones trigger community-voted token burns to celebrate and commemorate achievements.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Governance -->
+      <section id="governance" class="content-section">
+        <div class="section-header">
+          <span class="section-number">7</span>
+          <h2 class="section-title">Governance Model</h2>
+        </div>
+        <div class="section-content">
+          <h3>Decentralized Autonomous Organization (DAO)</h3>
+          <p>
+            Eco Donations operates as a fully decentralized autonomous organization, where all major decisions
+            are made collectively by the community through transparent, on-chain governance mechanisms.
+          </p>
+
+          <div class="governance-structure">
+            <div class="governance-level">
+              <h4>Community Proposals</h4>
+              <p>Any ECO token holder can submit proposals for platform improvements, new foundation partnerships, or policy changes.</p>
+              <div class="governance-features">
+                <span class="feature">Minimum 1,000 ECO required</span>
+                <span class="feature">7-day discussion period</span>
+                <span class="feature">Formal proposal template</span>
+              </div>
+            </div>
+
+            <div class="governance-level">
+              <h4>Voting Mechanism</h4>
+              <p>Quadratic voting ensures balanced representation while preventing whale dominance in decision-making processes.</p>
+              <div class="governance-features">
+                <span class="feature">Quadratic voting formula</span>
+                <span class="feature">Delegation support</span>
+                <span class="feature">14-day voting period</span>
+              </div>
+            </div>
+
+            <div class="governance-level">
+              <h4>Implementation</h4>
+              <p>Approved proposals are automatically implemented through smart contracts or executed by the community council.</p>
+              <div class="governance-features">
+                <span class="feature">48-hour timelock</span>
+                <span class="feature">Emergency veto power</span>
+                <span class="feature">Public execution queue</span>
+              </div>
+            </div>
+          </div>
+
+          <h3>Governance Categories</h3>
+          <div class="governance-categories">
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <h4>Foundation Partnerships</h4>
+              <p>Approval of new environmental organizations joining the platform</p>
+              <div class="vote-threshold">Requires: 60% approval</div>
+            </div>
+
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-cogs"></i>
+              </div>
+              <h4>Protocol Upgrades</h4>
+              <p>Smart contract improvements and new feature implementations</p>
+              <div class="vote-threshold">Requires: 75% approval</div>
+            </div>
+
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <h4>Treasury Management</h4>
+              <p>Allocation of community treasury funds for development and initiatives</p>
+              <div class="vote-threshold">Requires: 65% approval</div>
+            </div>
+
+            <div class="category-card">
+              <div class="category-icon">
+                <i class="fas fa-balance-scale"></i>
+              </div>
+              <h4>Policy Changes</h4>
+              <p>Updates to platform policies, fee structures, and operational procedures</p>
+              <div class="vote-threshold">Requires: 55% approval</div>
+            </div>
+          </div>
+
+          <h3>Community Council</h3>
+          <p>
+            A rotating council of 7 elected community members provides operational oversight and emergency response capabilities.
+            Council members serve 6-month terms and are elected through the same quadratic voting system.
+          </p>
+
+          <div class="council-responsibilities">
+            <div class="responsibility">
+              <i class="fas fa-shield-alt"></i>
+              <span>Emergency response and security incident management</span>
+            </div>
+            <div class="responsibility">
+              <i class="fas fa-gavel"></i>
+              <span>Dispute resolution between platform participants</span>
+            </div>
+            <div class="responsibility">
+              <i class="fas fa-clipboard-check"></i>
+              <span>Foundation verification and compliance monitoring</span>
+            </div>
+            <div class="responsibility">
+              <i class="fas fa-users"></i>
+              <span>Community engagement and education initiatives</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Impact Verification -->
+      <section id="impact" class="content-section">
+        <div class="section-header">
+          <span class="section-number">8</span>
+          <h2 class="section-title">Impact Verification</h2>
+        </div>
+        <div class="section-content">
+          <h3>Multi-Source Verification System</h3>
+          <p>
+            Environmental impact claims are verified through multiple independent sources to ensure accuracy and prevent greenwashing.
+            Our verification system combines technological monitoring with third-party auditing and community oversight.
+          </p>
+
+          <div class="verification-layers">
+            <div class="verification-layer">
+              <div class="layer-icon">
+                <i class="fas fa-satellite"></i>
+              </div>
+              <div class="layer-content">
+                <h4>Satellite Imagery Analysis</h4>
+                <p>Real-time monitoring of deforestation, reforestation, and land use changes through partnerships with satellite data providers</p>
+                <ul>
+                  <li>Weekly forest cover analysis</li>
+                  <li>Carbon sequestration estimates</li>
+                  <li>Biodiversity habitat mapping</li>
+                  <li>Illegal activity detection</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="verification-layer">
+              <div class="layer-icon">
+                <i class="fas fa-microchip"></i>
+              </div>
+              <div class="layer-content">
+                <h4>IoT Sensor Networks</h4>
+                <p>Ground-based sensors provide continuous monitoring of environmental conditions and project outcomes</p>
+                <ul>
+                  <li>Air and water quality measurements</li>
+                  <li>Soil carbon content tracking</li>
+                  <li>Wildlife population monitoring</li>
+                  <li>Weather pattern analysis</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="verification-layer">
+              <div class="layer-icon">
+                <i class="fas fa-certificate"></i>
+              </div>
+              <div class="layer-content">
+                <h4>Third-Party Auditing</h4>
+                <p>Independent environmental auditors provide periodic verification and compliance assessments</p>
+                <ul>
+                  <li>Quarterly impact assessments</li>
+                  <li>Methodology validation</li>
+                  <li>Financial audit trails</li>
+                  <li>Community impact studies</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="verification-layer">
+              <div class="layer-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="layer-content">
+                <h4>Community Verification</h4>
+                <p>Local communities and volunteers provide on-ground verification and reporting</p>
+                <ul>
+                  <li>Local community reports</li>
+                  <li>Volunteer monitoring programs</li>
+                  <li>Photographic evidence</li>
+                  <li>Whistleblower protection</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h3>Impact Metrics & Standards</h3>
+          <div class="metrics-grid">
+            <div class="metric-category">
+              <h4><i class="fas fa-tree"></i> Forest Conservation</h4>
+              <ul class="metric-list">
+                <li>Hectares protected/restored</li>
+                <li>CO₂ sequestration (tons)</li>
+                <li>Biodiversity index improvements</li>
+                <li>Local community benefits</li>
+              </ul>
+            </div>
+
+            <div class="metric-category">
+              <h4><i class="fas fa-water"></i> Ocean Protection</h4>
+              <ul class="metric-list">
+                <li>Marine area protected (km²)</li>
+                <li>Plastic waste removed (tons)</li>
+                <li>Marine species recovery</li>
+                <li>Water quality improvements</li>
+              </ul>
+            </div>
+
+            <div class="metric-category">
+              <h4><i class="fas fa-bolt"></i> Renewable Energy</h4>
+              <ul class="metric-list">
+                <li>Clean energy generated (MWh)</li>
+                <li>CO₂ emissions avoided (tons)</li>
+                <li>Households powered</li>
+                <li>Grid stability contributions</li>
+              </ul>
+            </div>
+
+            <div class="metric-category">
+              <h4><i class="fas fa-seedling"></i> Carbon Offset</h4>
+              <ul class="metric-list">
+                <li>Total carbon captured (tons)</li>
+                <li>Offset project verification</li>
+                <li>Additionality certification</li>
+                <li>Long-term storage guarantee</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>Data Integrity & Transparency</h3>
+          <div class="integrity-features">
+            <div class="integrity-item">
+              <i class="fas fa-lock"></i>
+              <div>
+                <h4>Immutable Records</h4>
+                <p>All verification data is hashed and stored on-chain, preventing tampering or manipulation</p>
+              </div>
+            </div>
+            <div class="integrity-item">
+              <i class="fas fa-eye"></i>
+              <div>
+                <h4>Public Dashboard</h4>
+                <p>Real-time impact metrics are publicly available with full data provenance</p>
+              </div>
+            </div>
+            <div class="integrity-item">
+              <i class="fas fa-shield-check"></i>
+              <div>
+                <h4>Dispute Resolution</h4>
+                <p>Community-driven dispute resolution for contested impact claims</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Roadmap -->
+      <section id="roadmap" class="content-section">
+        <div class="section-header">
+          <span class="section-number">9</span>
+          <h2 class="section-title">Development Roadmap</h2>
+        </div>
+        <div class="section-content">
+          <div class="roadmap-timeline">
+            <div class="timeline-item completed">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">Q2 2025</div>
+                <h4>Foundation Launch ✅</h4>
+                <ul>
+                  <li>Core smart contracts deployment</li>
+                  <li>Basic donation functionality</li>
+                  <li>Initial foundation partnerships</li>
+                  <li>Community beta testing</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="timeline-item current">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">Q3 2025</div>
+                <h4>Platform Enhancement 🔄</h4>
+                <ul>
+                  <li>ECO token distribution system</li>
+                  <li>Enhanced impact tracking</li>
+                  <li>Mobile application launch</li>
+                  <li>Advanced analytics dashboard</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">Q4 2025</div>
+                <h4>DAO Governance</h4>
+                <ul>
+                  <li>Full governance implementation</li>
+                  <li>Community council elections</li>
+                  <li>Proposal system activation</li>
+                  <li>Treasury management tools</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">Q1 2026</div>
+                <h4>Verification Network</h4>
+                <ul>
+                  <li>Satellite integration partnerships</li>
+                  <li>IoT sensor network deployment</li>
+                  <li>Third-party auditor onboarding</li>
+                  <li>AI-powered impact analysis</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">Q2 2026</div>
+                <h4>Global Expansion</h4>
+                <ul>
+                  <li>Multi-chain deployment</li>
+                  <li>International foundation network</li>
+                  <li>Localized platform versions</li>
+                  <li>Corporate partnership program</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">Q3 2026</div>
+                <h4>Advanced Features</h4>
+                <ul>
+                  <li>Carbon credit marketplace</li>
+                  <li>Impact derivatives trading</li>
+                  <li>Institutional investor tools</li>
+                  <li>API ecosystem development</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">2027+</div>
+                <h4>Ecosystem Maturity</h4>
+                <ul>
+                  <li>Full decentralization achievement</li>
+                  <li>Self-sustaining ecosystem</li>
+                  <li>Global environmental impact</li>
+                  <li>Next-generation sustainability tools</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h3>Key Milestones & Metrics</h3>
+          <div class="milestone-grid">
+            <div class="milestone-card">
+              <div class="milestone-value">$10M</div>
+              <div class="milestone-label">Total Donations Processed</div>
+              <div class="milestone-target">Target: Q4 2025</div>
+            </div>
+
+            <div class="milestone-card">
+              <div class="milestone-value">100</div>
+              <div class="milestone-label">Verified Foundation Partners</div>
+              <div class="milestone-target">Target: Q2 2026</div>
+            </div>
+
+            <div class="milestone-card">
+              <div class="milestone-value">1M</div>
+              <div class="milestone-label">Tons CO₂ Offset Verified</div>
+              <div class="milestone-target">Target: Q3 2026</div>
+            </div>
+
+            <div class="milestone-card">
+              <div class="milestone-value">50K</div>
+              <div class="milestone-label">Active Community Members</div>
+              <div class="milestone-target">Target: Q1 2027</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conclusion -->
+      <section id="conclusion" class="content-section">
+        <div class="section-header">
+          <span class="section-number">10</span>
+          <h2 class="section-title">Conclusion</h2>
+        </div>
+        <div class="section-content">
+          <p class="lead-paragraph">
+            Eco Donations represents more than a technological innovation—it embodies a fundamental shift toward
+            transparent, accountable, and measurably effective environmental action in the digital age.
+          </p>
+
+          <div class="conclusion-grid">
+            <div class="conclusion-point">
+              <div class="point-icon">
+                <i class="fas fa-bullseye"></i>
+              </div>
+              <h4>Mission-Critical Impact</h4>
+              <p>
+                By eliminating opacity and inefficiency in environmental funding, we enable every dollar donated
+                to create maximum verifiable impact for our planet's future.
+              </p>
+            </div>
+
+            <div class="conclusion-point">
+              <div class="point-icon">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <h4>Technological Innovation</h4>
+              <p>
+                Our multi-layered verification system and blockchain-native architecture sets new standards
+                for environmental project accountability and donor trust.
+              </p>
+            </div>
+
+            <div class="conclusion-point">
+              <div class="point-icon">
+                <i class="fas fa-hands-helping"></i>
+              </div>
+              <h4>Community Empowerment</h4>
+              <p>
+                Through decentralized governance, we ensure that environmental funding decisions reflect
+                the collective wisdom and values of our global community.
+              </p>
+            </div>
+
+            <div class="conclusion-point">
+              <div class="point-icon">
+                <i class="fas fa-infinity"></i>
+              </div>
+              <h4>Sustainable Future</h4>
+              <p>
+                Our tokenomics and incentive structures create a self-sustaining ecosystem that grows stronger
+                with each verified environmental improvement.
+              </p>
+            </div>
+          </div>
+
+          <div class="call-to-action">
+            <h3>Join the Movement</h3>
+            <p>
+              The environmental crisis requires immediate, coordinated, and transparent action.
+              Eco Donations provides the infrastructure for this action. Whether you're an individual donor,
+              environmental organization, or institutional investor, there's a place for you in our ecosystem.
+            </p>
+
+            <div class="cta-buttons">
+              <a href="/donate.html" class="cta-primary">
+                <i class="fas fa-heart"></i>
+                Start Donating
+              </a>
+              <a href="/governance.html" class="cta-secondary">
+                <i class="fas fa-vote-yea"></i>
+                Join Governance
+              </a>
+            </div>
+          </div>
+
+          <div class="final-statement">
+            <blockquote>
+              "The best time to plant a tree was 20 years ago. The second best time is now.
+              With Eco Donations, every contribution is a seed planted in our planet's future."
+            </blockquote>
+            <cite>— Eco Donations Team</cite>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__content">
+      <div class="footer__section">
+        <h3><i class="fa-solid fa-leaf"></i> Eco Donations</h3>
+        <p>Empowering environmental change through blockchain technology and transparent donations.</p>
+        <div class="footer__social">
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+            <i class="fa-brands fa-twitter"></i>
+          </a>
+          <a href="https://discord.com" target="_blank" rel="noopener" aria-label="Discord">
+            <i class="fa-brands fa-discord"></i>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__section">
+        <h3>Platform</h3>
+        <a href="donate.html">Make a Donation</a>
+        <a href="foundation.html">Browse Foundations</a>
+        <a href="governance.html">DAO Governance</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Resources</h3>
+        <a href="history.html">Transaction History</a>
+        <a href="whitepaper.html">Whitepaper</a>
+        <a href="#api">API Documentation</a>
+        <a href="#support">Support Center</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Legal</h3>
+        <a href="#terms">Terms of Service</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#cookies">Cookie Policy</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__bottom-content">
+        <p>© 2025 Eco Donations. Built with 💚 for the planet.</p>
+        <div class="footer__stats">
+          <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
+          <span><i class="fa-solid fa-leaf"></i> 100% Environmental Focus</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App logic -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="contract-fix.js?v=1753062000"></script>
+  <script src="main-wallet.js?v=1753062000"></script>
+</body>
+</html>

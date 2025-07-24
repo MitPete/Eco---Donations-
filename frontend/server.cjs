@@ -41,6 +41,10 @@ app.get('/governance', (req, res) => {
   res.sendFile(path.join(__dirname, 'governance.html'));
 });
 
+app.get('/whitepaper', (req, res) => {
+  res.sendFile(path.join(__dirname, 'whitepaper.html'));
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname)));
 
