@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-07-24T17:19:01.345Z",
+  "timestamp": "2025-07-24T17:35:58.872Z",
   "network": "localhost",
   "totalTests": 16,
-  "passedTests": 15,
-  "failedTests": 1,
+  "passedTests": 13,
+  "failedTests": 3,
   "tests": [
     {
       "name": "MultiSig Owner Verification",
@@ -22,8 +22,8 @@
     },
     {
       "name": "ECO Coin Balance Check",
-      "result": "PASSED",
-      "error": null
+      "result": "FAILED",
+      "error": "Wrong balance: 9800.0 ECO, expected 10000 ECO"
     },
     {
       "name": "ECO Coin Transfer",
@@ -57,8 +57,8 @@
     },
     {
       "name": "Vote on Proposal",
-      "result": "PASSED",
-      "error": null
+      "result": "FAILED",
+      "error": "cannot estimate gas; transaction may fail or may require manual gas limit [ See: https://links.ethers.org/v5-errors-UNPREDICTABLE_GAS_LIMIT ] (reason=\"Error: VM Exception while processing transaction: reverted with reason string 'Already voted'\", method=\"estimateGas\", transaction={\"from\":\"0x70997970C51812dc3A010C7d01b50e0d17dc79C8\",\"to\":\"0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690\",\"data\":\"0xc9d27afe00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001\",\"accessList\":null}, error={\"name\":\"ProviderError\",\"_stack\":\"ProviderError: Error: VM Exception while processing transaction: reverted with reason string 'Already voted'\\n    at HttpProvider.request (/Users/petermichell/Eco---Donations-/node_modules/hardhat/src/internal/core/providers/http.ts:116:21)\\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at EthersProviderWrapper.send (/Users/petermichell/Eco---Donations-/node_modules/@nomiclabs/hardhat-ethers/src/internal/ethers-provider-wrapper.ts:13:20)\",\"code\":-32603,\"_isProviderError\":true,\"data\":{\"message\":\"Error: VM Exception while processing transaction: reverted with reason string 'Already voted'\",\"data\":\"0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000d416c726561647920766f74656400000000000000000000000000000000000000\"}}, code=UNPREDICTABLE_GAS_LIMIT, version=providers/5.8.0)"
     },
     {
       "name": "Auto-Donation Subscription",
