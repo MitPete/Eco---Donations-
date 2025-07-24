@@ -1,0 +1,89 @@
+{
+  "timestamp": "2025-07-24T17:14:22.134Z",
+  "network": "localhost",
+  "totalTests": 16,
+  "passedTests": 15,
+  "failedTests": 1,
+  "tests": [
+    {
+      "name": "MultiSig Owner Verification",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "MultiSig Required Confirmations",
+      "result": "FAILED",
+      "error": "multiSigWallet.required is not a function"
+    },
+    {
+      "name": "ECO Coin Basic Info",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "ECO Coin Balance Check",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "ECO Coin Transfer",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Donation Contract Stats",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Make Donation",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Check Donation Stats After",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Governance Parameters",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Create Governance Proposal",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Vote on Proposal",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Auto-Donation Subscription",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Auto-Donation Global Limits",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Gas Usage Analysis",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Contract Versions",
+      "result": "PASSED",
+      "error": null
+    },
+    {
+      "name": "Security Features Check",
+      "result": "PASSED",
+      "error": null
+    }
+  ]
+}
