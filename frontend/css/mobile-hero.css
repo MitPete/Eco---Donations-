@@ -178,7 +178,7 @@
     overflow: visible !important; /* Allow content to extend beyond */
     position: relative !important;
     touch-action: pan-y !important;
-    padding-top: 120px !important; /* SPACE FOR THE FIXED BADGE */
+    padding-top: 50px !important; /* SPACE FOR THE FIXED BADGE */
   }
 
   /* Remove the ::before spacer since container handles it */
@@ -194,7 +194,7 @@
     justify-content: flex-start !important; /* START FROM TOP - BELOW BADGE */
     align-items: center !important;
     text-align: center !important;
-    height: calc(100% - 120px) !important; /* SUBTRACT BADGE HEIGHT */
+    height: calc(100% - 50px) !important; /* SUBTRACT BADGE HEIGHT */
     padding-top: 0 !important; /* Remove top padding */
     padding-bottom: 2rem !important; /* Add bottom padding to keep away from edge */
     margin-top: 0 !important;
@@ -216,55 +216,34 @@
   }
 
   body.homepage .hero-badge {
-    padding: 2rem 3rem !important; /* MASSIVE PADDING */
-    font-size: 2rem !important; /* MASSIVE FONT */
+    padding: 0.5rem 1rem !important; /* Compact but visible */
+    font-size: 0.75rem !important; /* Readable size */
     margin: 0 !important;
-    border-radius: 0 !important; /* NO BORDER RADIUS */
-    gap: 0 !important;
+    border-radius: 12px !important; /* Rounded corners */
+    gap: 0.25rem !important;
     position: fixed !important; /* FIXED POSITION */
     top: 65px !important; /* RIGHT BELOW NAVBAR */
-    left: 0 !important; /* LEFT EDGE */
-    right: 0 !important; /* RIGHT EDGE */
-    transform: none !important;
+    left: 50% !important; /* CENTER HORIZONTALLY */
+    transform: translateX(-50%) !important; /* CENTER HORIZONTALLY */
     z-index: 99999 !important; /* HIGHEST Z-INDEX */
-    background: #ff0000 !important; /* SOLID BRIGHT RED */
-    border: 10px solid #ffff00 !important; /* THICK YELLOW BORDER */
-    box-shadow: 0 0 100px rgba(255, 0, 0, 1), inset 0 0 50px rgba(255, 255, 0, 0.5) !important; /* MASSIVE GLOW */
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%) !important; /* Professional green */
+    border: 1px solid rgba(255, 255, 255, 0.3) !important; /* Subtle border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1) !important; /* Elegant shadow */
     color: #ffffff !important; /* WHITE TEXT */
-    font-weight: 900 !important; /* VERY BOLD */
-    text-transform: uppercase !important;
-    letter-spacing: 3px !important; /* MORE SPACED OUT */
-    width: 100% !important; /* FULL SCREEN WIDTH */
-    height: 100px !important; /* TALL HEIGHT */
+    font-weight: 600 !important; /* Semi-bold */
+    text-transform: none !important; /* Normal case */
+    letter-spacing: 0.5px !important; /* Subtle spacing */
+    width: auto !important; /* Auto width */
+    height: auto !important; /* Auto height */
     text-align: center !important;
-    display: block !important; /* BLOCK DISPLAY */
-    line-height: 100px !important; /* CENTER TEXT VERTICALLY */
-    animation: flashRed 1s infinite !important; /* FLASHING ANIMATION */
+    display: flex !important; /* Flex for alignment */
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1.2 !important; /* Better line height */
+    backdrop-filter: blur(10px) !important; /* Glass effect */
   }
 
-  /* Add flashing animation */
-  @keyframes flashRed {
-    0% { background: #ff0000 !important; }
-    50% { background: #00ff00 !important; }
-    100% { background: #ff0000 !important; }
-  }
-
-  /* Add shimmer effect to badge */
-  body.homepage .hero-badge::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    animation: shimmer 3s infinite;
-  }
-
-  @keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
-  }
+  /* Remove emergency animations and shimmer */
 
   body.homepage .hero-badge span:last-child {
     font-size: 0.75rem !important;
