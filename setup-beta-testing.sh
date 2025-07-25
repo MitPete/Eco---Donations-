@@ -36,7 +36,7 @@ class BetaUserTracker {
             feedback: [],
             lastActive: Date.now()
         };
-        
+
         this.users.set(userId, user);
         this.logEvent('user_registered', { userId, userType, source });
         return user;
@@ -53,7 +53,7 @@ class BetaUserTracker {
             events: [],
             completed: false
         };
-        
+
         this.sessions.set(sessionId, session);
         this.logEvent('session_started', { sessionId, userId, scenario });
         return sessionId;
@@ -66,9 +66,9 @@ class BetaUserTracker {
             timestamp: Date.now(),
             data: data
         };
-        
+
         console.log(`📊 [${new Date().toISOString()}] ${eventType}:`, data);
-        
+
         // Store event for analytics
         if (!this.events) this.events = [];
         this.events.push(event);
@@ -85,7 +85,7 @@ class BetaUserTracker {
                 feedback
             });
             user.lastActive = Date.now();
-            
+
             this.logEvent('scenario_completed', { userId, scenario, success });
         }
     }
@@ -99,12 +99,12 @@ class BetaUserTracker {
             comments,
             timestamp: Date.now()
         };
-        
+
         const user = this.users.get(userId);
         if (user) {
             user.feedback.push(feedback);
         }
-        
+
         this.feedback.push(feedback);
         this.logEvent('feedback_collected', feedback);
     }
@@ -115,14 +115,14 @@ class BetaUserTracker {
         const usersByType = {};
         const usersBySource = {};
         const scenarioCompletion = {};
-        
+
         for (const user of this.users.values()) {
             // User type distribution
             usersByType[user.type] = (usersByType[user.type] || 0) + 1;
-            
+
             // Source distribution
             usersBySource[user.source] = (usersBySource[user.source] || 0) + 1;
-            
+
             // Scenario completion rates
             for (const completed of user.completedScenarios) {
                 if (!scenarioCompletion[completed.scenario]) {
@@ -134,7 +134,7 @@ class BetaUserTracker {
                 }
             }
         }
-        
+
         return {
             totalUsers,
             usersByType,
@@ -156,7 +156,7 @@ Date: ${new Date().toLocaleDateString()}
 👥 USER METRICS:
 Total Users: ${analytics.totalUsers}/100
 - Crypto-native: ${analytics.usersByType['crypto-native'] || 0}/50
-- Environmental: ${analytics.usersByType['environmental'] || 0}/25  
+- Environmental: ${analytics.usersByType['environmental'] || 0}/25
 - Developers: ${analytics.usersByType['developers'] || 0}/15
 - Foundations: ${analytics.usersByType['foundations'] || 0}/10
 
@@ -182,7 +182,7 @@ Registration: ${analytics.totalUsers}/100 (${(analytics.totalUsers/100*100).toFi
 Completion Rate: Target >80% per scenario
 Satisfaction: Target >4.0/5.0 (Current: ${analytics.averageRating.toFixed(1)})
         `;
-        
+
         return report;
     }
 }
@@ -224,16 +224,16 @@ app.post('/api/feedback', (req, res) => {
             timestamp: new Date().toISOString(),
             ...req.body
         };
-        
+
         // Read existing feedback
         const existing = JSON.parse(fs.readFileSync(feedbackFile));
         existing.push(feedback);
-        
+
         // Save updated feedback
         fs.writeFileSync(feedbackFile, JSON.stringify(existing, null, 2));
-        
+
         console.log('📝 New feedback received:', feedback.type, feedback.rating);
-        
+
         res.json({ success: true, id: feedback.id });
     } catch (error) {
         console.error('Error saving feedback:', error);
@@ -245,18 +245,18 @@ app.post('/api/feedback', (req, res) => {
 app.get('/api/feedback/summary', (req, res) => {
     try {
         const feedback = JSON.parse(fs.readFileSync(feedbackFile));
-        
+
         const summary = {
             total: feedback.length,
             averageRating: feedback.reduce((sum, f) => sum + (f.rating || 0), 0) / feedback.length || 0,
             byType: {},
             recent: feedback.slice(-10)
         };
-        
+
         feedback.forEach(f => {
             summary.byType[f.type] = (summary.byType[f.type] || 0) + 1;
         });
-        
+
         res.json(summary);
     } catch (error) {
         console.error('Error reading feedback:', error);
@@ -363,7 +363,7 @@ cat > beta-testing/testing-checklist.md << 'EOF'
 
 ## Daily Tracking
 - [ ] Monitor user registrations by segment
-- [ ] Track scenario completion rates  
+- [ ] Track scenario completion rates
 - [ ] Collect and analyze feedback
 - [ ] Identify and prioritize bug fixes
 - [ ] Update users on progress and fixes
@@ -396,7 +396,7 @@ cat > beta-testing/metrics-dashboard.html << 'EOF'
 <body>
     <h1>🧪 Beta Testing Dashboard</h1>
     <p>Real-time tracking of beta user testing progress</p>
-    
+
     <div class="metric">
         <h3>User Registration</h3>
         <div class="progress">
@@ -404,7 +404,7 @@ cat > beta-testing/metrics-dashboard.html << 'EOF'
         </div>
         <p><span id="user-count">0</span> / 100 users</p>
     </div>
-    
+
     <div class="metric">
         <h3>Scenario Completion</h3>
         <div class="progress">
@@ -412,7 +412,7 @@ cat > beta-testing/metrics-dashboard.html << 'EOF'
         </div>
         <p><span id="scenario-rate">0</span>% average completion</p>
     </div>
-    
+
     <div class="metric">
         <h3>User Satisfaction</h3>
         <div class="progress">
@@ -420,12 +420,12 @@ cat > beta-testing/metrics-dashboard.html << 'EOF'
         </div>
         <p><span id="satisfaction-rating">0.0</span> / 5.0 average rating</p>
     </div>
-    
+
     <div class="metric">
         <h3>Active Issues</h3>
         <p class="status-good" id="issues-count">0 critical issues</p>
     </div>
-    
+
     <h2>Segment Breakdown</h2>
     <div id="segments">
         <div class="metric">
@@ -445,7 +445,7 @@ cat > beta-testing/metrics-dashboard.html << 'EOF'
             <p><span id="foundation-count">0</span> / 10</p>
         </div>
     </div>
-    
+
     <script>
         // Simulated data - replace with real API calls
         function updateDashboard() {
@@ -458,14 +458,14 @@ cat > beta-testing/metrics-dashboard.html << 'EOF'
                 })
                 .catch(error => {
                     console.log('Demo mode - using simulated data');
-                    
+
                     // Demo progress simulation
                     const progress = Math.min(100, (Date.now() % 100000) / 1000);
                     document.getElementById('user-progress').style.width = progress + '%';
                     document.getElementById('user-count').textContent = Math.floor(progress);
                 });
         }
-        
+
         // Update dashboard every 30 seconds
         updateDashboard();
         setInterval(updateDashboard, 30000);

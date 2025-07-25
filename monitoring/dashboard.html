@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Donations - Production Monitoring Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c5aa0;
+            margin-bottom: 10px;
+        }
+
+        .status-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .status-card h3 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-healthy { background-color: #27ae60; }
+        .status-warning { background-color: #f39c12; }
+        .status-error { background-color: #e74c3c; }
+        .status-unknown { background-color: #95a5a6; }
+
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .alerts-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .alert-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .alert-warning {
+            background-color: #fff8e1;
+            border-left-color: #f39c12;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            border-left-color: #e74c3c;
+        }
+
+        .alert-info {
+            background-color: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        .alert-timestamp {
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .refresh-button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .refresh-button:hover {
+            background: #229954;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .contracts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .contract-status {
+            padding: 10px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+        .gas-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .gas-price {
+            padding: 5px 10px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #27ae60;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1>🌱 Eco Donations - Production Monitoring</h1>
+                    <p>Real-time system health and performance monitoring</p>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <button class="refresh-button" onclick="refreshData()">
+                        🔄 Refresh
+                    </button>
+                    <div class="auto-refresh">
+                        <label>Auto-refresh:</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoRefresh" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-overview">
+            <div class="status-card">
+                <h3>System Health</h3>
+                <div class="status-indicator">
+                    <span class="status-dot" id="systemStatus"></span>
+                    <span id="systemStatusText">Loading...</span>
+                </div>
+                <div class="metric-value" id="uptime">--</div>
+                <div class="metric-label">Uptime</div>
+            </div>
+
+            <div class="status-card">
+                <h3>Network Status</h3>
+                <div class="status-indicator">
+                    <span class="status-dot" id="networkStatus"></span>
+                    <span id="networkStatusText">Loading...</span>
+                </div>
+                <div class="metric-value" id="responseTime">--</div>
+                <div class="metric-label">Response Time (ms)</div>
+            </div>
+
+            <div class="status-card">
+                <h3>Smart Contracts</h3>
+                <div class="status-indicator">
+                    <span class="status-dot" id="contractsStatus"></span>
+                    <span id="contractsStatusText">Loading...</span>
+                </div>
+                <div class="metric-value" id="contractsHealth">--</div>
+                <div class="metric-label">Healthy Contracts</div>
+            </div>
+
+            <div class="status-card">
+                <h3>Gas Price</h3>
+                <div class="gas-tracker">
+                    <div>
+                        <div class="metric-value" id="gasPrice">--</div>
+                        <div class="metric-label">Current (gwei)</div>
+                    </div>
+                    <div class="gas-price" id="gasPriceIndicator">--</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>Smart Contract Health</h3>
+                <div class="contracts-grid" id="contractsGrid">
+                    <div class="loading">Loading contract status...</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Recent Performance</h3>
+                <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Recent Alerts</h3>
+            <div id="alertsList">
+                <div class="loading">Loading alerts...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let autoRefreshEnabled = true;
+        let refreshInterval;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+            startAutoRefresh();
+
+            document.getElementById('autoRefresh').addEventListener('change', function(e) {
+                autoRefreshEnabled = e.target.checked;
+                if (autoRefreshEnabled) {
+                    startAutoRefresh();
+                } else {
+                    stopAutoRefresh();
+                }
+            });
+        });
+
+        function startAutoRefresh() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(refreshData, 30000); // 30 seconds
+        }
+
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+
+        async function refreshData() {
+            try {
+                const [health, metrics, alerts] = await Promise.all([
+                    fetch('/api/monitoring/health').then(r => r.json()),
+                    fetch('/api/monitoring/metrics').then(r => r.json()),
+                    fetch('/api/monitoring/alerts?limit=10').then(r => r.json())
+                ]);
+
+                updateSystemHealth(health);
+                updateNetworkStatus(health, metrics);
+                updateContractsStatus(health, metrics);
+                updateGasPrice(metrics);
+                updateContractsGrid(metrics);
+                updateAlerts(alerts);
+
+                console.log('Dashboard updated:', new Date().toLocaleTimeString());
+            } catch (error) {
+                console.error('Failed to refresh data:', error);
+                showError('Failed to load monitoring data');
+            }
+        }
+
+        function updateSystemHealth(health) {
+            const uptime = Math.floor((health.uptime || 0) / 1000);
+            const hours = Math.floor(uptime / 3600);
+            const minutes = Math.floor((uptime % 3600) / 60);
+
+            document.getElementById('uptime').textContent = `${hours}h ${minutes}m`;
+
+            const systemStatus = health.lastCheck && (Date.now() - health.lastCheck < 120000);
+            document.getElementById('systemStatus').className = `status-dot ${systemStatus ? 'status-healthy' : 'status-error'}`;
+            document.getElementById('systemStatusText').textContent = systemStatus ? 'Operational' : 'Offline';
+        }
+
+        function updateNetworkStatus(health, metrics) {
+            const networkHealth = metrics.networkStatus;
+            if (networkHealth) {
+                const status = networkHealth.status === 'healthy' ? 'status-healthy' : 'status-warning';
+                document.getElementById('networkStatus').className = `status-dot ${status}`;
+                document.getElementById('networkStatusText').textContent = networkHealth.status;
+                document.getElementById('responseTime').textContent = `${networkHealth.responseTime}`;
+            }
+        }
+
+        function updateContractsStatus(health, metrics) {
+            const contractsHealth = metrics.contractHealth || {};
+            const totalContracts = Object.keys(contractsHealth).length;
+            const healthyContracts = Object.values(contractsHealth).filter(c => c.status === 'healthy').length;
+
+            document.getElementById('contractsHealth').textContent = `${healthyContracts}/${totalContracts}`;
+
+            const allHealthy = healthyContracts === totalContracts && totalContracts > 0;
+            const status = allHealthy ? 'status-healthy' : (healthyContracts > 0 ? 'status-warning' : 'status-error');
+            document.getElementById('contractsStatus').className = `status-dot ${status}`;
+            document.getElementById('contractsStatusText').textContent = allHealthy ? 'All Healthy' : 'Issues Detected';
+        }
+
+        function updateGasPrice(metrics) {
+            const gasPrice = metrics.gasPrice;
+            if (gasPrice) {
+                document.getElementById('gasPrice').textContent = gasPrice.standard;
+
+                const indicator = document.getElementById('gasPriceIndicator');
+                const price = gasPrice.standard;
+
+                if (price <= 30) {
+                    indicator.style.backgroundColor = '#27ae60';
+                    indicator.textContent = 'Low';
+                } else if (price <= 60) {
+                    indicator.style.backgroundColor = '#f39c12';
+                    indicator.textContent = 'Medium';
+                } else {
+                    indicator.style.backgroundColor = '#e74c3c';
+                    indicator.textContent = 'High';
+                }
+            }
+        }
+
+        function updateContractsGrid(metrics) {
+            const contractsGrid = document.getElementById('contractsGrid');
+            const contractsHealth = metrics.contractHealth || {};
+
+            if (Object.keys(contractsHealth).length === 0) {
+                contractsGrid.innerHTML = '<div class="loading">No contracts configured</div>';
+                return;
+            }
+
+            contractsGrid.innerHTML = Object.entries(contractsHealth).map(([name, status]) => `
+                <div class="contract-status">
+                    <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                        <span class="status-dot ${getStatusClass(status.status)}"></span>
+                        <strong>${name}</strong>
+                    </div>
+                    <div style="font-size: 0.8em; color: #666;">
+                        ${status.exists ? '✅ Deployed' : '❌ Not Found'}<br>
+                        ${status.functional ? '✅ Functional' : '❌ Error'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateAlerts(alerts) {
+            const alertsList = document.getElementById('alertsList');
+
+            if (!alerts || alerts.length === 0) {
+                alertsList.innerHTML = '<div style="text-align: center; color: #27ae60; padding: 20px;">✅ No recent alerts</div>';
+                return;
+            }
+
+            alertsList.innerHTML = alerts.map(alert => `
+                <div class="alert-item alert-${alert.severity}">
+                    <strong>${alert.type.replace(/_/g, ' ')}</strong>
+                    <div>${alert.message}</div>
+                    <div class="alert-timestamp">${new Date(alert.timestamp).toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'healthy': return 'status-healthy';
+                case 'error': return 'status-error';
+                case 'warning': return 'status-warning';
+                default: return 'status-unknown';
+            }
+        }
+
+        function showError(message) {
+            const alertsList = document.getElementById('alertsList');
+            alertsList.innerHTML = `
+                <div class="alert-item alert-error">
+                    <strong>Dashboard Error</strong>
+                    <div>${message}</div>
+                    <div class="alert-timestamp">${new Date().toLocaleString()}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

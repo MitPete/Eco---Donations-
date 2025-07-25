@@ -6,11 +6,30 @@
 
 import contracts from '../contracts.json';
 
+// Environment detection
+const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const isVercel = window.location.hostname.includes('vercel.app');
+
 // Network Configuration
 export const NETWORK_CONFIG = {
   RPC_URL: 'http://localhost:8545',
   CHAIN_ID: contracts.chainId.toString(),
   CHAIN_NAME: 'Localhost 31337'
+};
+
+// API Configuration
+export const API_CONFIG = {
+  base: isDevelopment ? 'http://localhost:3001' : '/api',
+  feedback: isDevelopment ? 'http://localhost:3001/api/feedback' : '/api/feedback',
+  health: isDevelopment ? 'http://localhost:3001/api/health' : '/api/health'
+};
+
+// Beta Testing Configuration
+export const BETA_CONFIG = {
+  enabled: true,
+  feedbackCollection: true,
+  userTracking: true,
+  showWidget: true
 };
 
 // Contract Configuration

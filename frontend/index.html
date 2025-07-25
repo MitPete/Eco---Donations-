@@ -29,10 +29,12 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/css/base.css" id="base-css">
   <link rel="stylesheet" href="/css/home.css" id="page-css">
+  <link rel="stylesheet" href="/css/mobile-hero.css" id="mobile-css">
   <script>
     // Dynamic cache busting - always load fresh CSS
     document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
     document.getElementById('page-css').href = '/css/home.css?t=' + Date.now();
+    document.getElementById('mobile-css').href = '/css/mobile-hero.css?t=' + Date.now();
   </script>
 </head>
 <body class="homepage">
@@ -42,7 +44,15 @@
       <i class="fas fa-leaf"></i>
       Eco Donations
     </a>
-    <nav class="header__nav">
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav" id="mobileNav">
       <a href="index.html" class="header__nav-link active">Home</a>
       <a href="donate.html" class="header__nav-link">Donate</a>
       <a href="history.html" class="header__nav-link">History</a>
@@ -571,5 +581,42 @@
   <script src="ethers.umd.min.js"></script>
   <script src="contract-fix.js?v=1753062000"></script>
   <script src="main-wallet.js?v=1753062000"></script>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    function toggleMobileMenu() {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+
+      nav.classList.toggle('mobile-nav-open');
+      toggle.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const header = document.querySelector('.header');
+
+      if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu when clicking nav links
+    document.querySelectorAll('.header__nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const nav = document.getElementById('mobileNav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      });
+    });
+  </script>
+
+  <!-- Beta Testing Scripts -->
+  <script type="module" src="js/config.js"></script>
+  <script type="module" src="js/beta-feedback.js"></script>
 </body>
 </html>
