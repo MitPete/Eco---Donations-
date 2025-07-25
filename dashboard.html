@@ -14,19 +14,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/css/base.css" id="base-css">
-  <link rel="stylesheet" href="/css/dashboard.css" id="page-css">
+  <link rel="stylesheet" href="css/base.css" id="base-css">
+  <link rel="stylesheet" href="css/dashboard.css" id="page-css">
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="/ethers.umd.min.js"></script>
-  <script src="/contract-fix.js"></script>
-  <script src="/main-wallet.js"></script>
-  <script src="/js/modules/auto-donation.js"></script>
+  <script src="ethers.umd.min.js"></script>
+  <script src="contract-fix.js"></script>
+  <script src="main-wallet.js"></script>
+  <script src="js/modules/auto-donation.js"></script>
   <script>
     // Dynamic cache busting - always load fresh CSS
-    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
-    document.getElementById('page-css').href = '/css/dashboard.css?t=' + Date.now();
+    document.getElementById('base-css').href = 'css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = 'css/dashboard.css?t=' + Date.now();
   </script>
 </head>
 <body onload="loadDashboard()">
