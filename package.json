@@ -1,0 +1,48 @@
+{
+  "name": "eco-donations-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Eco Donations - A blockchain-powered environmental donation platform",
+  "main": "js/app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint js/**/*.js",
+    "format": "prettier --write \"**/*.{js,css,html}\"",
+    "start": "vite --host"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eco-donations/frontend.git"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "donations",
+    "environmental",
+    "dapp",
+    "web3"
+  ],
+  "author": "Eco Donations Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eco-donations/frontend/issues"
+  },
+  "homepage": "https://github.com/eco-donations/frontend#readme",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "ethers": "^5.7.2",
+    "express": "^5.1.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
