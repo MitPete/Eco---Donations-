@@ -243,8 +243,6 @@
     backdrop-filter: blur(10px) !important; /* Glass effect */
   }
 
-  /* Remove emergency animations and shimmer */
-
   body.homepage .hero-badge span:last-child {
     font-size: 0.75rem !important;
   }
