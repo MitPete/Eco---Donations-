@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eco Donations Whitepaper - Decentralized Environmental Impact Platform</title>
-  <meta name="description" content="Official whitepaper for Eco Donations - A blockchain-based platform for transparent environmental donations and verifiable impact tracking.">
+  <title>EcoCoin Whitepaper - Decentralized Environmental Impact Platform</title>
+  <meta name="description" content="Official whitepaper for EcoCoin - A blockchain-based platform for transparent environmental donations and verifiable impact tracking.">
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,12 +14,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/base.css" id="base-css">
-  <link rel="stylesheet" href="css/whitepaper.css" id="page-css">
+  <link rel="stylesheet" href="/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/css/whitepaper.css" id="page-css">
+  <link rel="stylesheet" href="/css/mobile-hero.css" id="mobile-css">
   <script>
     // Dynamic cache busting
-    document.getElementById('base-css').href = 'css/base.css?t=' + Date.now();
-    document.getElementById('page-css').href = 'css/whitepaper.css?t=' + Date.now();
+    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/css/whitepaper.css?t=' + Date.now();
+    document.getElementById('mobile-css').href = '/css/mobile-hero.css?t=' + Date.now();
   </script>
 </head>
 <body class="whitepaper-page">
@@ -27,16 +29,9 @@
   <header class="header">
     <a href="index.html" class="header__logo">
       <i class="fas fa-leaf"></i>
-      Eco Donations
+      EcoCoin
     </a>
-    <nav class="header__nav">
-      <a href="index.html" class="header__nav-link">Home</a>
-      <a href="donate.html" class="header__nav-link">Donate</a>
-      <a href="history.html" class="header__nav-link">History</a>
-      <a href="foundation.html" class="header__nav-link">Foundations</a>
-      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
-      <a href="governance.html" class="header__nav-link">Governance</a>
-    </nav>
+
     <div class="header__wallet">
       <div class="header__wallet-info">
         <span id="walletAddress" class="header__wallet-address"></span>
@@ -47,6 +42,22 @@
         Connect Wallet
       </button>
     </div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav" id="mobileNav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
+    </nav>
   </header>
 
   <!-- Main Content -->
@@ -1116,7 +1127,7 @@
 
     <div class="footer__bottom">
       <div class="footer__bottom-content">
-        <p>© 2025 Eco Donations. Built with 💚 for the planet.</p>
+        <p>© 2025 EcoCoin. Built with 💚 for the planet.</p>
         <div class="footer__stats">
           <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
           <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
@@ -1130,5 +1141,38 @@
   <script src="ethers.umd.min.js"></script>
   <script src="contract-fix.js?v=1753062000"></script>
   <script src="main-wallet.js?v=1753062000"></script>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    function toggleMobileMenu() {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+
+      nav.classList.toggle('mobile-nav-open');
+      toggle.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const header = document.querySelector('.header');
+
+      if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu when clicking nav links
+    document.querySelectorAll('.header__nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const nav = document.getElementById('mobileNav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      });
+    });
+  </script>
 </body>
 </html>

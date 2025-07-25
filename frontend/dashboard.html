@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Eco Donations</title>
+  <title>Dashboard - EcoCoin</title>
   <meta name="description" content="Your personal dashboard for tracking donations, ECO tokens, and environmental impact.">
 
   <!-- Fonts & Icons -->
@@ -14,8 +14,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/base.css" id="base-css">
-  <link rel="stylesheet" href="css/dashboard.css" id="page-css">
+  <link rel="stylesheet" href="/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/css/dashboard.css" id="page-css">
+  <link rel="stylesheet" href="/css/mobile-hero.css" id="mobile-css">
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,25 +26,19 @@
   <script src="js/modules/auto-donation.js"></script>
   <script>
     // Dynamic cache busting - always load fresh CSS
-    document.getElementById('base-css').href = 'css/base.css?t=' + Date.now();
-    document.getElementById('page-css').href = 'css/dashboard.css?t=' + Date.now();
+    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/css/dashboard.css?t=' + Date.now();
+    document.getElementById('mobile-css').href = '/css/mobile-hero.css?t=' + Date.now();
   </script>
 </head>
-<body onload="loadDashboard()">
+<body class="dashboardpage" onload="loadDashboard()">
   <!-- Header -->
   <header class="header">
     <a href="index.html" class="header__logo">
       <i class="fas fa-leaf"></i>
-      Eco Donations
+      EcoCoin
     </a>
-    <nav class="header__nav">
-      <a href="index.html" class="header__nav-link">Home</a>
-      <a href="donate.html" class="header__nav-link">Donate</a>
-      <a href="history.html" class="header__nav-link">History</a>
-      <a href="foundation.html" class="header__nav-link">Foundations</a>
-      <a href="dashboard.html" class="header__nav-link active">Dashboard</a>
-      <a href="governance.html" class="header__nav-link">Governance</a>
-    </nav>
+
     <div class="header__wallet">
       <div class="header__wallet-info">
         <span id="walletAddress" class="header__wallet-address"></span>
@@ -54,6 +49,22 @@
         Connect Wallet
       </button>
     </div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav" id="mobileNav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link active">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
+    </nav>
   </header>
 
   <!-- Main Content -->
@@ -1377,5 +1388,38 @@
         gap: 8px;
       }
     </style>
+
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+      function toggleMobileMenu() {
+        const nav = document.getElementById('mobileNav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+
+        nav.classList.toggle('mobile-nav-open');
+        toggle.classList.toggle('active');
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        const nav = document.getElementById('mobileNav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        const header = document.querySelector('.header');
+
+        if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+          nav.classList.remove('mobile-nav-open');
+          toggle.classList.remove('active');
+        }
+      });
+
+      // Close mobile menu when clicking nav links
+      document.querySelectorAll('.header__nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+          const nav = document.getElementById('mobileNav');
+          const toggle = document.querySelector('.mobile-menu-toggle');
+          nav.classList.remove('mobile-nav-open');
+          toggle.classList.remove('active');
+        });
+      });
+    </script>
   </body>
 </html>

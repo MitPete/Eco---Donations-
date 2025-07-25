@@ -1,3 +1,32 @@
+/* Hide bottom navigation completely - going back to hamburger menu */
+.bottom-nav {
+  display: none !important;
+}
+
+/* Enhanced ECOIN Logo Styling for ALL devices */
+.header__logo {
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08em !important;
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  text-transform: uppercase !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  text-decoration: none !important;
+}
+
+.header__logo i {
+  color: #10b981 !important;
+  font-size: 1.3rem !important;
+  text-shadow: 0 2px 8px rgba(16,185,129,0.3) !important;
+  -webkit-text-fill-color: #10b981 !important;
+}
+
 /* Mobile-First Hero Section Improvements for iPhone 16 and similar devices */
 
 /* Hide mobile menu toggle on desktop */
@@ -5,10 +34,15 @@
   display: none;
 }
 
-/* CRITICAL: Mobile Navigation - Works on ALL mobile devices */
-@media (max-width: 768px) {
-  /* Override the purple body background for homepage with dark background */
-  body.homepage {
+/* Hide mobile wallet button on desktop */
+.hero-wallet-mobile {
+  display: none !important;
+}
+
+/* CRITICAL: Mobile Navigation - Works on ALL mobile devices including iPhone 16 */
+@media (max-width: 900px) {
+  /* Override the purple body background for ALL pages with dark background */
+  body.homepage, body.donatepage, body.historypage, body.foundationpage, body.governancepage, body.whitepaper-page, body.dashboardpage {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
     min-height: 100vh !important;
     height: auto !important; /* ALLOW BODY TO EXPAND */
@@ -17,20 +51,24 @@
   }
 
   /* Force mobile layout - override ALL base.css styles */
-  body.homepage .header {
+  body.homepage .header, body.donatepage .header, body.historypage .header, body.foundationpage .header, body.governancepage .header, body.whitepaper-page .header, body.dashboardpage .header {
     flex-direction: row !important;
-    padding: 0.75rem 1rem !important;
-    min-height: 65px !important;
-    max-height: 65px !important;
-    gap: 0 !important;
+    padding: 0.4rem 0.8rem !important;
+    min-height: 54px !important;
+    max-height: 54px !important;
+    gap: 0.3rem !important;
     position: sticky !important;
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    z-index: 500 !important; /* LOWER Z-INDEX - BELOW BADGE */
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px) !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    z-index: 10000 !important;
+    background: rgba(30, 41, 59, 0.95) !important;
+    backdrop-filter: blur(18px) !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid rgba(52, 211, 153, 0.2) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    justify-content: space-between !important;
+    align-items: center !important;
   }
 
   /* Remove container spacer since sticky positioning respects document flow */
@@ -38,128 +76,249 @@
     display: none !important;
   }
 
-  /* Logo stays visible */
-  body.homepage .header__logo {
-    font-size: 1.25rem !important;
+  /* Logo stays visible - COMPACT for mobile */
+  body.homepage .header__logo, body.donatepage .header__logo, body.historypage .header__logo, body.foundationpage .header__logo, body.governancepage .header__logo, body.whitepaper-page, body.dashboardpage .header__logo, body.dashboardpage .header__logo {
+    font-size: 1.3rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.06em !important;
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
     flex-shrink: 0;
-  }
-
-  /* Show hamburger menu button */
-  body.homepage .mobile-menu-toggle {
+    text-transform: uppercase !important;
+    text-shadow: none !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
     display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-left: auto;
-    margin-right: 0.75rem;
-    order: 2; /* Place after logo but before wallet */
+    align-items: center !important;
+    gap: 0.3rem !important;
+    order: 1 !important;
+    min-width: fit-content !important;
   }
 
-  body.homepage .mobile-menu-toggle span {
+  body.homepage .header__logo i, body.donatepage .header__logo i, body.historypage .header__logo i, body.foundationpage .header__logo i, body.governancepage .header__logo i, body.whitepaper-page, body.dashboardpage .header__logo i {
+    color: #10b981 !important;
+    font-size: 1.1rem !important;
+    text-shadow: 0 2px 8px rgba(16,185,129,0.3) !important;
+    -webkit-text-fill-color: #10b981 !important;
+  }
+
+  /* Show hamburger menu button on mobile - RIGHT CORNER - COMPACT */
+  body.homepage .mobile-menu-toggle, body.donatepage .mobile-menu-toggle, body.historypage .mobile-menu-toggle, body.foundationpage .mobile-menu-toggle, body.governancepage .mobile-menu-toggle, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(52, 211, 153, 0.4) !important;
+    cursor: pointer !important;
+    padding: 6px !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25) !important;
+    order: 3 !important;
+    flex-shrink: 0 !important;
+    min-width: fit-content !important;
+  }
+
+  body.homepage .mobile-menu-toggle:hover, body.donatepage .mobile-menu-toggle:hover, body.historypage .mobile-menu-toggle:hover, body.foundationpage .mobile-menu-toggle:hover, body.governancepage .mobile-menu-toggle:hover, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35) !important;
+  }
+
+  body.homepage .mobile-menu-toggle span, body.donatepage .mobile-menu-toggle span, body.historypage .mobile-menu-toggle span, body.foundationpage .mobile-menu-toggle span, body.governancepage .mobile-menu-toggle span, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle span {
     display: block;
     height: 3px;
     width: 100%;
-    background: #374151;
+    background: #ffffff !important;
     margin: 3px 0;
-    transition: all 0.3s ease;
     border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
   }
 
-  body.homepage .mobile-menu-toggle.active span:nth-child(1) {
+  body.homepage .mobile-menu-toggle.active span:nth-child(1), body.donatepage .mobile-menu-toggle.active span:nth-child(1), body.historypage .mobile-menu-toggle.active span:nth-child(1), body.foundationpage .mobile-menu-toggle.active span:nth-child(1), body.governancepage .mobile-menu-toggle.active span:nth-child(1), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(1) {
     transform: rotate(45deg) translate(7px, 7px);
   }
 
-  body.homepage .mobile-menu-toggle.active span:nth-child(2) {
+  body.homepage .mobile-menu-toggle.active span:nth-child(2), body.donatepage .mobile-menu-toggle.active span:nth-child(2), body.historypage .mobile-menu-toggle.active span:nth-child(2), body.foundationpage .mobile-menu-toggle.active span:nth-child(2), body.governancepage .mobile-menu-toggle.active span:nth-child(2), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(2) {
     opacity: 0;
   }
 
-  body.homepage .mobile-menu-toggle.active span:nth-child(3) {
+  body.homepage .mobile-menu-toggle.active span:nth-child(3), body.donatepage .mobile-menu-toggle.active span:nth-child(3), body.historypage .mobile-menu-toggle.active span:nth-child(3), body.foundationpage .mobile-menu-toggle.active span:nth-child(3), body.governancepage .mobile-menu-toggle.active span:nth-child(3), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(3) {
     transform: rotate(-45deg) translate(7px, -7px);
   }
 
-  /* Hide main nav by default */
-  body.homepage .header__nav {
+  /* Show main nav when hamburger is clicked */
+  body.homepage .header__nav, body.donatepage .header__nav, body.historypage .header__nav, body.foundationpage .header__nav, body.governancepage .header__nav, body.whitepaper-page, body.dashboardpage .header__nav {
     display: none !important;
     position: fixed !important;
     top: 65px !important;
     left: 0 !important;
     width: 100% !important;
-    background: rgba(255, 255, 255, 0.98) !important;
-    backdrop-filter: blur(15px) !important;
+    background: rgba(30, 41, 59, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
     flex-direction: column !important;
-    padding: 2rem 0 !important;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-    z-index: 499 !important; /* EVEN LOWER Z-INDEX */
-    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+    padding: 1.5rem 0 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+    z-index: 499 !important;
+    border-top: 1px solid rgba(52, 211, 153, 0.25) !important;
     gap: 0 !important;
+    border-bottom: 1px solid rgba(52, 211, 153, 0.25) !important;
   }
 
-  body.homepage .header__nav.mobile-nav-open {
+  body.homepage .header__nav.mobile-nav-open, body.donatepage .header__nav.mobile-nav-open, body.historypage .header__nav.mobile-nav-open, body.foundationpage .header__nav.mobile-nav-open, body.governancepage .header__nav.mobile-nav-open, body.whitepaper-page, body.dashboardpage .header__nav.mobile-nav-open {
     display: flex !important;
   }
 
-  body.homepage .header__nav-link {
-    padding: 1.25rem 2rem !important;
+  body.homepage .header__nav-link, body.donatepage .header__nav-link, body.historypage .header__nav-link, body.foundationpage .header__nav-link, body.governancepage .header__nav-link, body.whitepaper-page, body.dashboardpage .header__nav-link {
+    padding: 1rem 1.5rem !important;
     border-radius: 0 !important;
     width: 100% !important;
     text-align: left !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-bottom: none !important;
     font-size: 1.1rem !important;
-    font-weight: 500 !important;
-    color: #374151 !important;
-    transition: all 0.3s ease !important;
-  }
-
-  body.homepage .header__nav-link:hover {
-    background: rgba(16, 185, 129, 0.08) !important;
-    color: #10b981 !important;
-    transform: none !important;
-  }
-
-  body.homepage .header__nav-link.active {
-    background: rgba(16, 185, 129, 0.12) !important;
-    color: #10b981 !important;
     font-weight: 600 !important;
-    border-left: 4px solid #10b981 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    background: none !important;
+    margin: 0.15rem 0 !important;
+    border-bottom: 2px solid transparent !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
   }
 
-  body.homepage .header__nav-link:last-child {
+  body.homepage .header__nav-link::before, body.donatepage .header__nav-link::before, body.historypage .header__nav-link::before, body.foundationpage .header__nav-link::before, body.governancepage .header__nav-link::before, body.whitepaper-page, body.dashboardpage .header__nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #34d399;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+
+  body.homepage .header__nav-link:hover::before, body.donatepage .header__nav-link:hover::before, body.historypage .header__nav-link:hover::before, body.foundationpage .header__nav-link:hover::before, body.governancepage .header__nav-link:hover::before, body.whitepaper-page, body.dashboardpage .header__nav-link:hover::before,
+  body.homepage .header__nav-link.active::before, body.donatepage .header__nav-link.active::before, body.historypage .header__nav-link.active::before, body.foundationpage .header__nav-link.active::before, body.governancepage .header__nav-link.active::before, body.whitepaper-page, body.dashboardpage .header__nav-link.active::before {
+    transform: scaleY(1);
+  }
+
+  body.homepage .header__nav-link:hover, body.donatepage .header__nav-link:hover, body.historypage .header__nav-link:hover, body.foundationpage .header__nav-link:hover, body.governancepage .header__nav-link:hover, body.whitepaper-page, body.dashboardpage .header__nav-link:hover {
+    background: rgba(52, 211, 153, 0.15) !important;
+    color: #34d399 !important;
+    transform: translateX(8px) !important;
+  }
+
+  body.homepage .header__nav-link.active, body.donatepage .header__nav-link.active, body.historypage .header__nav-link.active, body.foundationpage .header__nav-link.active, body.governancepage .header__nav-link.active, body.whitepaper-page, body.dashboardpage .header__nav-link.active {
+    background: rgba(52, 211, 153, 0.2) !important;
+    color: #34d399 !important;
+    font-weight: 700 !important;
+  }
+
+  body.homepage .header__nav-link:last-child, body.donatepage .header__nav-link:last-child, body.historypage .header__nav-link:last-child, body.foundationpage .header__nav-link:last-child, body.governancepage .header__nav-link:last-child, body.whitepaper-page, body.dashboardpage .header__nav-link:last-child {
     border-bottom: none !important;
   }
 
-  /* Compact wallet section */
-  body.homepage .header__wallet {
+  /* Show compact wallet button in header on mobile - CENTER POSITION */
+  body.homepage .header__wallet, body.donatepage .header__wallet, body.historypage .header__wallet, body.foundationpage .header__wallet, body.governancepage .header__wallet, body.whitepaper-page, body.dashboardpage .header__wallet {
+    display: flex !important;
     flex-direction: row !important;
     gap: 0 !important;
     width: auto !important;
     align-items: center !important;
-    order: 3; /* Place at the end */
+    order: 2 !important;
+    flex: 1 !important;
+    justify-content: center !important;
   }
 
-  body.homepage .header__wallet-info {
+  body.homepage .header__wallet-info, body.donatepage .header__wallet-info, body.historypage .header__wallet-info, body.foundationpage .header__wallet-info, body.governancepage .header__wallet-info, body.whitepaper-page, body.dashboardpage .header__wallet-info {
     display: none !important;
   }
 
-  body.homepage .header__connect-button {
+  body.homepage .header__connect-button, body.donatepage .header__connect-button, body.historypage .header__connect-button, body.foundationpage .header__connect-button, body.governancepage .header__connect-button, body.whitepaper-page, body.dashboardpage .header__connect-button {
     width: auto !important;
     max-width: none !important;
-    padding: 0.5rem 0.875rem !important;
-    font-size: 0.8rem !important;
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
     white-space: nowrap !important;
+    margin-left: 0 !important;
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(52, 211, 153, 0.4) !important;
+    border-radius: 8px !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25) !important;
+    transition: all 0.3s ease !important;
+    letter-spacing: 0.01em !important;
+    min-width: fit-content !important;
   }
 
-  body.homepage .header__connect-button i {
-    display: none !important; /* Hide wallet icon on mobile to save space */
+  body.homepage .header__connect-button:hover, body.donatepage .header__connect-button:hover, body.historypage .header__connect-button:hover, body.foundationpage .header__connect-button:hover, body.governancepage .header__connect-button:hover, body.whitepaper-page, body.dashboardpage .header__connect-button:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35) !important;
+  }
+
+  body.homepage .header__connect-button i, body.donatepage .header__connect-button i, body.historypage .header__connect-button i, body.foundationpage .header__connect-button i, body.governancepage .header__connect-button i, body.whitepaper-page, body.dashboardpage .header__connect-button i {
+    display: inline !important;
+    margin-right: 0.2rem !important;
+    font-size: 0.7rem !important;
+    color: #ffffff !important;
+  }
+
+  /* Extra optimizations for very small screens */
+  @media (max-width: 375px) {
+    body.homepage .header, body.donatepage .header, body.historypage .header, body.foundationpage .header, body.governancepage .header, body.whitepaper-page, body.dashboardpage .header {
+      padding: 0.3rem 0.6rem !important;
+      min-height: 50px !important;
+      max-height: 50px !important;
+    }
+
+    body.homepage .header__connect-button {
+      font-size: 0.7rem !important;
+      padding: 0.3rem 0.5rem !important;
+    }
+
+    body.homepage .header__connect-button i {
+      margin-right: 0.15rem !important;
+      font-size: 0.65rem !important;
+    }
+
+    body.homepage .mobile-menu-toggle {
+      width: 30px !important;
+      height: 30px !important;
+      padding: 5px !important;
+    }
+
+    body.homepage .header__logo {
+      font-size: 1.2rem !important;
+      gap: 0.25rem !important;
+    }
+
+    body.homepage .header__logo i {
+      font-size: 1rem !important;
+    }
+  }
+
+  /* Force bottom nav to never show */
+  .bottom-nav,
+  nav.bottom-nav,
+  .bottom-nav__item {
+    display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    left: -9999px !important;
   }
 
   /* Make sure connect button text is visible */
   body.homepage .header__connect-button span {
     display: inline !important;
+    font-weight: 600 !important;
   }
 
   /* Ensure home container starts properly - NO extra margins */
@@ -175,20 +334,56 @@
   /* Force hero section to start naturally after navbar */
   body.homepage .home-hero {
     margin-top: 65px !important; /* RESPECT NAVBAR HEIGHT */
-    height: auto !important; /* AUTO HEIGHT - NO CONSTRAINTS */
-    min-height: auto !important; /* NO MINIMUM HEIGHT CONSTRAINTS */
-    padding: 0.75rem 0.75rem 4rem !important; /* LOTS OF BOTTOM PADDING */
+    height: calc(100vh - 65px) !important; /* FULL VIEWPORT MINUS NAVBAR ONLY */
+    min-height: calc(100vh - 65px) !important; /* ENSURE MINIMUM FULL HEIGHT */
+    padding: 2rem 0.75rem 2rem !important; /* BALANCED PADDING */
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important; /* DARK BACKGROUND TO REPLACE PURPLE */
     position: relative !important;
     width: 100% !important;
     left: 0 !important;
     right: 0 !important;
     overflow: visible !important; /* ALLOW CONTENT TO EXTEND */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important; /* CENTER CONTENT VERTICALLY */
+  }
+
+  /* Hide badge on mobile */
+  body.homepage .hero-badge {
+    display: none !important;
+  }
+
+  /* Force hero sections on ALL other pages to use dark background - FIX BLUE BLOCKS */
+  body.donatepage .donate-hero,
+  body.historypage .history-hero,
+  body.foundationpage .foundation-hero,
+  body.dashboardpage .dashboard-hero,
+  body.governancepage .governance-hero,
+  body.whitepaper-page .whitepaper-hero,
+  body.donatepage .donate-container,
+  body.historypage .history-container,
+  body.foundationpage .foundation-container,
+  body.dashboardpage .dashboard-container,
+  body.governancepage .governance-container,
+  body.whitepaper-page .whitepaper-container {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    margin-top: 65px !important;
+    padding-top: 2rem !important;
+  }
+
+  /* Override any blue/purple gradients in hero sections */
+  body.donatepage *[style*="background"],
+  body.historypage *[style*="background"],
+  body.foundationpage *[style*="background"],
+  body.dashboardpage *[style*="background"],
+  body.governancepage *[style*="background"],
+  body.whitepaper-page *[style*="background"] {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
   }
 }
 
-/* iPhone 16 and similar screen sizes (390px width) */
-@media (max-width: 430px) {
+/* iPhone 16 and similar screen sizes (393px width) - EXPANDED to include iPhone 16 */
+@media (max-width: 500px) {
   /* Override the purple body background for homepage with dark background */
   body.homepage {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
@@ -199,19 +394,20 @@
   }
 
   body.homepage .home-hero {
-    margin-top: 65px !important; /* PUSH DOWN TO RESPECT NAVBAR HEIGHT */
-    height: auto !important; /* AUTO HEIGHT - NO CONSTRAINTS */
-    min-height: auto !important; /* NO MINIMUM HEIGHT CONSTRAINTS */
-    padding: 0 0.75rem 0.5rem !important;
+    margin-top: 0 !important; /* Minimal space above hero */
+    height: 100vh !important; /* Use full viewport height */
+    min-height: 100vh !important;
+    padding: 0 0.75rem 1.5rem !important; /* Remove top padding */
     overflow: visible !important; /* Allow content to extend beyond */
     position: relative !important;
     touch-action: pan-y !important;
-    padding-top: 20px !important; /* SPACE FOR THE BADGE BELOW NAVBAR */
-    padding-bottom: 4rem !important; /* LOTS OF BOTTOM PADDING TO PREVENT CUTOFF */
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important; /* DARK BACKGROUND TO REPLACE PURPLE */
     width: 100% !important;
     left: 0 !important;
     right: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important; /* CENTER CONTENT VERTICALLY */
   }
 
   /* Remove the ::before spacer since container handles it */
@@ -220,21 +416,19 @@
   }
 
   body.homepage .hero-content {
-    padding: 0 0.5rem !important; /* Even smaller padding */
+    padding: 0 1rem !important; /* Remove any top padding */
     max-width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-start !important; /* START FROM TOP - BELOW BADGE */
+    justify-content: center !important; /* CENTER CONTENT */
     align-items: center !important;
     text-align: center !important;
-    height: auto !important; /* AUTO HEIGHT - NO CONSTRAINTS */
-    min-height: auto !important; /* NO MINIMUM HEIGHT CONSTRAINTS */
-    padding-top: 50px !important; /* SPACE FOR BADGE (accounting for its position) */
-    padding-bottom: 4rem !important; /* LOTS OF BOTTOM PADDING TO PREVENT CUTOFF */
-    margin-top: 0 !important;
+    height: 100% !important; /* TAKE FULL HEIGHT */
+    min-height: auto !important;
+    margin: 0 !important; /* NO MARGINS */
     position: relative !important;
-    z-index: 1 !important; /* LOWER THAN BADGE */
-    animation: fadeInUp 0.8s ease-out !important; /* Smooth entrance animation */
+    z-index: 1 !important;
+    animation: fadeInUp 0.8s ease-out !important;
   }
 
   /* Add smooth entrance animation */
@@ -249,113 +443,132 @@
     }
   }
 
+  /* Stunning gradient animation for badge */
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Subtle pulsing effect for badge */
+  @keyframes subtlePulse {
+    0%, 100% {
+      transform: translateX(-50%) scale(1);
+      box-shadow:
+        0 0 20px rgba(102, 126, 234, 0.4),
+        0 0 40px rgba(245, 87, 108, 0.3),
+        0 15px 35px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+      transform: translateX(-50%) scale(1.05);
+      box-shadow:
+        0 0 30px rgba(102, 126, 234, 0.6),
+        0 0 60px rgba(245, 87, 108, 0.4),
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  /* Hide badge on mobile */
   body.homepage .hero-badge {
-    position: fixed !important; /* FIXED POSITION */
-    top: 75px !important; /* POSITIONED BELOW NAVBAR (65px + 10px spacing) */
-    left: 50% !important; /* CENTER HORIZONTALLY */
-    transform: translateX(-50%) !important; /* CENTER HORIZONTALLY */
-    z-index: 99999999 !important; /* EXTREMELY HIGH Z-INDEX */
-
-    /* MAKE IT SUPER VISIBLE FOR DEBUGGING */
-    padding: 1rem 2rem !important; /* BIG PADDING */
-    font-size: 1rem !important; /* LARGER TEXT */
-    border-radius: 25px !important; /* ROUNDED */
-    background: rgba(16, 185, 129, 1) !important; /* SOLID GREEN BACKGROUND */
-    color: white !important; /* WHITE TEXT */
-    border: 3px solid white !important; /* WHITE BORDER */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important; /* STRONG SHADOW */
-    font-weight: 800 !important; /* BOLD TEXT */
-
-    /* ENSURE VISIBILITY */
-    display: block !important; /* BLOCK DISPLAY */
-    width: auto !important;
-    height: auto !important;
-    text-align: center !important;
-    pointer-events: none !important;
-    opacity: 1 !important; /* FULL OPACITY */
-    visibility: visible !important; /* FORCE VISIBLE */
+    display: none !important;
   }
 
   body.homepage .hero-badge span:last-child {
-    font-size: 0.8rem !important; /* Slightly larger for better visibility */
+    font-size: 0.75rem !important;
+    opacity: 0.9 !important;
+    display: block !important;
+    margin-top: 0.2rem !important;
+    font-weight: 400 !important;
   }
 
   body.homepage .hero-content h1 {
-    font-size: 2.5rem !important; /* MUCH LARGER TITLE */
-    line-height: 1.1 !important;
-    margin-bottom: 1rem !important; /* BIGGER MARGIN */
-    margin-top: 1rem !important; /* TOP MARGIN TO SEPARATE FROM BADGE */
-    padding: 0 0.25rem !important;
-    letter-spacing: -0.02em !important;
+    font-size: 2.1rem !important; /* Slightly larger for better impact */
+    line-height: 1.15 !important; /* Tighter for two lines */
+    margin-bottom: 2rem !important; /* More space after title for paragraph separation */
+    margin-top: 0 !important; /* No extra top margin */
+    padding: 0 0.25rem !important; /* Less side padding */
+    letter-spacing: -0.01em !important;
     position: relative !important;
-    z-index: 1 !important; /* LOWER THAN BADGE */
-    font-weight: 800 !important;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #ffffff 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    z-index: 1 !important;
+    font-weight: 700 !important;
+    max-width: 100% !important;
+    white-space: normal !important; /* Allow wrapping, but force two lines below */
+
+    /* CLEAN APPLE STYLE */
+    color: #ffffff !important;
+    text-shadow: none !important;
     animation: fadeInUp 0.8s ease-out 0.4s both !important;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1)) !important;
   }
 
-  /* Add subtle glow effect on title */
-  body.homepage .hero-content h1::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 197, 253, 0.1) 100%) !important; /* Softer blue glow */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    z-index: -1;
-    filter: blur(20px);
-    opacity: 0.3 !important; /* More subtle */
+  /* Clean green accent for Web3 */
+  body.homepage .hero-content h1 .gradient-text {
+    color: #10b981 !important; /* Solid, high-contrast green */
+    font-weight: 900 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.18), 0 0px 1px #fff !important; /* Crisp, subtle shadow */
+    display: block !important; /* Force new line */
+    margin-top: 0.6rem !important; /* More space for separation */
+    font-size: 1.45em !important; /* Even larger for visibility */
+    white-space: normal !important;
+    letter-spacing: 0.02em !important;
+    line-height: 1.18 !important;
   }
+
+  /* Remove coin completely - no ::before */
+
+  /* Remove coin text - no ::after */
+
+  /* Remove coin animation */
 
   body.homepage .hero-content h1 br {
-    display: none !important; /* Remove line break on mobile */
+    display: block !important; /* SHOW LINE BREAK ON MOBILE */
   }
 
   body.homepage .hero-subtitle {
-    font-size: 1rem !important; /* LARGER SUBTITLE */
-    line-height: 1.3 !important;
-    margin-bottom: 1.5rem !important; /* BIGGER MARGIN */
+    font-size: 1.1rem !important; /* SLIGHTLY LARGER SUBTITLE */
+    line-height: 1.4 !important;
+    margin-bottom: 2rem !important; /* REASONABLE SPACE BEFORE BUTTONS */
     padding: 0 0.5rem !important;
     opacity: 0.95 !important;
     font-weight: 400 !important;
     color: rgba(255, 255, 255, 0.9) !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
-    animation: fadeInUp 0.8s ease-out 0.6s both !important; /* Delayed entrance */
+    animation: fadeInUp 0.8s ease-out 0.7s both !important; /* Delayed entrance */
+    max-width: 90% !important; /* CONSTRAIN WIDTH FOR READABILITY */
   }
 
   body.homepage .hero-actions {
     flex-direction: column !important;
-    gap: 0.4rem !important; /* Tiny gap */
+    gap: 1rem !important; /* BETTER SPACING BETWEEN BUTTONS */
     width: 100% !important;
-    margin-bottom: 0.5rem !important; /* Tiny margin */
+    margin-bottom: 1rem !important; /* BACK TO ORIGINAL SPACING */
     animation: fadeInUp 0.8s ease-out 0.8s both !important; /* Delayed entrance */
   }
 
   body.homepage .hero-btn,
   body.homepage .hero-actions .btn {
     width: 100% !important;
-    max-width: 240px !important; /* Much smaller buttons */
-    padding: 0.6rem 1.2rem !important; /* Much smaller padding */
-    font-size: 0.85rem !important; /* Much smaller font */
+    max-width: 280px !important; /* SLIGHTLY LARGER BUTTONS */
+    padding: 0.875rem 1.5rem !important; /* MORE COMFORTABLE PADDING */
+    font-size: 1rem !important; /* BETTER FONT SIZE */
     font-weight: 600 !important;
     border-radius: 50px !important; /* More rounded for modern look */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 0.3rem !important; /* Tiny gap */
+    gap: 0.5rem !important; /* BETTER ICON SPACING */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Smooth easing */
     transform: translateY(0) !important;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1) !important; /* Much smaller shadow */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important; /* SUBTLE SHADOW */
     text-decoration: none !important;
+    min-height: 52px !important; /* COMFORTABLE TOUCH TARGET */
   }
 
   /* Enhanced primary button - Target correct classes */
@@ -425,13 +638,15 @@
   }
 
   body.homepage .impact-ticker {
-    flex-direction: column !important;
-    gap: 1.5rem !important;
-    padding: 2rem 1.25rem !important;
-    margin-top: 1rem !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important; /* Small gap between items */
+    padding: 1.2rem 0.5rem !important; /* Compact padding for horizontal layout */
+    margin-top: 2rem !important;
     border-radius: 24px !important;
     width: 100% !important;
-    max-width: 340px !important;
+    max-width: 360px !important;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
     backdrop-filter: blur(30px) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -461,7 +676,9 @@
 
   .ticker-item {
     text-align: center;
-    padding: 0.5rem 0 !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    padding: 0.5rem 0.2rem !important;
     position: relative !important;
     z-index: 2 !important;
   }
@@ -539,40 +756,33 @@
 
 /* Extra small screens (iPhone SE, etc.) */
 @media (max-width: 375px) {
-  .home-hero {
-    padding: 0.75rem 0.5rem;
-    min-height: 550px;
+  body.homepage .home-hero {
+    padding: 1.5rem 0.5rem 1.5rem !important;
+    height: calc(100vh - 65px) !important;
+    min-height: calc(100vh - 65px) !important;
   }
 
-  .hero-content h1 {
-    font-size: 2rem !important;
-    padding: 0 0.25rem;
+  body.homepage .hero-content h1 {
+    font-size: 2.4rem !important; /* SLIGHTLY SMALLER FOR TINY SCREENS */
+    padding: 0 0.25rem !important;
   }
 
-  .hero-subtitle {
+  body.homepage .hero-subtitle {
+    font-size: 1rem !important;
+    padding: 0 0.75rem !important;
+    max-width: 95% !important;
+  }
+
+  body.homepage .hero-btn,
+  body.homepage .hero-actions .btn {
+    padding: 0.75rem 1.25rem !important;
     font-size: 0.95rem !important;
-    padding: 0 0.75rem;
-  }
-
-  .hero-btn {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-    max-width: 260px;
-  }
-
-  .impact-ticker {
-    padding: 1.25rem 0.75rem;
-    gap: 1rem;
-    max-width: 300px;
-  }
-
-  .ticker-value {
-    font-size: 1.5rem !important;
+    max-width: 260px !important;
   }
 }
 
 /* Landscape orientation improvements */
-@media (max-width: 430px) and (orientation: landscape) {
+@media (max-width: 500px) and (orientation: landscape) {
   .home-hero {
     height: 100vh;
     min-height: 500px;
@@ -617,7 +827,7 @@
 }
 
 /* Ensure proper stacking and readability */
-@media (max-width: 430px) {
+@media (max-width: 500px) {
   /* FORCE ALL HERO CONTENT ELEMENTS TO STAY BELOW BADGE */
   body.homepage .hero-content * {
     position: relative !important;
