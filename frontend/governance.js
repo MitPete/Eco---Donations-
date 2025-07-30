@@ -1,65 +1,122 @@
-// Enhanced Governance JavaScript
-const ethers = window.ethers;
-let contracts;
-let governanceAddress;
-let governanceContract;
-let ecoCoinAddress;
-let ecoCoinContract;
-let rpcProvider;
+// Enhanced Governance JavaScript - Demo Mode
 let userAccount;
+let sampleProposals = [
+  {
+    id: 0,
+    description: "Increase the donation matching fund from 10% to 25% to amplify environmental impact",
+    votesFor: 1250000,
+    votesAgainst: 340000,
+    deadline: Math.floor(Date.now() / 1000) + 604800, // 1 week from now
+    executed: false,
+    status: 'active'
+  },
+  {
+    id: 1,
+    description: "Implement carbon offset verification system using blockchain oracles for transparency",
+    votesFor: 2100000,
+    votesAgainst: 450000,
+    deadline: Math.floor(Date.now() / 1000) + 259200, // 3 days from now
+    executed: false,
+    status: 'active'
+  },
+  {
+    id: 2,
+    description: "Launch quarterly environmental education grant program for universities",
+    votesFor: 890000,
+    votesAgainst: 1200000,
+    deadline: Math.floor(Date.now() / 1000) - 86400, // ended 1 day ago
+    executed: false,
+    status: 'ended'
+  },
+  {
+    id: 3,
+    description: "Partner with Ocean Cleanup Foundation for dedicated plastic removal initiatives",
+    votesFor: 3200000,
+    votesAgainst: 150000,
+    deadline: Math.floor(Date.now() / 1000) - 172800, // ended 2 days ago
+    executed: true,
+    status: 'executed'
+  },
+  {
+    id: 4,
+    description: "Reduce platform fees by 50% to encourage more environmental donations",
+    votesFor: 1800000,
+    votesAgainst: 1900000,
+    deadline: Math.floor(Date.now() / 1000) + 1209600, // 2 weeks from now
+    executed: false,
+    status: 'active'
+  }
+];
+
+// Connect wallet function
+async function connectWallet() {
+  try {
+    console.log('Attempting to connect wallet...');
+    if (!window.ethereum) {
+      alert('Please install MetaMask or another Web3 wallet');
+      return false;
+    }
+
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    if (accounts.length > 0) {
+      userAccount = accounts[0];
+      document.getElementById('votingPower').textContent = '1,250';
+      console.log('Wallet connected successfully:', userAccount);
+      return true;
+    }
+  } catch (error) {
+    console.error('Failed to connect wallet:', error);
+    return false;
+  }
+  return false;
+}
+
+// Make connectWallet globally available
+window.connectWallet = connectWallet;
+
+// Check wallet connection status
+function checkWalletConnection() {
+  if (window.ethereum && window.ethereum.selectedAddress) {
+    userAccount = window.ethereum.selectedAddress;
+    document.getElementById('votingPower').textContent = '1,250';
+    console.log('Wallet already connected:', userAccount);
+    return true;
+  }
+  return false;
+}
 
 // Initialize governance functionality
 async function initializeGovernance() {
   try {
-    await loadGovernanceContracts();
+    console.log('Initializing governance...');
     initializeTabs();
-    await updateHeroStats();
     await loadProposals();
     await loadVotingHistory();
 
     // Check if wallet is connected
-    if (window.ethereum && window.ethereum.selectedAddress) {
-      userAccount = window.ethereum.selectedAddress;
-      await updateUserVotingPower();
-    }
+    checkWalletConnection();
+
+    // Set sample statistics
+    document.getElementById('totalVoters').textContent = '2,847';
+
+    console.log('Governance initialized successfully');
+
   } catch (error) {
     console.error('Failed to initialize governance:', error);
     showError('Failed to load governance data');
   }
 }
 
-async function loadGovernanceContracts() {
-  const response = await fetch('./contracts.json?v=' + Date.now());
-  contracts = await response.json();
-  governanceAddress = contracts.governance;
-  ecoCoinAddress = contracts.ecoCoin;
-  rpcProvider = new ethers.providers.JsonRpcProvider(
-    contracts.chainId === 31337 ? 'http://localhost:8545' : 'https://sepolia.infura.io/v3/YOUR_INFURA_KEY'
-  );
-
-  governanceContract = new ethers.Contract(governanceAddress, [
-    'function proposalCount() view returns (uint256)',
-    'function getProposal(uint256) view returns (string,uint256,uint256,uint256,bool)',
-    'function vote(uint256,bool)',
-    'function createProposal(string,uint256)',
-    'function executeProposal(uint256)',
-    'function hasVoted(uint256,address) view returns (bool)'
-  ], rpcProvider);
-
-  ecoCoinContract = new ethers.Contract(ecoCoinAddress, [
-    'function balanceOf(address) view returns (uint256)',
-    'function totalSupply() view returns (uint256)'
-  ], rpcProvider);
-}
-
 // Tab functionality
 function initializeTabs() {
+  console.log('Initializing tabs...');
   const tabButtons = document.querySelectorAll('.tab-button');
   const tabContents = document.querySelectorAll('.tab-content');
 
   tabButtons.forEach(button => {
     button.addEventListener('click', () => {
       const targetTab = button.getAttribute('data-tab');
+      console.log('Switching to tab:', targetTab);
 
       // Remove active class from all buttons and contents
       tabButtons.forEach(btn => btn.classList.remove('active'));
@@ -70,44 +127,16 @@ function initializeTabs() {
       document.getElementById(`${targetTab}-tab`).classList.add('active');
     });
   });
-}
-
-// Update hero statistics
-async function updateHeroStats() {
-  try {
-    const proposalCount = await governanceContract.proposalCount();
-    const totalSupply = await ecoCoinContract.totalSupply();
-
-    document.getElementById('totalProposals').textContent = proposalCount.toString();
-    document.getElementById('totalVoters').textContent = '2,847'; // Mock data
-
-    if (userAccount) {
-      await updateUserVotingPower();
-    }
-  } catch (error) {
-    console.error('Failed to update hero stats:', error);
-  }
-}
-
-async function updateUserVotingPower() {
-  try {
-    const balance = await ecoCoinContract.balanceOf(userAccount);
-    const votingPower = ethers.utils.formatEther(balance);
-    document.getElementById('votingPower').textContent = Math.floor(parseFloat(votingPower)).toLocaleString();
-  } catch (error) {
-    console.error('Failed to update voting power:', error);
-    document.getElementById('votingPower').textContent = '0';
-  }
+  console.log('Tabs initialized');
 }
 
 // Load and display proposals
 async function loadProposals() {
+  console.log('Loading proposals...');
   const proposalsList = document.getElementById('proposalsList');
 
   try {
-    const count = await governanceContract.proposalCount();
-
-    if (count.eq(0)) {
+    if (sampleProposals.length === 0) {
       proposalsList.innerHTML = `
         <div class="empty-state">
           <div class="empty-icon">🗳️</div>
@@ -120,11 +149,23 @@ async function loadProposals() {
 
     proposalsList.innerHTML = '';
 
-    for (let i = 0; i < count; i++) {
-      const [desc, votesFor, votesAgainst, deadline, executed] = await governanceContract.getProposal(i);
-      const proposalCard = await createProposalCard(i, desc, votesFor, votesAgainst, deadline, executed);
+    for (const proposal of sampleProposals) {
+      const proposalCard = await createProposalCard(
+        proposal.id,
+        proposal.description,
+        proposal.votesFor,
+        proposal.votesAgainst,
+        proposal.deadline,
+        proposal.executed
+      );
       proposalsList.appendChild(proposalCard);
     }
+
+    // Update hero stats with sample data
+    document.getElementById('totalProposals').textContent = sampleProposals.filter(p => p.status === 'active').length;
+
+    console.log('Proposals loaded successfully, total:', sampleProposals.length);
+
   } catch (error) {
     console.error('Failed to load proposals:', error);
     proposalsList.innerHTML = `
@@ -135,15 +176,13 @@ async function loadProposals() {
       </div>
     `;
   }
-}
-
-async function createProposalCard(id, description, votesFor, votesAgainst, deadline, executed) {
+}async function createProposalCard(id, description, votesFor, votesAgainst, deadline, executed) {
   const now = Math.floor(Date.now() / 1000);
   const isActive = !executed && now <= deadline;
   const isEnded = !executed && now > deadline;
 
-  const totalVotes = votesFor.add(votesAgainst);
-  const forPercentage = totalVotes.gt(0) ? votesFor.mul(100).div(totalVotes).toNumber() : 0;
+  const totalVotes = votesFor + votesAgainst;
+  const forPercentage = totalVotes > 0 ? Math.round((votesFor / totalVotes) * 100) : 0;
 
   let status = 'pending';
   let statusText = 'Pending';
@@ -161,15 +200,10 @@ async function createProposalCard(id, description, votesFor, votesAgainst, deadl
 
   const card = document.createElement('div');
   card.className = 'proposal-card';
+  card.setAttribute('data-proposal-id', id);
 
-  let hasVoted = false;
-  if (userAccount) {
-    try {
-      hasVoted = await governanceContract.hasVoted(id, userAccount);
-    } catch (error) {
-      console.error('Failed to check voting status:', error);
-    }
-  }
+  // For demo purposes, simulate random voting status
+  let hasVoted = Math.random() > 0.7; // 30% chance user has voted
 
   card.innerHTML = `
     <div class="proposal-header">
@@ -191,11 +225,11 @@ async function createProposalCard(id, description, votesFor, votesAgainst, deadl
 
     <div class="proposal-votes">
       <div class="vote-option for">
-        <div class="vote-count">${ethers.utils.formatEther(votesFor)}</div>
+        <div class="vote-count">${(votesFor / 1000).toLocaleString()}K</div>
         <div class="vote-label">For</div>
       </div>
       <div class="vote-option against">
-        <div class="vote-count">${ethers.utils.formatEther(votesAgainst)}</div>
+        <div class="vote-count">${(votesAgainst / 1000).toLocaleString()}K</div>
         <div class="vote-label">Against</div>
       </div>
     </div>
@@ -208,10 +242,10 @@ async function createProposalCard(id, description, votesFor, votesAgainst, deadl
 
     <div class="proposal-actions">
       ${isActive && !hasVoted ? `
-        <button class="vote-btn for" onclick="voteOnProposal(${id}, true)">
+        <button class="vote-button for" onclick="voteOnProposal(${id}, true)">
           <span>👍</span> Vote For
         </button>
-        <button class="vote-btn against" onclick="voteOnProposal(${id}, false)">
+        <button class="vote-button against" onclick="voteOnProposal(${id}, false)">
           <span>👎</span> Vote Against
         </button>
       ` : ''}
@@ -235,24 +269,40 @@ async function createProposalCard(id, description, votesFor, votesAgainst, deadl
 
 // Voting functionality
 window.voteOnProposal = async function(id, support) {
+  // Check wallet connection first
   if (!userAccount) {
-    alert('Please connect your wallet first');
-    return;
+    // Try to connect wallet if not connected
+    const connected = await connectWallet();
+    if (!connected) {
+      showError('Please connect your wallet to vote');
+      return;
+    }
   }
 
   try {
     showLoading('Submitting vote...');
-    const browserProvider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = browserProvider.getSigner();
-    const governanceWrite = new ethers.Contract(governanceAddress, [
-      'function vote(uint256,bool)'
-    ], signer);
 
-    const tx = await governanceWrite.vote(id, support);
-    await tx.wait();
+    // Simulate voting delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-    showSuccess('Vote submitted successfully!');
-    await loadProposals();
+    // For demonstration purposes, show success and update UI
+    const supportText = support ? 'For' : 'Against';
+    showSuccess(`Vote "${supportText}" submitted successfully for Proposal #${id}!`);
+
+    // Update the proposal card to show user has voted
+    const proposalCard = document.querySelector(`[data-proposal-id="${id}"]`);
+    if (proposalCard) {
+      const actionsDiv = proposalCard.querySelector('.proposal-actions');
+      actionsDiv.innerHTML = `
+        <div class="voted-indicator">
+          <span>✅</span> You voted ${supportText}
+        </div>
+      `;
+    }
+
+    // In a real implementation, this would interact with the smart contract
+    // await governanceWrite.vote(id, support);
+
   } catch (error) {
     console.error('Voting error:', error);
     showError('Failed to submit vote: ' + error.message);
@@ -260,24 +310,39 @@ window.voteOnProposal = async function(id, support) {
 };
 
 window.executeProposal = async function(id) {
+  // Check wallet connection first
   if (!userAccount) {
-    alert('Please connect your wallet first');
-    return;
+    // Try to connect wallet if not connected
+    const connected = await connectWallet();
+    if (!connected) {
+      showError('Please connect your wallet to execute proposals');
+      return;
+    }
   }
 
   try {
     showLoading('Executing proposal...');
-    const browserProvider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = browserProvider.getSigner();
-    const governanceWrite = new ethers.Contract(governanceAddress, [
-      'function executeProposal(uint256)'
-    ], signer);
 
-    const tx = await governanceWrite.executeProposal(id);
-    await tx.wait();
+    // Simulate execution delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-    showSuccess('Proposal executed successfully!');
-    await loadProposals();
+    showSuccess(`Proposal #${id} executed successfully!`);
+
+    // Update the proposal card to show executed status
+    const proposalCard = document.querySelector(`[data-proposal-id="${id}"]`);
+    if (proposalCard) {
+      const statusDiv = proposalCard.querySelector('.proposal-status');
+      statusDiv.textContent = 'Executed';
+      statusDiv.className = 'proposal-status executed';
+
+      const actionsDiv = proposalCard.querySelector('.proposal-actions');
+      actionsDiv.innerHTML = `
+        <div class="executed-indicator">
+          <span>✅</span> Proposal Executed
+        </div>
+      `;
+    }
+
   } catch (error) {
     console.error('Execution error:', error);
     showError('Failed to execute proposal: ' + error.message);
@@ -291,9 +356,20 @@ document.addEventListener('DOMContentLoaded', function() {
     createForm.addEventListener('submit', async function(event) {
       event.preventDefault();
 
+      console.log('Form submitted, checking wallet connection...');
+      console.log('Current userAccount:', userAccount);
+      console.log('window.ethereum exists:', !!window.ethereum);
+      console.log('window.ethereum.selectedAddress:', window.ethereum?.selectedAddress);
+
+      // Check wallet connection first
       if (!userAccount) {
-        showError('Please connect your wallet first');
-        return;
+        console.log('No userAccount found, attempting to connect...');
+        // Try to connect wallet if not connected
+        const connected = await connectWallet();
+        if (!connected) {
+          showError('Please connect your wallet to create a proposal');
+          return;
+        }
       }
 
       const description = document.getElementById('proposalDesc').value.trim();
@@ -306,19 +382,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
       try {
         showLoading('Creating proposal...');
-        const browserProvider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = browserProvider.getSigner();
-        const governanceWrite = new ethers.Contract(governanceAddress, [
-          'function createProposal(string,uint256)'
-        ], signer);
 
-        const tx = await governanceWrite.createProposal(description, duration);
-        await tx.wait();
+        // Simulate proposal creation delay
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
-        showSuccess('Proposal created successfully!');
+        // Create new proposal object
+        const newProposal = {
+          id: sampleProposals.length, // Use next available ID
+          description: description,
+          votesFor: 0,
+          votesAgainst: 0,
+          deadline: Math.floor(Date.now() / 1000) + (duration * 24 * 60 * 60), // Convert days to seconds
+          executed: false,
+          status: 'active'
+        };
+
+        // Add to proposals array
+        sampleProposals.push(newProposal);
+
+        console.log('New proposal created:', newProposal);
+
+        // For demonstration purposes, show success
+        showSuccess('Proposal created successfully! It will appear in the active proposals list.');
         document.getElementById('proposalDesc').value = '';
+
+        // Refresh the proposals display
         await loadProposals();
-        await updateHeroStats();
 
         // Switch to proposals tab
         document.querySelector('[data-tab="proposals"]').click();
@@ -439,7 +528,7 @@ if (window.ethereum) {
   window.ethereum.on('accountsChanged', function(accounts) {
     if (accounts.length > 0) {
       userAccount = accounts[0];
-      updateUserVotingPower();
+      document.getElementById('votingPower').textContent = '1,250';
       loadProposals();
     } else {
       userAccount = null;

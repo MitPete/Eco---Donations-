@@ -1,0 +1,457 @@
+/* Transaction Flow Modal Styles */
+.transaction-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s ease;
+}
+
+.transaction-modal.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.transaction-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.transaction-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 0;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.transaction-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 30px 20px;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.transaction-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.transaction-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.transaction-modal-close:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* Progress Section */
+.transaction-progress {
+    padding: 25px 30px;
+    background: #f8fbff;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    height: 2px;
+    background: #e1e5e9;
+    z-index: 1;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    max-width: 80px;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e1e5e9;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.progress-step.completed .step-number {
+    background: #28a745;
+    color: white;
+}
+
+.progress-step.active .step-number {
+    background: #007bff;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.step-name {
+    font-size: 11px;
+    text-align: center;
+    color: #666;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.progress-step.completed .step-name {
+    color: #28a745;
+}
+
+.progress-step.active .step-name {
+    color: #007bff;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #e1e5e9;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+/* Transaction Details */
+.transaction-details {
+    padding: 25px 30px;
+}
+
+.current-step {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #f8fbff;
+    border: 2px solid #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    animation: spin 2s linear infinite;
+}
+
+.step-info {
+    flex: 1;
+}
+
+.step-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 5px;
+}
+
+.step-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Gas Information */
+.gas-information {
+    padding: 20px 30px;
+    background: #fff9e6;
+    border-top: 1px solid #e1e5e9;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.gas-information h4 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.gas-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gas-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.gas-item.total {
+    padding-top: 8px;
+    border-top: 1px solid #f0c040;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* Transaction Confirmation */
+.transaction-confirmation {
+    padding: 25px 30px;
+    text-align: center;
+    border-top: 1px solid #e1e5e9;
+}
+
+.transaction-confirmation h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.transaction-confirmation p {
+    margin: 0 0 20px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.confirmation-buttons .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+/* Transaction Result */
+.transaction-result {
+    padding: 30px;
+    text-align: center;
+    border-top: 1px solid #e1e5e9;
+}
+
+.result-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.result-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+}
+
+.result-hash {
+    font-size: 12px;
+    color: #666;
+    word-break: break-all;
+}
+
+.tx-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.tx-link:hover {
+    text-decoration: underline;
+}
+
+/* Animations */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .transaction-modal-content {
+        margin: 20px;
+        max-height: calc(100vh - 40px);
+    }
+    
+    .transaction-modal-header,
+    .transaction-progress,
+    .transaction-details,
+    .gas-information,
+    .transaction-confirmation,
+    .transaction-result {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    .progress-steps {
+        gap: 5px;
+    }
+    
+    .progress-step {
+        max-width: 60px;
+    }
+    
+    .step-name {
+        font-size: 10px;
+    }
+    
+    .current-step {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .confirmation-buttons {
+        flex-direction: column;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .transaction-modal-content {
+        background: #2d2d2d;
+        color: white;
+    }
+    
+    .transaction-modal-header {
+        border-bottom-color: #444;
+    }
+    
+    .transaction-modal-header h3 {
+        color: white;
+    }
+    
+    .transaction-progress {
+        background: #1a1a1a;
+        border-bottom-color: #444;
+    }
+    
+    .gas-information {
+        background: #2a2a2a;
+        border-color: #444;
+    }
+    
+    .step-description {
+        color: #ccc;
+    }
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}

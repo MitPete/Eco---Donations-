@@ -16,7 +16,7 @@ async function main() {
         const donationAmount = hre.ethers.utils.parseEther("1.0"); // 1 ETH
 
         // Create transaction
-        const tx = await donation.donate(0, {
+        const tx = await donation.donate(0, "Test donation from script", {
             value: donationAmount
         });
         await tx.wait();

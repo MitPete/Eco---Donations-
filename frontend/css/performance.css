@@ -1,0 +1,115 @@
+/* PERFORMANCE OPTIMIZATIONS */
+
+/* Lazy Loading Styles */
+.lazy {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.lazy.loaded {
+  opacity: 1;
+}
+
+/* Responsive Images */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Image Optimization */
+.large-image {
+  /* Use CSS to downscale large images on smaller screens */
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .large-image {
+    max-width: 400px; /* Reduce max size on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .large-image {
+    max-width: 300px; /* Further reduce on small mobile */
+  }
+}
+
+/* Progressive Enhancement - Hide images until loaded */
+.progressive-img {
+  background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 25%, #e0e0e0 50%, #f0f0f0 50%, #f0f0f0 75%, #e0e0e0 75%);
+  background-size: 20px 20px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.progressive-img.loaded {
+  background: none;
+  min-height: auto;
+}
+
+/* Critical CSS Inlining Prevention */
+.non-critical {
+  /* Mark non-critical elements for lazy loading */
+  will-change: transform;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .lazy {
+    transition: none;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Performance Debugging */
+.perf-debug {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 12px;
+  border-radius: 4px;
+  z-index: 10000;
+  display: none;
+}
+
+.perf-debug.show {
+  display: block;
+}
+
+/* Optimize font loading */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap; /* Improves perceived performance */
+  src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2');
+}
+
+/* Critical Resource Hints */
+.resource-hints {
+  display: none;
+}
+
+/* WebP Support Detection */
+.webp .webp-image {
+  background-image: url('image.webp');
+}
+
+.no-webp .webp-image {
+  background-image: url('image.jpg');
+}

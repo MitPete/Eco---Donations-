@@ -1,0 +1,14 @@
+{
+  "11155111": {
+    "ecoCoin": "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
+    "donationContract": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+    "ecoGovernance": "0x68B1D87F95878fE05B998F19b66F4baba5De1aed",
+    "multiSigWallet": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "autoDonationService": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+  },
+  "31337": {
+    "ecoCoin": "0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc",
+    "donationContract": "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f",
+    "ecoGovernance": "0x922D6956C99E12DFeB3224DEA977D0939758A1Fe"
+  }
+}

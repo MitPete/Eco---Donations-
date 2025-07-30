@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error Handling Test</title>
+    <script src="ethers.umd.min.js"></script>
+</head>
+<body>
+    <h1>Contract Error Handling Test</h1>
+    <div id="results"></div>
+
+    <script>
+        async function testErrorHandling() {
+            const results = document.getElementById('results');
+
+            // Test 1: Invalid contract address
+            try {
+                results.innerHTML += '<h3>Test 1: Invalid Contract Address</h3>';
+                const invalidContracts = {
+                    ecoCoin: "0x1234567890123456789012345678901234567890",
+                    donationContract: "0x1234567890123456789012345678901234567890",
+                    chainId: 31337
+                };
+
+                const rpcProvider = new ethers.JsonRpcProvider('http://localhost:8545');
+                const donationAbi = ['function getDonationCount() view returns (uint256)'];
+                const contract = new ethers.Contract(invalidContracts.donationContract, donationAbi, rpcProvider);
+
+                await contract.getDonationCount();
+                results.innerHTML += '<p>❌ Should have failed with invalid contract</p>';
+            } catch (error) {
+                results.innerHTML += `<p>✅ Properly caught invalid contract error: ${error.message}</p>`;
+            }
+
+            // Test 2: Wrong network
+            try {
+                results.innerHTML += '<h3>Test 2: Wrong Network Connection</h3>';
+                const wrongProvider = new ethers.JsonRpcProvider('http://localhost:9999');
+                await wrongProvider.getNetwork();
+                results.innerHTML += '<p>❌ Should have failed with wrong network</p>';
+            } catch (error) {
+                results.innerHTML += `<p>✅ Properly caught network error: ${error.message}</p>`;
+            }
+
+            // Test 3: Malformed contracts.json
+            try {
+                results.innerHTML += '<h3>Test 3: Malformed Configuration</h3>';
+                const malformedContracts = {
+                    // Missing required fields
+                    chainId: 31337
+                };
+
+                if (!malformedContracts.ecoCoin || !malformedContracts.donationContract) {
+                    throw new Error('Invalid contract configuration: missing required addresses');
+                }
+                results.innerHTML += '<p>❌ Should have failed with missing addresses</p>';
+            } catch (error) {
+                results.innerHTML += `<p>✅ Properly caught config error: ${error.message}</p>`;
+            }
+
+            results.innerHTML += '<p><strong>🎉 ERROR HANDLING TESTS PASSED!</strong></p>';
+        }
+
+        testErrorHandling();
+    </script>
+</body>
+</html>

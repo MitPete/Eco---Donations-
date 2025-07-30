@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4 Implementation Guide - ECO Donations</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .code-block { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .highlight { background: #e8f5e8; padding: 10px; border-left: 4px solid #4CAF50; }
+        .warning { background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🚀 ECO Donations - Google Analytics 4 Implementation</h1>
+    
+    <h2>📊 Step 1: Basic GA4 Setup</h2>
+    <div class="highlight">
+        <strong>Add this code to ALL HTML pages (in &lt;head&gt; section):</strong>
+    </div>
+    
+    <div class="code-block">
+        <pre>&lt;!-- Google tag (gtag.js) --&gt;
+&lt;script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+&lt;/script&gt;</pre>
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ Replace 'GA_MEASUREMENT_ID' with your actual GA4 measurement ID (format: G-XXXXXXXXXX)</strong>
+    </div>
+
+    <h2>🎯 Step 2: Custom Event Tracking for ECO Donations</h2>
+    
+    <h3>💳 Wallet Connection Events</h3>
+    <div class="code-block">
+        <pre>// Track successful wallet connection
+function trackWalletConnection(walletType, userAddress) {
+    gtag('event', 'wallet_connected', {
+        'event_category': 'wallet',
+        'wallet_type': walletType, // 'metamask', 'walletconnect', etc.
+        'user_address': userAddress.substring(0, 10) + '...', // Privacy
+        'value': 1
+    });
+}
+
+// Track wallet disconnection
+function trackWalletDisconnection() {
+    gtag('event', 'wallet_disconnected', {
+        'event_category': 'wallet',
+        'value': 1
+    });
+}</pre>
+    </div>
+
+    <h3>💚 Donation Events</h3>
+    <div class="code-block">
+        <pre>// Track donation started
+function trackDonationStarted(foundation, amount) {
+    gtag('event', 'donation_started', {
+        'event_category': 'donation',
+        'foundation': foundation,
+        'amount': parseFloat(amount),
+        'currency': 'ETH',
+        'value': parseFloat(amount)
+    });
+}
+
+// Track donation completed
+function trackDonationCompleted(foundation, amount, txHash, ecoTokens) {
+    gtag('event', 'purchase', { // Using 'purchase' for e-commerce tracking
+        'event_category': 'donation',
+        'transaction_id': txHash,
+        'value': parseFloat(amount),
+        'currency': 'ETH',
+        'items': [{
+            'item_id': foundation,
+            'item_name': 'Environmental Donation',
+            'item_category': 'Foundation',
+            'quantity': 1,
+            'price': parseFloat(amount)
+        }]
+    });
+    
+    // Also track as custom event
+    gtag('event', 'donation_completed', {
+        'event_category': 'donation',
+        'foundation': foundation,
+        'amount': parseFloat(amount),
+        'eco_tokens_earned': parseFloat(ecoTokens),
+        'transaction_hash': txHash,
+        'value': parseFloat(amount)
+    });
+}
+
+// Track donation failed
+function trackDonationFailed(foundation, amount, error) {
+    gtag('event', 'donation_failed', {
+        'event_category': 'error',
+        'foundation': foundation,
+        'amount': parseFloat(amount),
+        'error_type': error,
+        'value': 0
+    });
+}</pre>
+    </div>
+
+    <h3>🗳️ Governance Events</h3>
+    <div class="code-block">
+        <pre>// Track proposal viewing
+function trackProposalView(proposalId, proposalTitle) {
+    gtag('event', 'proposal_viewed', {
+        'event_category': 'governance',
+        'proposal_id': proposalId,
+        'proposal_title': proposalTitle,
+        'value': 1
+    });
+}
+
+// Track vote casting
+function trackVoteCast(proposalId, voteChoice, tokenAmount) {
+    gtag('event', 'vote_cast', {
+        'event_category': 'governance',
+        'proposal_id': proposalId,
+        'vote_choice': voteChoice, // 'yes', 'no', 'abstain'
+        'token_amount': parseFloat(tokenAmount),
+        'value': parseFloat(tokenAmount)
+    });
+}
+
+// Track proposal creation
+function trackProposalCreated(proposalId, category) {
+    gtag('event', 'proposal_created', {
+        'event_category': 'governance',
+        'proposal_id': proposalId,
+        'proposal_category': category,
+        'value': 10 // High value for engagement
+    });
+}</pre>
+    </div>
+
+    <h3>🤖 Auto-Donation Events</h3>
+    <div class="code-block">
+        <pre>// Track auto-donation setup
+function trackAutoDonationSetup(foundation, amount, frequency) {
+    gtag('event', 'auto_donation_setup', {
+        'event_category': 'auto_donation',
+        'foundation': foundation,
+        'amount': parseFloat(amount),
+        'frequency': frequency, // 'daily', 'weekly', 'monthly'
+        'value': parseFloat(amount)
+    });
+}
+
+// Track auto-donation execution
+function trackAutoDonationExecution(foundation, amount) {
+    gtag('event', 'auto_donation_executed', {
+        'event_category': 'auto_donation',
+        'foundation': foundation,
+        'amount': parseFloat(amount),
+        'value': parseFloat(amount)
+    });
+}</pre>
+    </div>
+
+    <h3>🐛 Error Tracking</h3>
+    <div class="code-block">
+        <pre>// Track application errors
+function trackError(errorType, errorMessage, location) {
+    gtag('event', 'exception', {
+        'description': errorMessage,
+        'fatal': false,
+        'event_category': 'error',
+        'error_type': errorType,
+        'location': location
+    });
+}
+
+// Track transaction errors
+function trackTransactionError(action, error, gasUsed) {
+    gtag('event', 'transaction_error', {
+        'event_category': 'blockchain',
+        'action': action,
+        'error_message': error,
+        'gas_used': gasUsed || 0,
+        'value': 0
+    });
+}</pre>
+    </div>
+
+    <h2>📱 Step 3: Page View Tracking Enhancement</h2>
+    <div class="code-block">
+        <pre>// Enhanced page tracking with custom dimensions
+function trackPageView(pageName, userType) {
+    gtag('config', 'GA_MEASUREMENT_ID', {
+        'page_title': pageName,
+        'page_location': window.location.href,
+        'custom_map': {
+            'custom_parameter_1': 'user_type',
+            'custom_parameter_2': 'wallet_connected'
+        }
+    });
+    
+    gtag('event', 'page_view', {
+        'page_title': pageName,
+        'user_type': userType || 'unknown',
+        'wallet_connected': !!window.ethereum?.selectedAddress
+    });
+}</pre>
+    </div>
+
+    <h2>⚡ Step 4: Performance Tracking</h2>
+    <div class="code-block">
+        <pre>// Track Core Web Vitals
+function trackWebVitals() {
+    // Largest Contentful Paint
+    new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        gtag('event', 'LCP', {
+            'event_category': 'Web Vitals',
+            'value': Math.round(lastEntry.startTime),
+            'event_label': window.location.pathname
+        });
+    }).observe({entryTypes: ['largest-contentful-paint']});
+
+    // First Input Delay
+    new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach((entry) => {
+            gtag('event', 'FID', {
+                'event_category': 'Web Vitals',
+                'value': Math.round(entry.processingStart - entry.startTime),
+                'event_label': window.location.pathname
+            });
+        });
+    }).observe({entryTypes: ['first-input']});
+
+    // Cumulative Layout Shift
+    new PerformanceObserver((entryList) => {
+        let clsValue = 0;
+        for (const entry of entryList.getEntries()) {
+            clsValue += entry.value;
+        }
+        gtag('event', 'CLS', {
+            'event_category': 'Web Vitals',
+            'value': Math.round(clsValue * 1000),
+            'event_label': window.location.pathname
+        });
+    }).observe({entryTypes: ['layout-shift']});
+}
+
+// Initialize Web Vitals tracking
+if (document.readyState === 'complete') {
+    trackWebVitals();
+} else {
+    window.addEventListener('load', trackWebVitals);
+}</pre>
+    </div>
+
+    <h2>🎯 Step 5: Implementation Checklist</h2>
+    <div class="highlight">
+        <h3>✅ Implementation Tasks:</h3>
+        <ul>
+            <li>[ ] Create GA4 property in Google Analytics</li>
+            <li>[ ] Add GA4 tracking code to all pages</li>
+            <li>[ ] Implement wallet connection tracking</li>
+            <li>[ ] Implement donation event tracking</li>
+            <li>[ ] Implement governance event tracking</li>
+            <li>[ ] Add error tracking throughout app</li>
+            <li>[ ] Set up performance monitoring</li>
+            <li>[ ] Test tracking in browser console</li>
+            <li>[ ] Verify events in GA4 real-time reports</li>
+            <li>[ ] Create custom dashboard in GA4</li>
+        </ul>
+    </div>
+
+    <h2>📊 Step 6: Custom Dashboards & Reports</h2>
+    <div class="warning">
+        <p><strong>Free Google Data Studio Dashboard Templates:</strong></p>
+        <ul>
+            <li><strong>User Journey Dashboard</strong>: Track wallet connection → donation → governance flow</li>
+            <li><strong>Donation Analytics</strong>: Foundation performance, amounts, success rates</li>
+            <li><strong>Performance Dashboard</strong>: Page speeds, error rates, user experience</li>
+            <li><strong>Governance Dashboard</strong>: Proposal engagement, voting patterns</li>
+        </ul>
+    </div>
+
+    <h2>🔍 Testing Your Implementation</h2>
+    <div class="code-block">
+        <pre>// Test tracking in browser console:
+gtag('event', 'test_event', {
+    'event_category': 'testing',
+    'test_parameter': 'implementation_check',
+    'value': 1
+});
+
+// Check if tracking is working:
+console.log('GA4 loaded:', typeof gtag !== 'undefined');
+console.log('DataLayer:', window.dataLayer);</pre>
+    </div>
+
+    <div class="highlight">
+        <p><strong>🎉 Ready for Beta Launch!</strong> This comprehensive tracking setup will provide deep insights into user behavior, platform performance, and business metrics throughout your beta period.</p>
+    </div>
+
+</body>
+</html>

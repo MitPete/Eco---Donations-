@@ -23,7 +23,7 @@ class BetaUserTracker {
             feedback: [],
             lastActive: Date.now()
         };
-        
+
         this.users.set(userId, user);
         this.logEvent('user_registered', { userId, userType, source });
         return user;
@@ -40,7 +40,7 @@ class BetaUserTracker {
             events: [],
             completed: false
         };
-        
+
         this.sessions.set(sessionId, session);
         this.logEvent('session_started', { sessionId, userId, scenario });
         return sessionId;
@@ -53,9 +53,9 @@ class BetaUserTracker {
             timestamp: Date.now(),
             data: data
         };
-        
+
         console.log(`📊 [${new Date().toISOString()}] ${eventType}:`, data);
-        
+
         // Store event for analytics
         if (!this.events) this.events = [];
         this.events.push(event);
@@ -72,7 +72,7 @@ class BetaUserTracker {
                 feedback
             });
             user.lastActive = Date.now();
-            
+
             this.logEvent('scenario_completed', { userId, scenario, success });
         }
     }
@@ -86,12 +86,12 @@ class BetaUserTracker {
             comments,
             timestamp: Date.now()
         };
-        
+
         const user = this.users.get(userId);
         if (user) {
             user.feedback.push(feedback);
         }
-        
+
         this.feedback.push(feedback);
         this.logEvent('feedback_collected', feedback);
     }
@@ -102,14 +102,14 @@ class BetaUserTracker {
         const usersByType = {};
         const usersBySource = {};
         const scenarioCompletion = {};
-        
+
         for (const user of this.users.values()) {
             // User type distribution
             usersByType[user.type] = (usersByType[user.type] || 0) + 1;
-            
+
             // Source distribution
             usersBySource[user.source] = (usersBySource[user.source] || 0) + 1;
-            
+
             // Scenario completion rates
             for (const completed of user.completedScenarios) {
                 if (!scenarioCompletion[completed.scenario]) {
@@ -121,7 +121,7 @@ class BetaUserTracker {
                 }
             }
         }
-        
+
         return {
             totalUsers,
             usersByType,
@@ -143,7 +143,7 @@ Date: ${new Date().toLocaleDateString()}
 👥 USER METRICS:
 Total Users: ${analytics.totalUsers}/100
 - Crypto-native: ${analytics.usersByType['crypto-native'] || 0}/50
-- Environmental: ${analytics.usersByType['environmental'] || 0}/25  
+- Environmental: ${analytics.usersByType['environmental'] || 0}/25
 - Developers: ${analytics.usersByType['developers'] || 0}/15
 - Foundations: ${analytics.usersByType['foundations'] || 0}/10
 
@@ -169,7 +169,7 @@ Registration: ${analytics.totalUsers}/100 (${(analytics.totalUsers/100*100).toFi
 Completion Rate: Target >80% per scenario
 Satisfaction: Target >4.0/5.0 (Current: ${analytics.averageRating.toFixed(1)})
         `;
-        
+
         return report;
     }
 }

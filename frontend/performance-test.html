@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Performance Test - Eco Donations</title>
+    <script src="js/performance.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .pass { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warn { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .fail { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>Performance Test Results</h1>
+    <div id="results"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const results = document.getElementById('results');
+
+            // Test 1: Page Load Time
+            window.addEventListener('load', () => {
+                const loadTime = performance.now();
+                const loadClass = loadTime < 2000 ? 'pass' : loadTime < 3000 ? 'warn' : 'fail';
+                results.innerHTML += `
+                    <div class="test-result ${loadClass}">
+                        📊 Page Load Time: ${loadTime.toFixed(2)}ms
+                        ${loadClass === 'pass' ? '✅ Excellent' : loadClass === 'warn' ? '⚠️ Good' : '❌ Needs improvement'}
+                    </div>
+                `;
+            });
+
+            // Test 2: Resource Count
+            setTimeout(() => {
+                const resources = performance.getEntriesByType('resource');
+                const resourceCount = resources.length;
+                const resourceClass = resourceCount < 20 ? 'pass' : resourceCount < 40 ? 'warn' : 'fail';
+                results.innerHTML += `
+                    <div class="test-result ${resourceClass}">
+                        📦 Resources Loaded: ${resourceCount}
+                        ${resourceClass === 'pass' ? '✅ Optimized' : resourceClass === 'warn' ? '⚠️ Moderate' : '❌ Too many resources'}
+                    </div>
+                `;
+
+                // Test 3: Large Resources
+                const largeResources = resources.filter(r => r.transferSize > 100000);
+                results.innerHTML += `
+                    <div class="test-result ${largeResources.length === 0 ? 'pass' : 'warn'}">
+                        🐘 Large Resources (>100KB): ${largeResources.length}
+                        ${largeResources.length === 0 ? '✅ No large resources' : '⚠️ ' + largeResources.map(r => r.name.split('/').pop()).join(', ')}
+                    </div>
+                `;
+            }, 1000);
+
+            // Test 4: JavaScript Bundle Size
+            fetch('./main-wallet.js')
+                .then(response => response.blob())
+                .then(blob => {
+                    const size = blob.size;
+                    const sizeKB = (size / 1024).toFixed(2);
+                    const sizeClass = size < 50000 ? 'pass' : size < 100000 ? 'warn' : 'fail';
+                    results.innerHTML += `
+                        <div class="test-result ${sizeClass}">
+                            📜 Main JS Bundle: ${sizeKB}KB
+                            ${sizeClass === 'pass' ? '✅ Optimized' : sizeClass === 'warn' ? '⚠️ Moderate' : '❌ Consider code splitting'}
+                        </div>
+                    `;
+                });
+
+            // Test 5: CSS Size Check
+            const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+            let totalCSSSize = 0;
+            let cssChecked = 0;
+
+            cssLinks.forEach(link => {
+                fetch(link.href)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        totalCSSSize += blob.size;
+                        cssChecked++;
+
+                        if (cssChecked === cssLinks.length) {
+                            const totalKB = (totalCSSSize / 1024).toFixed(2);
+                            const cssClass = totalCSSSize < 100000 ? 'pass' : totalCSSSize < 200000 ? 'warn' : 'fail';
+                            results.innerHTML += `
+                                <div class="test-result ${cssClass}">
+                                    🎨 Total CSS Size: ${totalKB}KB
+                                    ${cssClass === 'pass' ? '✅ Optimized' : cssClass === 'warn' ? '⚠️ Moderate' : '❌ Consider minification'}
+                                </div>
+                            `;
+                        }
+                    });
+            });
+
+            // Test 6: Performance API Metrics
+            setTimeout(() => {
+                const navigation = performance.getEntriesByType('navigation')[0];
+                if (navigation) {
+                    const ttfb = navigation.responseStart - navigation.requestStart;
+                    const domReady = navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart;
+
+                    results.innerHTML += `
+                        <div class="test-result ${ttfb < 500 ? 'pass' : 'warn'}">
+                            ⚡ Time to First Byte: ${ttfb.toFixed(2)}ms
+                        </div>
+                        <div class="test-result ${domReady < 1000 ? 'pass' : 'warn'}">
+                            🏗️ DOM Ready: ${domReady.toFixed(2)}ms
+                        </div>
+                    `;
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

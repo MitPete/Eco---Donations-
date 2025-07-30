@@ -31,12 +31,32 @@ function fallbackIsValidAddress(address) {
 }
 
 function fallbackGetContractAddress(contracts, contractName) {
-  const address = contracts[contractName];
-  if (!fallbackIsValidAddress(address)) {
-    console.error(`Invalid ${contractName} address:`, address);
-    return null;
+  // Support both old format (direct contract addresses) and new format (multi-network)
+  if (contracts[contractName]) {
+    // Old format: contracts.ecoCoin = "0x123..."
+    const address = contracts[contractName];
+    if (!fallbackIsValidAddress(address)) {
+      console.error(`Invalid ${contractName} address:`, address);
+      return null;
+    }
+    return address;
   }
-  return address;
+
+  // New format: contracts[chainId][contractName] = "0x123..."
+  const chainId = window.ethereum?.chainId || '0x7a69'; // Default to localhost chain ID
+  const networkContracts = contracts[parseInt(chainId, 16)];
+
+  if (networkContracts && networkContracts[contractName]) {
+    const address = networkContracts[contractName];
+    if (!fallbackIsValidAddress(address)) {
+      console.error(`Invalid ${contractName} address for chain ${chainId}:`, address);
+      return null;
+    }
+    return address;
+  }
+
+  console.error(`Contract ${contractName} not found for current network (chainId: ${chainId})`);
+  return null;
 }
 
 // Helper function to use utility functions with fallback
@@ -111,6 +131,15 @@ async function loadContracts() {
     const response = await fetch('./contracts.json?v=' + Date.now());
     contracts = await response.json();
     console.log('Loaded contracts from contracts.json:', contracts);
+
+    // Check if this is the new multi-network format
+    if (contracts['31337'] || contracts['11155111']) {
+      console.log('✅ Multi-network contracts configuration detected');
+      // This is the new format - will be handled in getContractForNetwork
+    } else {
+      console.log('✅ Legacy contracts configuration detected');
+      // Legacy format - keep as is
+    }
   } catch (error) {
     console.error('Failed to load contracts:', error);
     contracts = {
@@ -122,11 +151,39 @@ async function loadContracts() {
   }
 }
 
+// Get contracts for specific network
+function getContractForNetwork(chainId) {
+  // Handle multi-network format
+  if (contracts[chainId.toString()]) {
+    return {
+      ...contracts[chainId.toString()],
+      chainId: chainId
+    };
+  }
+
+  // Handle legacy format
+  if (contracts.chainId === chainId) {
+    return contracts;
+  }
+
+  // Fallback for localhost
+  if (chainId === 31337) {
+    return {
+      ecoCoin: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      donationContract: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      ecoGovernance: "0x922D6956C99E12DFeB3224DEA977D0939758A1Fe",
+      chainId: 31337
+    };
+  }
+
+  return null;
+}
+
 // Initialize variables
 let browserProvider, signer;
-let RPC_URL, ecoCoinAddress, donationAddress, chainIdExpected;
+let RPC_URL, ecoCoinAddress, donationAddress, governanceAddress, chainIdExpected;
 let rpcProvider;
-let ecoWrite, donateWrite;
+let ecoWrite, donateWrite, governanceRead;
 let foundationChartInstance = null;
 
 // Initialize the application
@@ -136,21 +193,68 @@ async function initializeApp() {
   console.log('%c[Eco-Donations] Ethers v' + ethers.version, 'color:green;');
   console.log('[main] Loaded contracts:', contracts);
 
+  /* ───────── NETWORK DETECTION ───────── */
+  // Detect current network if wallet is connected
+  let detectedChainId = 31337; // Default to localhost
+
+  if (window.ethereum) {
+    try {
+      const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+      detectedChainId = parseInt(currentChainId, 16);
+      console.log('🔗 Detected network chain ID:', detectedChainId);
+    } catch (error) {
+      console.warn('Could not detect network, using localhost');
+    }
+  }
+
+  // Get contracts for detected network
+  const networkContracts = getContractForNetwork(detectedChainId);
+  if (!networkContracts) {
+    console.error('❌ No contracts found for chain ID:', detectedChainId);
+    // Fallback to localhost
+    detectedChainId = 31337;
+    const fallbackContracts = getContractForNetwork(31337);
+    if (fallbackContracts) {
+      Object.assign(contracts, fallbackContracts);
+    }
+  } else {
+    Object.assign(contracts, networkContracts);
+  }
+
   /* ───────── CONFIG ───────── */
   // Support both local and testnet
-  const isLocal = contracts.chainId === 31337;
-  RPC_URL = isLocal ? 'http://localhost:8545' : 'https://sepolia.infura.io/v3/YOUR_INFURA_KEY';
+  const isLocal = detectedChainId === 31337;
+  const isSepolia = detectedChainId === 11155111;
+
+  if (isLocal) {
+    RPC_URL = 'http://localhost:8545';
+  } else if (isSepolia) {
+    RPC_URL = 'https://sepolia.infura.io/v3/demo'; // Demo endpoint for now
+  } else {
+    console.warn('⚠️ Unsupported network:', detectedChainId);
+    RPC_URL = 'http://localhost:8545'; // Fallback
+  }
+
+  console.log(`🌐 Network: ${isLocal ? 'Localhost' : isSepolia ? 'Sepolia Testnet' : 'Unknown'} (${detectedChainId})`);
+  console.log('🔗 RPC URL:', RPC_URL);
 
   // Validate contract addresses using utility functions
   ecoCoinAddress = safeGetContractAddress(contracts, 'ecoCoin');
   donationAddress = safeGetContractAddress(contracts, 'donationContract');
+  governanceAddress = safeGetContractAddress(contracts, 'ecoGovernance');
 
   if (!ecoCoinAddress || !donationAddress) {
     console.error('Invalid contract addresses. Cannot initialize app.');
     return;
   }
 
-  chainIdExpected = contracts.chainId.toString();
+  if (governanceAddress) {
+    console.log('✅ Governance contract loaded:', governanceAddress);
+  } else {
+    console.warn('⚠️ Governance contract not available');
+  }
+
+  chainIdExpected = detectedChainId.toString();
 
   /* ───────── PROVIDERS ───────── */
   rpcProvider = new ethers.providers.JsonRpcProvider(RPC_URL); // read-only
@@ -162,6 +266,13 @@ const donationAbi = [
   'function donate(uint8,string) payable',
   'event DonationMade(uint8 f,address sender,uint amount,string msg_)',
   'event TokenBalanceUpdated(address donor,uint256 balance)'
+];
+const governanceAbi = [
+  'function proposalCount() view returns (uint256)',
+  'function proposals(uint256) view returns (string description, uint256 votesFor, uint256 votesAgainst, uint256 deadline, uint256 quorum, bool executed, bool cancelled, address proposer, uint256 createdAt)',
+  'function hasVoted(uint256, address) view returns (bool)',
+  'event ProposalCreated(uint256 indexed proposalId, address indexed proposer, string description)',
+  'event VoteCast(uint256 indexed proposalId, address indexed voter, bool support, uint256 weight)'
 ];
 
 /* ───────── HELPERS ───────── */
@@ -181,16 +292,43 @@ async function ensureContract(addr, provider) {
 
 /* ───────── CONNECT WALLET ───────── */
 async function connectWallet() {
+  const connectBtn = document.querySelector('.header__connect-btn, .hero__cta');
+
   if (!window.ethereum) {
-    alert('MetaMask not detected. Please install MetaMask extension.');
+    if (window.toast) {
+      window.toast.error('MetaMask not detected. Please install MetaMask extension.', {
+        title: 'Wallet Not Found',
+        duration: 8000
+      });
+    } else {
+      alert('MetaMask not detected. Please install MetaMask extension.');
+    }
     return;
   }
 
   try {
+    // Start button loading state
+    if (window.buttonLoading && connectBtn) {
+      window.buttonLoading.start(connectBtn, 'Connecting...');
+    }
+
+    // Show loading toast
+    const loadingToastId = window.toast ? window.toast.info('Connecting to wallet...', {
+      title: 'Wallet Connection',
+      persistent: true,
+      id: 'wallet_connect'
+    }) : null;
+
     // Validate that contract addresses are available
     if (!donationAddress || !ecoCoinAddress) {
       console.error('Contract addresses not properly initialized');
-      alert('Application not properly initialized. Please refresh the page.');
+      if (window.toast) {
+        window.toast.error('Application not properly initialized. Please refresh the page.', {
+          title: 'Initialization Error'
+        });
+      } else {
+        alert('Application not properly initialized. Please refresh the page.');
+      }
       return;
     }
 
@@ -206,10 +344,20 @@ async function connectWallet() {
       const isLocal = contracts.chainId === 31337;
       const networkName = isLocal ? 'Hardhat Local (31337)' : 'Sepolia Testnet (11155111)';
 
-      if (isLocal) {
-        alert(`Please switch MetaMask to ${networkName}.\n\nNetwork Details:\n- RPC URL: http://127.0.0.1:8545\n- Chain ID: 31337\n- Currency: ETH`);
+      if (window.toast) {
+        window.toast.warning(
+          `Please switch MetaMask to ${networkName}${isLocal ? '\n\nNetwork Details:\n- RPC URL: http://127.0.0.1:8545\n- Chain ID: 31337\n- Currency: ETH' : ''}`,
+          {
+            title: 'Wrong Network',
+            duration: 10000
+          }
+        );
       } else {
-        alert(`Please switch MetaMask to ${networkName}.`);
+        if (isLocal) {
+          alert(`Please switch MetaMask to ${networkName}.\n\nNetwork Details:\n- RPC URL: http://127.0.0.1:8545\n- Chain ID: 31337\n- Currency: ETH`);
+        } else {
+          alert(`Please switch MetaMask to ${networkName}.`);
+        }
       }
       return;
     }
@@ -228,6 +376,12 @@ async function connectWallet() {
     donateWrite = new ethers.Contract(donationAddress, donationAbi, signer);
     ecoWrite = new ethers.Contract(ecoCoinAddress, ecoCoinAbi, signer);
 
+    // Initialize governance contract if available
+    if (governanceAddress) {
+      governanceRead = new ethers.Contract(governanceAddress, governanceAbi, rpcProvider);
+      console.log('✅ Governance contract initialized');
+    }
+
     donateWrite.on('TokenBalanceUpdated', (donor, bal) => {
       signer.getAddress().then(a => {
         if (a.toLowerCase() === donor.toLowerCase())
@@ -243,6 +397,14 @@ async function connectWallet() {
     updateWalletUI(addr, true);
 
     await updateBalance();
+
+    // Hide loading toast and show success
+    if (window.toast && loadingToastId) {
+      window.toast.hide(loadingToastId);
+      window.toast.success(`Wallet connected: ${addr.slice(0, 6)}...${addr.slice(-4)}`, {
+        title: 'Wallet Connected'
+      });
+    }
 
     // Dispatch wallet connected event for auto-donation
     document.dispatchEvent(new CustomEvent('walletConnected', {
@@ -260,7 +422,28 @@ async function connectWallet() {
     }
   } catch (error) {
     console.error('Failed to connect wallet:', error);
-    alert('Failed to connect wallet. Please try again.');
+
+    // Hide loading toast if exists
+    if (window.toast) {
+      window.toast.hide('wallet_connect');
+
+      if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
+        window.toast.warning('Wallet connection was cancelled by user');
+      } else if (error.message?.includes('User rejected')) {
+        window.toast.warning('Wallet connection was rejected by user');
+      } else {
+        window.toast.error(`Failed to connect wallet: ${error.message || 'Unknown error'}`, {
+          title: 'Connection Failed'
+        });
+      }
+    } else {
+      alert('Failed to connect wallet. Please try again.');
+    }
+  } finally {
+    // Stop button loading state
+    if (window.buttonLoading && connectBtn) {
+      window.buttonLoading.stop(connectBtn);
+    }
   }
 }
 
@@ -321,6 +504,12 @@ async function reconnectWallet() {
         donateWrite = new ethers.Contract(donationAddress, donationAbi, signer);
         ecoWrite = new ethers.Contract(ecoCoinAddress, ecoCoinAbi, signer);
 
+        // Initialize governance contract if available
+        if (governanceAddress) {
+          governanceRead = new ethers.Contract(governanceAddress, governanceAbi, rpcProvider);
+          console.log('[reconnectWallet] ✅ Governance contract initialized');
+        }
+
         console.log('[reconnectWallet] Setting up event listeners...');
 
         // Set up event listener for token balance updates
@@ -379,47 +568,221 @@ async function updateBalance() {
 /* ───────── DONATE ───────── */
 async function sendDonation(ev) {
   ev.preventDefault();
-  if (!donateWrite) { alert('Connect wallet first'); return false; }
+
+  // Check if new transaction flow is available
+  if (window.transactionFlow && window.walletManager) {
+    return await sendDonationWithFlow(ev);
+  }
+
+  // Fallback to legacy flow
+  return await sendDonationLegacy(ev);
+}
+
+// New transaction flow implementation
+async function sendDonationWithFlow(ev) {
+  const f   = +document.getElementById('foundation').value;
+  const msg = document.getElementById('message').value;
+  const val = document.getElementById('amount').value;
+  const donateBtn = ev.target.querySelector('button[type="submit"]');
+
+  if (!val || Number(val) <= 0) {
+    if (window.toast) {
+      window.toast.error('Please enter a valid donation amount');
+    } else {
+      alert('Enter a valid amount');
+    }
+    return false;
+  }
+
+  try {
+    // Start button loading state
+    if (window.buttonLoading && donateBtn) {
+      window.buttonLoading.start(donateBtn, 'Processing...');
+    }
+
+    // Get foundation address (for now using a mock address)
+    const foundationAddresses = {
+      0: '0x742d35Cc6cF8fC3F1234567890123456789012AB', // WWF
+      1: '0x987d35Cc6cF8fC3F1234567890123456789012CD', // Greenpeace
+      2: '0x456d35Cc6cF8fC3F1234567890123456789012EF', // Ocean Cleanup
+      3: '0x789d35Cc6cF8fC3F1234567890123456789012GH'  // Amazon Watch
+    };
+
+    const foundationAddress = foundationAddresses[f] || foundationAddresses[0];
+
+    // Start transaction flow
+    const flowId = await window.transactionFlow.startDonation(val, foundationAddress);
+
+    // Listen for transaction success
+    const successHandler = (event) => {
+      if (event.detail.flowId === flowId) {
+        window.removeEventListener('transactionSuccess', successHandler);
+
+        // Update UI after successful donation
+        updateUIAfterDonation(event.detail.txHash, val, f, msg);
+
+        // Stop button loading
+        if (window.buttonLoading && donateBtn) {
+          window.buttonLoading.stop(donateBtn);
+        }
+      }
+    };
+
+    const errorHandler = (event) => {
+      if (event.detail && event.detail.flowId === flowId) {
+        window.removeEventListener('transactionError', errorHandler);
+
+        // Stop button loading
+        if (window.buttonLoading && donateBtn) {
+          window.buttonLoading.stop(donateBtn);
+        }
+      }
+    };
+
+    window.addEventListener('transactionSuccess', successHandler);
+    window.addEventListener('transactionError', errorHandler);
+
+    console.log('🚀 Donation flow started:', flowId);
+    return true;
+
+  } catch (error) {
+    console.error('Donation error:', error);
+
+    // Stop button loading
+    if (window.buttonLoading && donateBtn) {
+      window.buttonLoading.stop(donateBtn);
+    }
+
+    if (window.toast) {
+      window.toast.error(`Donation failed: ${error.message}`);
+    } else {
+      alert(`Donation failed: ${error.message}`);
+    }
+    return false;
+  }
+}
+
+// Legacy donation implementation (fallback)
+async function sendDonationLegacy(ev) {
+  if (!donateWrite) {
+    if (window.toast) {
+      window.toast.error('Please connect your wallet first');
+    } else {
+      alert('Connect wallet first');
+    }
+    return false;
+  }
 
   const f   = +document.getElementById('foundation').value;
   const msg = document.getElementById('message').value;
   const val = document.getElementById('amount').value;
-  if (!val || Number(val) <= 0) { alert('Enter a valid amount'); return false; }
+  const donateBtn = ev.target.querySelector('button[type="submit"]');
 
-  // Main donation transaction
-  const tx = await donateWrite.donate(f, msg, { value: ethers.utils.parseEther(val) });
-  document.getElementById('txStatus').textContent = 'Waiting for confirmation…';
-  await tx.wait();
+  if (!val || Number(val) <= 0) {
+    if (window.toast) {
+      window.toast.error('Please enter a valid donation amount');
+    } else {
+      alert('Enter a valid amount');
+    }
+    return false;
+  }
 
-  // Trigger auto-donation if enabled
   try {
+    // Start button loading state
+    if (window.buttonLoading && donateBtn) {
+      window.buttonLoading.start(donateBtn, 'Processing...');
+    }
+
+    // Main donation transaction
+    const tx = await donateWrite.donate(f, msg, { value: ethers.utils.parseEther(val) });
+
+    // Show transaction pending toast
+    let pendingToastId;
+    if (window.toast) {
+      pendingToastId = window.toast.transactionPending(tx.hash, 'Donation transaction submitted');
+    }
+
+    document.getElementById('txStatus').textContent = 'Waiting for confirmation…';
+    await tx.wait();
+
+    // Hide pending toast and show success
+    if (window.toast) {
+      window.toast.transactionSuccess(tx.hash, 'Donation confirmed!');
+    }
+
+    // Update UI after successful donation
+    updateUIAfterDonation(tx.hash, val, f, msg);
+
+  } catch (error) {
+    console.error('Donation error:', error);
+
+    // Stop button loading
+    if (window.buttonLoading && donateBtn) {
+      window.buttonLoading.stop(donateBtn);
+    }
+
+    if (window.toast) {
+      window.toast.error(`Donation failed: ${error.message}`);
+    } else {
+      alert(`Donation failed: ${error.message}`);
+    }
+
+    document.getElementById('txStatus').textContent = 'Donation failed';
+    return false;
+  }
+}
+
+// Helper function to update UI after successful donation
+async function updateUIAfterDonation(txHash, amount, foundationIndex, message) {
+  try {
+    // Trigger auto-donation if enabled
     if (window.autoDonationManager && window.autoDonationManager.userSettings && window.autoDonationManager.userSettings.isActive) {
       document.getElementById('txStatus').textContent = '✅ Donation confirmed! Processing auto-donation...';
-      await window.autoDonationManager.triggerAutoDonation(Number(val));
+
+      if (window.toast) {
+        window.toast.info('Processing auto-donation...', { title: 'Auto-Donation Active' });
+      }
+
+      await window.autoDonationManager.triggerAutoDonation(Number(amount));
       document.getElementById('txStatus').textContent = '✅ Donation and auto-donation confirmed!';
+
+      if (window.toast) {
+        window.toast.success('Auto-donation also completed successfully!', { title: 'Auto-Donation Complete' });
+      }
     } else {
       document.getElementById('txStatus').textContent = '✅ Donation confirmed!';
     }
-  } catch (error) {
-    console.error('Auto-donation failed:', error);
+  } catch (autoError) {
+    console.error('Auto-donation failed:', autoError);
     document.getElementById('txStatus').textContent = '✅ Donation confirmed! (Auto-donation skipped)';
+
+    if (window.toast) {
+      window.toast.warning('Donation successful, but auto-donation failed', { title: 'Auto-Donation Error' });
+    }
   }
 
   await updateBalance();
 
   // Calculate ECO coins received
-  const ecoCoins = (Number(val) * 10).toFixed(2);
+  const ecoCoins = (Number(amount) * 10).toFixed(2);
+
+  // Foundation names
+  const names = ['WWF', 'Greenpeace', 'The Ocean Cleanup', 'Amazon Watch'];
 
   // Show modal with donation details
   const modal = document.getElementById('donationModal');
-  const modalMessage = document.getElementById('modalMessage');
-  modalMessage.innerHTML = `Thank you for donating to <strong>${names[f]}</strong>!<br>
-    You have received <strong>${ecoCoins} ECO Coins</strong> for your contribution.`;
-  modal.style.display = 'flex';
+  if (modal) {
+    const modalMessage = document.getElementById('modalMessage');
+    if (modalMessage) {
+      modalMessage.innerHTML = `Thank you for donating to <strong>${names[foundationIndex]}</strong>!<br>
+          You have received <strong>${ecoCoins} ECO Coins</strong> for your contribution.`;
+    }
+    modal.style.display = 'flex';
+  }
 
   // Close modal function
   window.closeModal = function() {
-    modal.style.display = 'none';
+    if (modal) modal.style.display = 'none';
   };
 
   // Refresh history on all pages after donation
@@ -433,12 +796,11 @@ async function sendDonation(ev) {
     if (currentStatus && currentStatus.textContent.includes('confirmed')) {
       currentStatus.innerHTML = '✅ Donation confirmed! <a href="history.html" style="color: #2e7d32; text-decoration: underline;">View your impact →</a>';
     }
-  }, 1000);
+  }, 3000);
 
   /* Remove 3-D coin spinner & thanks */
   const box = document.getElementById('badgeContainer');
-  box.innerHTML = '';
-  return false;
+  if (box) box.innerHTML = '';
 }
 
 /* ───────── HISTORY ───────── */
@@ -771,6 +1133,74 @@ async function loadDashboard() {
         console.error('Failed to get user address:', error);
       }
     }
+  }
+
+  // Load governance data if available
+  await loadGovernanceStats();
+}
+
+/* ───────── GOVERNANCE STATS ───────── */
+async function loadGovernanceStats() {
+  if (!governanceRead || !governanceAddress) {
+    console.log('Governance contract not available, skipping governance stats');
+    return;
+  }
+
+  try {
+    console.log('Loading governance statistics...');
+
+    // Get proposal count
+    const proposalCount = await governanceRead.proposalCount();
+    console.log('Total proposals:', proposalCount.toString());
+
+    // Update the impact rank card to show governance participation
+    const impactRankElement = document.getElementById('impactRank');
+    if (impactRankElement && signer) {
+      const userAddress = await signer.getAddress();
+      let userVotes = 0;
+      let userProposals = 0;
+
+      // Check user's governance participation
+      for (let i = 0; i < proposalCount.toNumber(); i++) {
+        try {
+          const proposal = await governanceRead.proposals(i);
+
+          // Check if user created this proposal
+          if (proposal.proposer.toLowerCase() === userAddress.toLowerCase()) {
+            userProposals++;
+          }
+
+          // Check if user voted on this proposal
+          const hasVoted = await governanceRead.hasVoted(i, userAddress);
+          if (hasVoted) {
+            userVotes++;
+          }
+        } catch (error) {
+          console.warn(`Error checking proposal ${i}:`, error.message);
+        }
+      }
+
+      // Calculate participation score
+      const participationScore = (userVotes * 10) + (userProposals * 50);
+      let rank = 'Newcomer';
+
+      if (participationScore >= 100) rank = 'Champion';
+      else if (participationScore >= 50) rank = 'Advocate';
+      else if (participationScore >= 20) rank = 'Contributor';
+      else if (participationScore >= 10) rank = 'Participant';
+
+      impactRankElement.textContent = rank;
+
+      // Update the trend text to show governance stats
+      const trendElement = impactRankElement.parentElement.querySelector('.dashboard-stat-card__trend span');
+      if (trendElement) {
+        trendElement.textContent = `${userVotes} votes, ${userProposals} proposals`;
+      }
+    }
+
+    console.log('✅ Governance stats loaded successfully');
+  } catch (error) {
+    console.error('Failed to load governance stats:', error);
   }
 }
 

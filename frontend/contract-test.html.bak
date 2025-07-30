@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contract Initialization Test</title>
+    <script src="ethers.umd.min.js"></script>
+</head>
+<body>
+    <h1>Contract Initialization Test</h1>
+    <div id="results"></div>
+
+    <script>
+        async function testContractInitialization() {
+            const results = document.getElementById('results');
+
+            try {
+                // Load contracts configuration
+                const response = await fetch('./contracts.json?v=' + Date.now());
+                const contracts = await response.json();
+                console.log('✅ Loaded contracts:', contracts);
+                results.innerHTML += '<p>✅ Loaded contracts configuration</p>';
+
+                // Test RPC connection
+                const rpcProvider = new ethers.JsonRpcProvider('http://localhost:8545');
+                const network = await rpcProvider.getNetwork();
+                console.log('✅ Connected to network:', network);
+                results.innerHTML += `<p>✅ Connected to network: ${network.name} (chainId: ${network.chainId})</p>`;
+
+                // Validate chain ID
+                if (Number(network.chainId) !== contracts.chainId) {
+                    throw new Error(`Chain ID mismatch: expected ${contracts.chainId}, got ${network.chainId}`);
+                }
+                results.innerHTML += '<p>✅ Chain ID validation passed</p>';
+
+                // Test contract instantiation
+                const donationAbi = ['function getDonationCount() view returns (uint256)'];
+                const donationContract = new ethers.Contract(contracts.donationContract, donationAbi, rpcProvider);
+
+                // Test contract call
+                const donationCount = await donationContract.getDonationCount();
+                console.log('✅ Donation count:', donationCount.toString());
+                results.innerHTML += `<p>✅ Contract call successful: ${donationCount.toString()} donations</p>`;
+
+                // Test ECO token contract
+                const ecoAbi = ['function name() view returns (string)', 'function symbol() view returns (string)'];
+                const ecoContract = new ethers.Contract(contracts.ecoCoin, ecoAbi, rpcProvider);
+
+                const tokenName = await ecoContract.name();
+                const tokenSymbol = await ecoContract.symbol();
+                console.log('✅ ECO Token:', tokenName, tokenSymbol);
+                results.innerHTML += `<p>✅ ECO Token: ${tokenName} (${tokenSymbol})</p>`;
+
+                // Test governance contract
+                if (contracts.ecoGovernance) {
+                    const govAbi = ['function proposalCount() view returns (uint256)'];
+                    const govContract = new ethers.Contract(contracts.ecoGovernance, govAbi, rpcProvider);
+
+                    const proposalCount = await govContract.proposalCount();
+                    console.log('✅ Governance proposals:', proposalCount.toString());
+                    results.innerHTML += `<p>✅ Governance contract: ${proposalCount.toString()} proposals</p>`;
+                }
+
+                results.innerHTML += '<p><strong>🎉 ALL TESTS PASSED!</strong></p>';
+
+            } catch (error) {
+                console.error('❌ Test failed:', error);
+                results.innerHTML += `<p>❌ Test failed: ${error.message}</p>`;
+            }
+        }
+
+        // Run tests when page loads
+        testContractInitialization();
+    </script>
+</body>
+</html>

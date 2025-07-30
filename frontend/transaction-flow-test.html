@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Flow Testing - EcoCoin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/wallet-selector.css">
+    <link rel="stylesheet" href="css/transaction-flow.css">
+    <style>
+        .test-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .test-header h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .test-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e5e9;
+        }
+
+        .test-card h3 {
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .test-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .test-input {
+            padding: 12px;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .test-btn:hover {
+            background: #0056b3;
+        }
+
+        .test-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .test-btn.secondary {
+            background: #6c757d;
+        }
+
+        .test-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .test-btn.danger {
+            background: #dc3545;
+        }
+
+        .test-btn.danger:hover {
+            background: #c82333;
+        }
+
+        .wallet-status {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #007bff;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .status-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .status-value {
+            color: #666;
+            font-family: monospace;
+        }
+
+        .status-value.connected {
+            color: #28a745;
+        }
+
+        .status-value.disconnected {
+            color: #dc3545;
+        }
+
+        .active-flows {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .flow-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .flow-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-info {
+            flex: 1;
+        }
+
+        .flow-type {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .flow-id {
+            font-size: 12px;
+            color: #666;
+            font-family: monospace;
+        }
+
+        .flow-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .flow-status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .flow-status.completed {
+            background: #cce7ff;
+            color: #004085;
+        }
+
+        .flow-status.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .scenario-tests {
+            margin-top: 40px;
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .scenario-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .scenario-card h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .scenario-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .test-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .test-page {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-page">
+        <div class="test-header">
+            <h1>💸 Transaction Flow Testing</h1>
+            <p>Test all transaction flow features including donations, governance votes, and error scenarios</p>
+        </div>
+
+        <!-- Wallet Status -->
+        <div class="wallet-status">
+            <h3>🔗 Wallet Connection Status</h3>
+            <div class="status-item">
+                <span class="status-label">Status:</span>
+                <span class="status-value" id="wallet-status">Disconnected</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Address:</span>
+                <span class="status-value" id="wallet-address">-</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Balance:</span>
+                <span class="status-value" id="wallet-balance">-</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Network:</span>
+                <span class="status-value" id="wallet-network">-</span>
+            </div>
+        </div>
+
+        <!-- Active Flows -->
+        <div class="active-flows">
+            <h3>🔄 Active Transaction Flows</h3>
+            <div id="active-flows-list">
+                <p style="color: #666; font-style: italic;">No active flows</p>
+            </div>
+        </div>
+
+        <!-- Test Cases -->
+        <div class="test-grid">
+            <!-- Donation Flow Tests -->
+            <div class="test-card">
+                <h3>💚 Donation Flow</h3>
+                <p>Test the complete donation transaction flow with gas estimation and confirmation.</p>
+
+                <div class="test-form">
+                    <input type="number" class="test-input" id="donation-amount" placeholder="Amount in ETH (e.g., 0.01)" step="0.001" min="0.001">
+                    <input type="text" class="test-input" id="foundation-address" placeholder="Foundation Address" value="0x742d35Cc6cF8fC3F1234567890123456789012AB">
+                    <button class="test-btn" onclick="testDonationFlow()">🚀 Start Donation Flow</button>
+                    <button class="test-btn secondary" onclick="testDonationFlowWithError()">❌ Test With Error</button>
+                </div>
+            </div>
+
+            <!-- Governance Flow Tests -->
+            <div class="test-card">
+                <h3>🗳️ Governance Vote Flow</h3>
+                <p>Test governance voting transaction flow with proposal voting.</p>
+
+                <div class="test-form">
+                    <input type="text" class="test-input" id="proposal-id" placeholder="Proposal ID" value="1">
+                    <select class="test-input" id="vote-choice">
+                        <option value="1">✅ Vote Yes</option>
+                        <option value="0">❌ Vote No</option>
+                        <option value="2">🤔 Abstain</option>
+                    </select>
+                    <input type="text" class="test-input" id="governance-contract" placeholder="Governance Contract" value="0x987d35Cc6cF8fC3F1234567890123456789012CD">
+                    <button class="test-btn" onclick="testGovernanceFlow()">🗳️ Start Vote Flow</button>
+                    <button class="test-btn secondary" onclick="testGovernanceFlowWithError()">❌ Test With Error</button>
+                </div>
+            </div>
+
+            <!-- Token Approval Flow Tests -->
+            <div class="test-card">
+                <h3>✅ Token Approval Flow</h3>
+                <p>Test token approval transaction flow for contract interactions.</p>
+
+                <div class="test-form">
+                    <input type="text" class="test-input" id="token-address" placeholder="Token Address" value="0x456d35Cc6cF8fC3F1234567890123456789012EF">
+                    <input type="text" class="test-input" id="spender-address" placeholder="Spender Address" value="0x789d35Cc6cF8fC3F1234567890123456789012GH">
+                    <input type="number" class="test-input" id="approval-amount" placeholder="Amount to Approve" value="1000">
+                    <button class="test-btn" onclick="testApprovalFlow()">✅ Start Approval Flow</button>
+                    <button class="test-btn secondary" onclick="testApprovalFlowWithError()">❌ Test With Error</button>
+                </div>
+            </div>
+
+            <!-- Flow Management -->
+            <div class="test-card">
+                <h3>⚙️ Flow Management</h3>
+                <p>Manage and control active transaction flows.</p>
+
+                <div class="test-form">
+                    <button class="test-btn secondary" onclick="refreshFlowStatus()">🔄 Refresh Status</button>
+                    <button class="test-btn danger" onclick="cancelAllFlows()">🛑 Cancel All Flows</button>
+                    <button class="test-btn secondary" onclick="clearCompletedFlows()">🧹 Clear Completed</button>
+                    <button class="test-btn" onclick="exportFlowData()">📊 Export Flow Data</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scenario Tests -->
+        <div class="scenario-tests">
+            <h2>🎯 Test Scenarios</h2>
+            <div class="scenario-grid">
+                <div class="scenario-card">
+                    <h4>🚀 Happy Path Tests</h4>
+                    <p class="scenario-description">Test successful transaction flows with proper wallet connection and sufficient balance.</p>
+                    <button class="test-btn" onclick="runHappyPathTests()">Run Happy Path Tests</button>
+                </div>
+
+                <div class="scenario-card">
+                    <h4>❌ Error Scenarios</h4>
+                    <p class="scenario-description">Test error handling including insufficient balance, rejected transactions, and network errors.</p>
+                    <button class="test-btn secondary" onclick="runErrorScenarios()">Run Error Tests</button>
+                </div>
+
+                <div class="scenario-card">
+                    <h4>📱 Mobile Experience</h4>
+                    <p class="scenario-description">Test transaction flows on mobile devices with touch interactions and responsive UI.</p>
+                    <button class="test-btn" onclick="testMobileExperience()">Test Mobile Flow</button>
+                </div>
+
+                <div class="scenario-card">
+                    <h4>⏱️ Performance Tests</h4>
+                    <p class="scenario-description">Test transaction flow performance, gas estimation speed, and UI responsiveness.</p>
+                    <button class="test-btn" onclick="runPerformanceTests()">Run Performance Tests</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include all necessary scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="js/browser-polyfills.js"></script>
+    <script src="js/wallet-persistence.js"></script>
+    <script src="js/transaction-tracker.js"></script>
+    <script src="js/enhanced-wallet.js"></script>
+    <script src="js/transaction-flow.js"></script>
+
+    <script>
+        // Test page functionality
+        class TransactionFlowTester {
+            constructor() {
+                this.init();
+            }
+
+            async init() {
+                console.log('🧪 Initializing Transaction Flow Tester...');
+
+                // Wait for components to load
+                await this.waitForComponents();
+
+                // Setup UI updates
+                this.setupUIUpdates();
+
+                // Update wallet status
+                this.updateWalletStatus();
+
+                console.log('✅ Transaction Flow Tester initialized');
+            }
+
+            async waitForComponents() {
+                let attempts = 0;
+                while ((!window.walletManager || !window.transactionFlow) && attempts < 50) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    attempts++;
+                }
+
+                if (!window.walletManager || !window.transactionFlow) {
+                    console.error('❌ Required components not loaded');
+                    throw new Error('Required components not loaded');
+                }
+            }
+
+            setupUIUpdates() {
+                // Listen for wallet events
+                window.addEventListener('walletConnected', () => {
+                    this.updateWalletStatus();
+                });
+
+                window.addEventListener('walletDisconnected', () => {
+                    this.updateWalletStatus();
+                });
+
+                window.addEventListener('transactionSuccess', (event) => {
+                    console.log('🎉 Transaction success:', event.detail);
+                    this.updateFlowStatus();
+                });
+
+                // Update flow status every 2 seconds
+                setInterval(() => {
+                    this.updateFlowStatus();
+                }, 2000);
+            }
+
+            async updateWalletStatus() {
+                const statusEl = document.getElementById('wallet-status');
+                const addressEl = document.getElementById('wallet-address');
+                const balanceEl = document.getElementById('wallet-balance');
+                const networkEl = document.getElementById('wallet-network');
+
+                if (window.walletManager?.isConnected()) {
+                    statusEl.textContent = 'Connected';
+                    statusEl.className = 'status-value connected';
+
+                    const address = window.walletManager.getAddress();
+                    addressEl.textContent = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '-';
+
+                    try {
+                        const balance = await window.walletManager.getBalance();
+                        balanceEl.textContent = `${parseFloat(balance).toFixed(4)} ETH`;
+                    } catch (error) {
+                        balanceEl.textContent = 'Error loading balance';
+                    }
+
+                    try {
+                        const network = await window.walletManager.getNetwork();
+                        networkEl.textContent = network.name || `Chain ID: ${network.chainId}`;
+                    } catch (error) {
+                        networkEl.textContent = 'Unknown network';
+                    }
+                } else {
+                    statusEl.textContent = 'Disconnected';
+                    statusEl.className = 'status-value disconnected';
+                    addressEl.textContent = '-';
+                    balanceEl.textContent = '-';
+                    networkEl.textContent = '-';
+                }
+            }
+
+            updateFlowStatus() {
+                const flowsContainer = document.getElementById('active-flows-list');
+
+                if (!window.transactionFlow) {
+                    flowsContainer.innerHTML = '<p style="color: #666; font-style: italic;">Transaction flow manager not available</p>';
+                    return;
+                }
+
+                const activeFlows = window.transactionFlow.getActiveFlows();
+
+                if (activeFlows.length === 0) {
+                    flowsContainer.innerHTML = '<p style="color: #666; font-style: italic;">No active flows</p>';
+                    return;
+                }
+
+                flowsContainer.innerHTML = activeFlows.map(flow => `
+                    <div class="flow-item">
+                        <div class="flow-info">
+                            <div class="flow-type">${this.getFlowDisplayName(flow.type)} Flow</div>
+                            <div class="flow-id">ID: ${flow.id}</div>
+                        </div>
+                        <div class="flow-status ${flow.status}">${flow.status.toUpperCase()}</div>
+                    </div>
+                `).join('');
+            }
+
+            getFlowDisplayName(type) {
+                const names = {
+                    donation: '💚 Donation',
+                    governance: '🗳️ Governance',
+                    approval: '✅ Approval'
+                };
+                return names[type] || type;
+            }
+        }
+
+        // Test functions
+        async function testDonationFlow() {
+            const amount = document.getElementById('donation-amount').value;
+            const address = document.getElementById('foundation-address').value;
+
+            if (!amount || !address) {
+                alert('Please fill in all donation fields');
+                return;
+            }
+
+            if (!window.walletManager?.isConnected()) {
+                alert('Please connect your wallet first');
+                await window.walletManager?.connectWallet();
+                return;
+            }
+
+            try {
+                console.log('🚀 Starting donation flow test...');
+                const flowId = await window.transactionFlow.startDonation(amount, address);
+                console.log('✅ Donation flow started:', flowId);
+            } catch (error) {
+                console.error('❌ Donation flow error:', error);
+                alert(`Donation flow error: ${error.message}`);
+            }
+        }
+
+        async function testDonationFlowWithError() {
+            // Test with invalid amount to trigger error
+            try {
+                const flowId = await window.transactionFlow.startDonation('999999', '0x742d35Cc6cF8fC3F1234567890123456789012AB');
+            } catch (error) {
+                console.log('✅ Error scenario test successful:', error.message);
+            }
+        }
+
+        async function testGovernanceFlow() {
+            const proposalId = document.getElementById('proposal-id').value;
+            const voteChoice = document.getElementById('vote-choice').value;
+            const contractAddress = document.getElementById('governance-contract').value;
+
+            if (!proposalId || !contractAddress) {
+                alert('Please fill in all governance fields');
+                return;
+            }
+
+            if (!window.walletManager?.isConnected()) {
+                alert('Please connect your wallet first');
+                await window.walletManager?.connectWallet();
+                return;
+            }
+
+            try {
+                console.log('🗳️ Starting governance flow test...');
+                // Create mock vote data
+                const voteData = '0x' + '1234'.repeat(16); // Mock vote transaction data
+                const flowId = await window.transactionFlow.startGovernanceVote(contractAddress, voteData);
+                console.log('✅ Governance flow started:', flowId);
+            } catch (error) {
+                console.error('❌ Governance flow error:', error);
+                alert(`Governance flow error: ${error.message}`);
+            }
+        }
+
+        async function testGovernanceFlowWithError() {
+            try {
+                const flowId = await window.transactionFlow.startGovernanceVote('invalid_address', '0x1234');
+            } catch (error) {
+                console.log('✅ Governance error scenario test successful:', error.message);
+            }
+        }
+
+        async function testApprovalFlow() {
+            const tokenAddress = document.getElementById('token-address').value;
+            const spenderAddress = document.getElementById('spender-address').value;
+            const amount = document.getElementById('approval-amount').value;
+
+            if (!tokenAddress || !spenderAddress || !amount) {
+                alert('Please fill in all approval fields');
+                return;
+            }
+
+            if (!window.walletManager?.isConnected()) {
+                alert('Please connect your wallet first');
+                await window.walletManager?.connectWallet();
+                return;
+            }
+
+            try {
+                console.log('✅ Starting approval flow test...');
+                // Create mock approval data
+                const approvalData = '0x' + 'abcd'.repeat(16); // Mock approval transaction data
+                const flowId = await window.transactionFlow.startTokenApproval(tokenAddress, approvalData);
+                console.log('✅ Approval flow started:', flowId);
+            } catch (error) {
+                console.error('❌ Approval flow error:', error);
+                alert(`Approval flow error: ${error.message}`);
+            }
+        }
+
+        async function testApprovalFlowWithError() {
+            try {
+                const flowId = await window.transactionFlow.startTokenApproval('', '0x1234');
+            } catch (error) {
+                console.log('✅ Approval error scenario test successful:', error.message);
+            }
+        }
+
+        function refreshFlowStatus() {
+            if (window.tester) {
+                window.tester.updateFlowStatus();
+                window.tester.updateWalletStatus();
+            }
+            console.log('🔄 Status refreshed');
+        }
+
+        function cancelAllFlows() {
+            if (window.transactionFlow) {
+                const flows = window.transactionFlow.getActiveFlows();
+                flows.forEach(flow => {
+                    if (flow.status === 'active') {
+                        window.transactionFlow.cancelFlow(flow.id);
+                    }
+                });
+                console.log('🛑 All flows cancelled');
+            }
+        }
+
+        function clearCompletedFlows() {
+            // This would clear completed flows from memory (if implemented)
+            console.log('🧹 Completed flows cleared');
+        }
+
+        function exportFlowData() {
+            if (window.transactionFlow) {
+                const flows = window.transactionFlow.getActiveFlows();
+                const data = JSON.stringify(flows, null, 2);
+                console.log('📊 Flow data:', data);
+
+                // Download as JSON file
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `transaction-flows-${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        async function runHappyPathTests() {
+            console.log('🚀 Running happy path tests...');
+            alert('Happy path tests would run a series of successful transactions');
+        }
+
+        async function runErrorScenarios() {
+            console.log('❌ Running error scenario tests...');
+            alert('Error scenario tests would test various failure conditions');
+        }
+
+        async function testMobileExperience() {
+            console.log('📱 Testing mobile experience...');
+            alert('Mobile tests would verify touch interactions and responsive UI');
+        }
+
+        async function runPerformanceTests() {
+            console.log('⏱️ Running performance tests...');
+            alert('Performance tests would measure gas estimation speed and UI responsiveness');
+        }
+
+        // Initialize tester when page loads
+        window.addEventListener('load', async () => {
+            try {
+                window.tester = new TransactionFlowTester();
+            } catch (error) {
+                console.error('Failed to initialize transaction flow tester:', error);
+            }
+        });
+
+        // Connect wallet button for testing
+        window.addEventListener('load', () => {
+            if (!window.walletManager?.isConnected()) {
+                setTimeout(() => {
+                    if (confirm('Connect wallet for testing transaction flows?')) {
+                        window.walletManager?.connectWallet().catch(console.error);
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

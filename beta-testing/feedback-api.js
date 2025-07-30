@@ -30,16 +30,16 @@ app.post('/api/feedback', (req, res) => {
             timestamp: new Date().toISOString(),
             ...req.body
         };
-        
+
         // Read existing feedback
         const existing = JSON.parse(fs.readFileSync(feedbackFile));
         existing.push(feedback);
-        
+
         // Save updated feedback
         fs.writeFileSync(feedbackFile, JSON.stringify(existing, null, 2));
-        
+
         console.log('📝 New feedback received:', feedback.type, feedback.rating);
-        
+
         res.json({ success: true, id: feedback.id });
     } catch (error) {
         console.error('Error saving feedback:', error);
@@ -51,18 +51,18 @@ app.post('/api/feedback', (req, res) => {
 app.get('/api/feedback/summary', (req, res) => {
     try {
         const feedback = JSON.parse(fs.readFileSync(feedbackFile));
-        
+
         const summary = {
             total: feedback.length,
             averageRating: feedback.reduce((sum, f) => sum + (f.rating || 0), 0) / feedback.length || 0,
             byType: {},
             recent: feedback.slice(-10)
         };
-        
+
         feedback.forEach(f => {
             summary.byType[f.type] = (summary.byType[f.type] || 0) + 1;
         });
-        
+
         res.json(summary);
     } catch (error) {
         console.error('Error reading feedback:', error);

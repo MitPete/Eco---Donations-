@@ -9,9 +9,9 @@
 /* ENHANCED HERO SECTION */
 .governance-hero {
   position: relative;
-  background: linear-gradient(135deg, 
-    rgba(79, 70, 229, 0.9) 0%, 
-    rgba(67, 56, 202, 0.85) 50%, 
+  background: linear-gradient(135deg,
+    rgba(79, 70, 229, 0.9) 0%,
+    rgba(67, 56, 202, 0.85) 50%,
     rgba(55, 48, 163, 0.9) 100%
   );
   padding: 4rem 2rem;
@@ -35,7 +35,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -77,13 +77,13 @@
 }
 
 @keyframes float-particles {
-  0%, 100% { 
-    transform: translateY(0) scale(1); 
-    opacity: 0.4; 
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.4;
   }
-  50% { 
-    transform: translateY(-30px) scale(1.2); 
-    opacity: 1; 
+  50% {
+    transform: translateY(-30px) scale(1.2);
+    opacity: 1;
   }
 }
 
@@ -458,43 +458,92 @@
   gap: 1rem;
 }
 
-.vote-button {
-  flex: 1;
+/* PROPOSAL ACTIONS */
+.proposal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.voted-indicator,
+.executed-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  background: white;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 2px solid #10b981;
+  border-radius: 16px;
+  color: #059669;
+  font-weight: 600;
+  width: 100%;
+}
+
+.vote-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   color: #64748b;
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.vote-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s;
+}
+
+.vote-button:hover::before {
+  left: 100%;
 }
 
 .vote-button:hover {
-  border-color: #4f46e5;
-  color: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .vote-button.for {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
   border-color: #10b981;
   color: #059669;
 }
 
 .vote-button.for:hover {
-  background: rgba(16, 185, 129, 0.1);
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #059669;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
 }
 
 .vote-button.against {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
   border-color: #ef4444;
   color: #dc2626;
 }
 
 .vote-button.against:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+  border-color: #dc2626;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.25);
 }
 
 /* CREATE PROPOSAL FORM */
@@ -743,48 +792,48 @@
   .governance-hero {
     padding: 3rem 1rem;
   }
-  
+
   .hero-title {
     font-size: 2.5rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1.1rem;
   }
-  
+
   .hero-stats {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .governance-dashboard {
     padding: 3rem 1rem;
   }
-  
+
   .governance-tabs {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .tab-button {
     justify-content: flex-start;
     min-width: auto;
   }
-  
+
   .proposal-form {
     padding: 2rem;
   }
-  
+
   .vote-options {
     flex-direction: column;
   }
-  
+
   .history-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .history-stats {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -795,16 +844,16 @@
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .tab-button {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
   }
-  
+
   .proposal-card {
     padding: 1.5rem;
   }
-  
+
   .proposal-meta {
     grid-template-columns: repeat(2, 1fr);
   }
