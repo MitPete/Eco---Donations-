@@ -2,16 +2,20 @@
   "name": "eco-donations-frontend",
   "version": "1.0.0",
   "description": "Frontend for Eco Donations - A blockchain-powered environmental donation platform",
-  "main": "js/app.js",
+  "main": "public/index.html",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint js/**/*.js",
+    "test:browser": "node tests/automated-browser-tests.js",
+    "test:responsive": "node tests/test-responsive.js",
+    "lint": "eslint src/**/*.js js/**/*.js",
     "format": "prettier --write \"**/*.{js,css,html}\"",
-    "start": "vite --host"
+    "start": "vite --host",
+    "serve": "node scripts/web-server.js",
+    "optimize": "bash scripts/optimize.sh"
   },
   "repository": {
     "type": "git",

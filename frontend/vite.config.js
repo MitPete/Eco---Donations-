@@ -2,8 +2,9 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
-  // Project root
-  root: '.',
+  // Project root - using public directory as root
+  root: './public',
+  publicDir: false, // Disable default public dir since we're already in it
 
   // Build configuration
   build: {
@@ -14,13 +15,13 @@ export default defineConfig({
     // Multi-page configuration
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        donate: resolve(__dirname, 'src/pages/donate.html'),
-        dashboard: resolve(__dirname, 'src/pages/dashboard.html'),
-        governance: resolve(__dirname, 'src/pages/governance.html'),
-        history: resolve(__dirname, 'src/pages/history.html'),
-        foundation: resolve(__dirname, 'src/pages/foundation.html'),
-        whitepaper: resolve(__dirname, 'src/pages/whitepaper.html')
+        main: resolve(__dirname, 'public/index.html'),
+        donate: resolve(__dirname, 'public/donate.html'),
+        dashboard: resolve(__dirname, 'public/dashboard.html'),
+        governance: resolve(__dirname, 'public/governance.html'),
+        history: resolve(__dirname, 'public/history.html'),
+        foundation: resolve(__dirname, 'public/foundation.html'),
+        whitepaper: resolve(__dirname, 'public/whitepaper.html')
       }
     },
 
@@ -44,6 +45,11 @@ export default defineConfig({
     host: true,
     open: true,
     cors: true,
+
+    // File system routing - allow access to parent directories
+    fs: {
+      allow: ['..']
+    },
 
     // Proxy for API calls if needed
     proxy: {

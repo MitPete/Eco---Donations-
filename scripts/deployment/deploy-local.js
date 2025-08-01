@@ -14,25 +14,46 @@ async function main() {
   await multiSigWallet.deployed();
   console.log("✅ MultiSigWallet deployed to:", multiSigWallet.address);
 
-  // Deploy EcoCoin
+  // First deploy a placeholder EcoCoin to get an address
   console.log("\n📦 Deploying EcoCoin...");
   const EcoCoin = await ethers.getContractFactory("EcoCoin");
-  const maxSupply = ethers.utils.parseEther("1000000000"); // 1 billion ECO tokens
-  const ecoCoin = await EcoCoin.deploy(maxSupply);
-  await ecoCoin.deployed();
-  console.log("✅ EcoCoin deployed to:", ecoCoin.address);
 
-  // Deploy DonationContract
+  // Create a temporary address for initial deployment (we'll use multiSig as placeholder)
+  const tempEcoCoin = await EcoCoin.deploy(
+    multiSigWallet.address, // temporary donation contract address
+    multiSigWallet.address  // multisig wallet address
+  );
+  await tempEcoCoin.deployed();
+  console.log("✅ EcoCoin deployed to:", tempEcoCoin.address);
+
+  // Deploy DonationContract with real EcoCoin address
   console.log("\n📦 Deploying DonationContract...");
   const DonationContract = await ethers.getContractFactory("DonationContract");
   // Use different addresses for foundations for local testing
   const accounts = await ethers.getSigners();
+
+  // Create foundation URIs
+  const foundationUris = [
+    "https://example.com/ocean.json",
+    "https://example.com/forest.json",
+    "https://example.com/wildlife.json",
+    "https://example.com/climate.json"
+  ];
+
   const donation = await DonationContract.deploy(
-    ecoCoin.address,
-    accounts[1].address, // oceans
-    accounts[2].address, // rainforest
-    accounts[3].address, // sequoias
-    accounts[4].address  // energy
+    tempEcoCoin.address,
+    multiSigWallet.address,
+    accounts[0].address, // treasury (deployer for testing)
+    foundationUris
+  );
+  await donation.deployed();
+  console.log("✅ DonationContract deployed to:", donation.address);
+
+  // Now deploy the final EcoCoin with correct donation contract address
+  console.log("\n📦 Deploying final EcoCoin...");
+  const ecoCoin = await EcoCoin.deploy(
+    donation.address, // donation contract address
+    multiSigWallet.address // multisig wallet address
   );
   await donation.deployed();
   console.log("✅ DonationContract deployed to:", donation.address);
@@ -44,10 +65,10 @@ async function main() {
   await ecoGovernance.deployed();
   console.log("✅ EcoGovernance deployed to:", ecoGovernance.address);
 
-  // Deploy AutoDonationService
-  console.log("\n📦 Deploying AutoDonationService...");
-  const AutoDonationService = await ethers.getContractFactory("AutoDonationService");
-  const autoDonation = await AutoDonationService.deploy(donation.address);
+  // Deploy AutoDonationContract
+  console.log("\n📦 Deploying AutoDonationContract...");
+  const AutoDonationContract = await ethers.getContractFactory("AutoDonationContract");
+  const autoDonation = await AutoDonationContract.deploy(donation.address, ecoCoin.address, multiSigWallet.address);
   await autoDonation.deployed();
   console.log("✅ AutoDonationService deployed to:", autoDonation.address);
 
@@ -66,13 +87,13 @@ async function main() {
   const fs = require('fs');
   const path = require('path');
 
-  // Write to src/frontend/src/contracts.json
-  const contractsPath = path.join(__dirname, '../src/frontend/src/contracts.json');
+  // Write to frontend/public/contracts/contracts.json
+  const contractsPath = path.join(__dirname, '../../frontend/public/contracts/contracts.json');
   fs.writeFileSync(contractsPath, JSON.stringify(contractsConfig, null, 2));
 
-  // Also write to src/frontend/contracts.json
-  const frontendContractsPath = path.join(__dirname, '../src/frontend/contracts.json');
-  fs.writeFileSync(frontendContractsPath, JSON.stringify(contractsConfig, null, 2));
+  // Also write to frontend/contracts.json for backup
+  const backupContractsPath = path.join(__dirname, '../../frontend/contracts.json');
+  fs.writeFileSync(backupContractsPath, JSON.stringify(contractsConfig, null, 2));
 
   console.log("\n🎉 Deployment Summary:");
   console.log("- MultiSigWallet:", multiSigWallet.address);

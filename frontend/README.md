@@ -1,268 +1,125 @@
 # Eco Donations Frontend
 
-A modern, responsive frontend for the Eco Donations blockchain-powered environmental donation platform.
+A modern, organized frontend for the Eco Donations platform built with vanilla JavaScript, CSS, and HTML.
 
-## 🌱 About
-
-Eco Donations is a decentralized application (DApp) that allows users to make environmental donations using Ethereum and earn ECO tokens as rewards. The frontend provides an intuitive interface for connecting wallets, making donations, viewing impact metrics, and tracking donation history.
-
-## 🚀 Features
-
-- **Wallet Integration**: MetaMask wallet connection with automatic reconnection
-- **Donation Management**: Easy donation interface with multiple foundation options
-- **Impact Tracking**: Real-time visualization of environmental impact
-- **Responsive Design**: Mobile-first approach with desktop optimization
-- **Modular Architecture**: Clean, maintainable code structure
-- **Dark Mode Support**: Automatic theme switching based on user preference
-
-## 🏗️ Architecture
-
-The frontend follows a modular architecture with clear separation of concerns:
+## 🏗️ Project Structure
 
 ```
 frontend/
-├── js/
-│   ├── app.js                 # Main application entry point
-│   ├── config.js              # Configuration constants
-│   ├── modules/               # Feature modules
-│   │   ├── wallet.js         # Wallet management
-│   │   ├── donation.js       # Donation handling
-│   │   └── home.js           # Home page functionality
-│   └── utils/                 # Utility functions
-│       └── helpers.js        # Helper functions
-├── css/
-│   ├── base.css              # Base styles and variables
-│   ├── components/           # Component-specific styles
-│   │   └── header.css        # Header component styles
-│   └── pages/                # Page-specific styles
-├── assets/                   # Static assets
-├── *.html                    # HTML pages
-└── package.json              # Dependencies and scripts
+├── public/                 # Static files served directly
+│   ├── *.html             # All page templates
+│   ├── assets/            # Static assets (images, libraries)
+│   └── contracts/         # Contract ABIs and addresses
+├── src/                   # Source code
+│   ├── components/        # Reusable UI components
+│   ├── pages/             # Page-specific logic
+│   ├── services/          # Business logic (wallet, governance)
+│   ├── styles/            # CSS stylesheets
+│   └── config/            # Configuration files
+├── js/                    # Legacy modular JavaScript (being integrated)
+├── scripts/               # Build and utility scripts
+├── tests/                 # Test files
+├── docs/                  # Documentation
+└── archive/               # Historical files
 ```
 
-## 🛠️ Tech Stack
+## 🚀 Quick Start
 
-- **Frontend**: Vanilla JavaScript (ES6+), HTML5, CSS3
-- **Build Tool**: Vite
-- **Blockchain**: Ethers.js v6
-- **Styling**: Custom CSS with CSS Variables
-- **Package Manager**: npm
-
-## 📦 Installation
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/eco-donations/frontend.git
-   cd frontend
-   ```
-
-2. **Install dependencies:**
+1. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-3. **Start development server:**
+2. **Start development server:**
 
    ```bash
    npm run dev
    ```
 
-4. **Build for production:**
+3. **Build for production:**
    ```bash
    npm run build
    ```
 
-## 🔧 Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
-
-### Configuration
-
-The application configuration is centralized in `js/config.js`:
-
-```javascript
-// Network configuration
-export const NETWORK_CONFIG = {
-  RPC_URL: "http://localhost:8545",
-  CHAIN_ID: "31337",
-  CHAIN_NAME: "Localhost 31337",
-};
-
-// Contract addresses
-export const CONTRACT_CONFIG = {
-  ECO_COIN_ADDRESS: "0x...",
-  DONATION_ADDRESS: "0x...",
-};
-```
-
-### Module System
-
-The application uses ES6 modules with clear imports/exports:
-
-```javascript
-// Import specific functions
-import { connectWallet, isWalletConnected } from "./modules/wallet.js";
-import { makeDonation, getAllDonations } from "./modules/donation.js";
-
-// Use in your code
-if (isWalletConnected()) {
-  await makeDonation(foundationId, amount, message);
-}
-```
-
-## 🎨 Styling
-
-### CSS Architecture
-
-The styling follows a component-based approach with CSS custom properties:
-
-```css
-/* CSS Variables for consistency */
-:root {
-  --brand-primary: #28c76f;
-  --brand-secondary: #0066ff;
-  --border-radius: 14px;
-  --transition: 0.25s ease;
-}
-
-/* Component styling */
-.component {
-  background: var(--brand-primary);
-  border-radius: var(--border-radius);
-  transition: var(--transition);
-}
-```
-
-### Responsive Design
-
-Mobile-first approach with breakpoints:
-
-- Mobile: `< 768px`
-- Tablet: `768px - 1024px`
-- Desktop: `> 1024px`
-
-## 🔗 Smart Contract Integration
-
-The frontend integrates with Ethereum smart contracts using Ethers.js:
-
-```javascript
-// Contract initialization
-const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
-// Making a donation
-const tx = await contract.donate(foundationId, message, {
-  value: ethers.parseEther(amount),
-});
-```
-
 ## 📱 Pages
 
-### Home Page (`index.html`)
+- **Home** (`index.html`) - Landing page and platform overview
+- **Donate** (`donate.html`) - Make donations to foundations
+- **Dashboard** (`dashboard.html`) - User dashboard and analytics
+- **Governance** (`governance.html`) - DAO governance interface
+- **History** (`history.html`) - Transaction history
+- **Foundation** (`foundation.html`) - Foundation information
+- **Whitepaper** (`whitepaper.html`) - Project documentation
 
-- Hero section with video background
-- Statistics banner
-- Impact metrics
-- Foundation showcase
-- How it works section
+## 🔧 Features
 
-### Donation Page (`donate.html`)
+- **Wallet Integration** - MetaMask and WalletConnect support
+- **Real-time Updates** - Live transaction tracking
+- **Responsive Design** - Mobile-first approach
+- **Modular Architecture** - Component-based structure
+- **Performance Optimized** - Minified assets and lazy loading
+- **Security Focused** - Safe contract interactions
 
-- Foundation selection
-- Amount input with quick options
-- Message input
-- Transaction confirmation
+## 🛠️ Development
 
-### History Page (`history.html`)
+### File Organization
 
-- Donation history table
-- Statistics dashboard
-- Impact metrics
-- Donor rankings
+- **Components**: Reusable UI elements in `src/components/`
+- **Services**: Business logic in `src/services/`
+- **Styles**: CSS organized by feature in `src/styles/`
+- **Config**: Network and app configuration in `src/config/`
 
-### Foundation Page (`foundation.html`)
+### Key Services
 
-- Foundation details
-- Impact statistics
-- Donation history
-- Foundation-specific metrics
+- `src/services/wallet.js` - Wallet connection and management
+- `src/services/governance.js` - DAO governance functionality
+- `src/config/network-config.js` - Blockchain network settings
 
-## 🔐 Security
+### Styling
 
-- Client-side validation for all inputs
-- Secure wallet connection handling
-- Transaction confirmation flows
-- Error handling for blockchain interactions
-
-## 🌍 Environment Variables
-
-Create a `.env` file for environment-specific configurations:
-
-```env
-VITE_RPC_URL=http://localhost:8545
-VITE_CHAIN_ID=31337
-VITE_ECO_COIN_ADDRESS=0x...
-VITE_DONATION_ADDRESS=0x...
-```
-
-## 📊 Performance
-
-- Lazy loading for components
-- Optimized asset loading
-- Efficient state management
-- Minimal bundle size
+- Modular CSS with feature-specific stylesheets
+- Responsive design with mobile-first approach
+- Minified production builds for performance
 
 ## 🧪 Testing
 
 ```bash
-# Run tests (when implemented)
-npm test
+# Run browser tests
+npm run test:browser
 
-# Run linting
-npm run lint
-
-# Format code
-npm run format
+# Run responsive tests
+npm run test:responsive
 ```
 
-## 🚀 Deployment
+## 🔧 Build Process
 
-1. **Build the application:**
+The build system uses Vite for:
 
-   ```bash
-   npm run build
-   ```
+- Module bundling
+- CSS preprocessing
+- Asset optimization
+- Development server
 
-2. **Deploy the `dist` folder** to your hosting service
+## 📖 Documentation
 
-3. **Configure environment variables** for production
+- See `docs/` directory for detailed documentation
+- `STRUCTURE.md` - Complete directory structure
+- `docs/ARCHITECTURE.md` - Frontend architecture details
+
+## 🌐 Deployment
+
+1. Build production assets: `npm run build`
+2. Deploy `dist/` directory to your web server
+3. Configure `.htaccess` for proper routing
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+1. Follow the established file structure
+2. Use consistent naming conventions
+3. Update documentation for new features
+4. Test on multiple browsers and devices
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Ethereum Foundation for blockchain infrastructure
-- MetaMask for wallet integration
-- Vite for build tooling
-- Inter font family for typography
-
----
-
-**Built with ❤️ for the environment 🌍**
+MIT License - see LICENSE file for details

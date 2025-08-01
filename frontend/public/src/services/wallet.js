@@ -130,7 +130,7 @@ async function loadContracts() {
   try {
     const response = await fetch('./contracts/contracts.json?v=' + Date.now());
     contracts = await response.json();
-    console.log('Loaded contracts from contracts.json:', contracts);
+    console.log('Loaded contracts from contracts/contracts.json:', contracts);
 
     // Check if this is the new multi-network format
     if (contracts['31337'] || contracts['11155111']) {
@@ -1207,8 +1207,15 @@ async function loadGovernanceStats() {
 /* ───────── FOUNDATION PROFILE ───────── */
 async function loadFoundationProfile() {
   const urlParams = new URLSearchParams(window.location.search);
-  const foundationId = parseInt(urlParams.get('id'), 10);
-  if (isNaN(foundationId) || foundationId < 0 || foundationId > 3) {
+  let foundationId = parseInt(urlParams.get('id'), 10);
+
+  // If no foundation ID is provided, default to foundation 0 (Save The Oceans)
+  if (isNaN(foundationId)) {
+    foundationId = 0;
+    console.log('No foundation ID specified, defaulting to foundation 0');
+  }
+
+  if (foundationId < 0 || foundationId > 3) {
     console.error('Invalid foundation ID specified');
     return;
   }

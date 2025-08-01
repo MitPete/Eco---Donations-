@@ -1,0 +1,147 @@
+/* Mobile-First Responsive Design */
+@media (max-width: 767px) {
+    /* Navigation */
+    .navbar {
+        padding: 10px 15px;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        display: none;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .hamburger {
+        display: block;
+        cursor: pointer;
+    }
+    
+    /* Forms */
+    .donation-form {
+        padding: 15px;
+        margin: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-control {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 12px;
+        border-radius: 8px;
+    }
+    
+    .btn {
+        padding: 15px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        min-height: 44px; /* Touch target size */
+    }
+    
+    /* Cards */
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .card {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    /* Tables */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+    }
+    
+    /* Typography */
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 18px; }
+    
+    .small-text {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    /* Wallet Connection */
+    .wallet-status {
+        padding: 10px;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
+    
+    .connect-wallet-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+        padding: 0 20px;
+    }
+    
+    .governance-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+}
+
+/* General Touch Improvements */
+@media (hover: none) {
+    .btn:hover {
+        transform: none;
+    }
+    
+    .card:hover {
+        transform: none;
+    }
+    
+    /* Remove hover effects on touch devices */
+    .interactive:hover {
+        background: initial;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo {
+        background-image: url('../assets/logo@2x.png');
+        background-size: contain;
+    }
+}

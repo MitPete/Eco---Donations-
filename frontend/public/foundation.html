@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foundations - EcoCoin</title>
+  <meta name="description" content="Discover environmental foundations and their impact. Support ocean cleanup, forest protection, and renewable energy projects.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/src/styles/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/src/styles/css/foundation.css" id="page-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css" id="mobile-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile.css" id="mobile-responsive-css">
+
+  <!-- Browser Compatibility -->
+  <script src="/js/browser-polyfills.js"></script>
+  <script>
+    // Dynamic cache busting - always load fresh CSS
+    document.getElementById('base-css').href = '/src/styles/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/src/styles/css/foundation.css?t=' + Date.now();
+    document.getElementById('mobile-css').href = '/src/styles/css/mobile-hero.css?t=' + Date.now();
+  </script>
+</head>
+<body class="foundationpage" onload="initializeFoundationPage()">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      EcoCoin
+    </a>
+
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
+    </div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav" id="mobileNav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link active">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="foundation-container">
+    <!-- Enhanced Hero Section -->
+    <div class="foundation-hero" id="foundationHero">
+      <div class="hero-background-animation">
+        <div class="floating-leaf"></div>
+        <div class="floating-leaf"></div>
+        <div class="floating-leaf"></div>
+        <div class="floating-leaf"></div>
+      </div>
+      <div class="foundation-hero__content">
+        <div class="hero-icon-wrapper">
+          <div class="hero-icon">
+            <i class="fas fa-globe"></i>
+          </div>
+        </div>
+        <h1 id="foundationTitle" class="foundation-hero__title">Environmental Foundations</h1>
+        <p class="foundation-hero__subtitle">Supporting causes that protect our planet for future generations</p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-value">4</span>
+            <span class="hero-stat-label">Active Foundations</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">$2.4M+</span>
+            <span class="hero-stat-label">Total Funded</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">15,847</span>
+            <span class="hero-stat-label">Donations Made</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Foundation Selection -->
+    <div class="foundation-selection">
+      <div class="foundation-selection__header">
+        <h2 class="section-title">Choose a Foundation</h2>
+        <p class="section-subtitle">Select a foundation to learn more about their mission and impact</p>
+      </div>
+      <div class="foundation-selection__grid">
+        <div class="foundation-card ocean-card" data-foundation="0" onclick="selectFoundation(0)">
+          <div class="foundation-card__background"></div>
+          <div class="foundation-card__content">
+            <div class="foundation-card__icon">
+              <div class="icon-wrapper ocean">
+                <i class="fas fa-water"></i>
+              </div>
+            </div>
+            <h3>Save The Oceans</h3>
+            <p>Protecting marine life and cleaning our oceans from plastic pollution</p>
+            <div class="foundation-stats">
+              <div class="stat-item">
+                <span class="stat-value">45%</span>
+                <span class="stat-label">Funded</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">890K</span>
+                <span class="stat-label">Raised</span>
+              </div>
+            </div>
+            <div class="foundation-card__hover-effect"></div>
+          </div>
+        </div>
+
+        <div class="foundation-card forest-card" data-foundation="1" onclick="selectFoundation(1)">
+          <div class="foundation-card__background"></div>
+          <div class="foundation-card__content">
+            <div class="foundation-card__icon">
+              <div class="icon-wrapper forest">
+                <i class="fas fa-tree"></i>
+              </div>
+            </div>
+            <h3>Protect The Rainforest</h3>
+            <p>Preserving biodiversity and fighting deforestation worldwide</p>
+            <div class="foundation-stats">
+              <div class="stat-item">
+                <span class="stat-value">67%</span>
+                <span class="stat-label">Funded</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">1.2M</span>
+                <span class="stat-label">Raised</span>
+              </div>
+            </div>
+            <div class="foundation-card__hover-effect"></div>
+          </div>
+        </div>
+
+        <div class="foundation-card sequoia-card" data-foundation="2" onclick="selectFoundation(2)">
+          <div class="foundation-card__background"></div>
+          <div class="foundation-card__content">
+            <div class="foundation-card__icon">
+              <div class="icon-wrapper sequoia">
+                <i class="fas fa-seedling"></i>
+              </div>
+            </div>
+            <h3>Protect The Sequoias</h3>
+            <p>Safeguarding ancient forests and massive carbon storage</p>
+            <div class="foundation-stats">
+              <div class="stat-item">
+                <span class="stat-value">23%</span>
+                <span class="stat-label">Funded</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">340K</span>
+                <span class="stat-label">Raised</span>
+              </div>
+            </div>
+            <div class="foundation-card__hover-effect"></div>
+          </div>
+        </div>
+
+        <div class="foundation-card energy-card" data-foundation="3" onclick="selectFoundation(3)">
+          <div class="foundation-card__background"></div>
+          <div class="foundation-card__content">
+            <div class="foundation-card__icon">
+              <div class="icon-wrapper energy">
+                <i class="fas fa-bolt"></i>
+              </div>
+            </div>
+            <h3>Clean Energy</h3>
+            <p>Advancing renewable energy solutions and sustainability</p>
+            <div class="foundation-stats">
+              <div class="stat-item">
+                <span class="stat-value">78%</span>
+                <span class="stat-label">Funded</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">1.8M</span>
+                <span class="stat-label">Raised</span>
+              </div>
+            </div>
+            <div class="foundation-card__hover-effect"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Foundation Profile -->
+    <div class="foundation-profile" id="foundationProfile">
+      <!-- About Section -->
+      <div class="foundation-section about-section">
+        <div class="foundation-section__header">
+          <div class="section-icon">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <div class="section-text">
+            <h2>About the Foundation</h2>
+            <p>Learn about their mission and environmental impact</p>
+          </div>
+        </div>
+        <div class="foundation-section__content">
+          <div class="mission-content">
+            <p id="foundationMission" class="foundation-mission">Select a foundation to learn about their mission and impact.</p>
+            <div class="mission-highlights" id="missionHighlights">
+              <!-- Dynamic highlights will be inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Impact Metrics -->
+      <div class="foundation-section metrics-section">
+        <div class="foundation-section__header">
+          <div class="section-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="section-text">
+            <h2>Impact Metrics</h2>
+            <p>Real-time donation and impact statistics</p>
+          </div>
+        </div>
+        <div class="foundation-section__content">
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-card__glow"></div>
+              <div class="metric-card__icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="metric-card__content">
+                <span class="metric-card__value" id="totalDonations">0</span>
+                <span class="metric-card__label">ETH Donated</span>
+                <div class="metric-card__trend">
+                  <i class="fas fa-trending-up"></i>
+                  <span>+12% this month</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-card__glow"></div>
+              <div class="metric-card__icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="metric-card__content">
+                <span class="metric-card__value" id="donorCount">0</span>
+                <span class="metric-card__label">Donors</span>
+                <div class="metric-card__trend">
+                  <i class="fas fa-user-plus"></i>
+                  <span>Growing community</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-card__glow"></div>
+              <div class="metric-card__icon">
+                <i class="fas fa-hand-holding-heart"></i>
+              </div>
+              <div class="metric-card__content">
+                <span class="metric-card__value" id="averageDonation">0</span>
+                <span class="metric-card__label">ETH Average</span>
+                <div class="metric-card__trend">
+                  <i class="fas fa-heart"></i>
+                  <span>Generous supporters</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Real Impact -->
+      <div class="foundation-section impact-section">
+        <div class="foundation-section__header">
+          <div class="section-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <div class="section-text">
+            <h2>Real Impact Achieved</h2>
+            <p>Tangible environmental results from donations</p>
+          </div>
+        </div>
+        <div class="foundation-section__content">
+          <div class="impact-showcase">
+            <div class="impact-grid" id="impactGrid">
+              <!-- Dynamic impact cards will be inserted here -->
+            </div>
+            <div class="impact-timeline">
+              <h3><i class="fas fa-clock"></i> Recent Achievements</h3>
+              <div class="timeline-items" id="timelineItems">
+                <!-- Timeline items will be populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Recent Donations -->
+      <div class="foundation-section donations-section">
+        <div class="foundation-section__header">
+          <div class="section-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <div class="section-text">
+            <h2>Recent Donations</h2>
+            <p>Latest contributions from our community</p>
+          </div>
+        </div>
+        <div class="foundation-section__content">
+          <div class="donations-feed">
+            <div class="donations-list" id="recentDonations">
+              <!-- Recent donations will be populated here -->
+            </div>
+            <div class="view-all-link">
+              <a href="history.html" class="link-button">
+                <i class="fas fa-external-link-alt"></i>
+                View All Donations
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Action Buttons -->
+      <div class="foundation-actions">
+        <button onclick="showDefaultFoundationState()" class="foundation-action-button secondary">
+          <div class="button-content">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Foundations</span>
+          </div>
+        </button>
+        <a href="donate.html?foundation=0" class="foundation-action-button primary" id="foundationDonateButton">
+          <div class="button-content">
+            <i class="fas fa-heart"></i>
+            <span>Donate Now</span>
+          </div>
+          <div class="button-shine"></div>
+        </a>
+        <a href="history.html" class="foundation-action-button secondary">
+          <div class="button-content">
+            <i class="fas fa-chart-line"></i>
+            <span>View All Donations</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__content">
+      <div class="footer__section">
+        <h3><i class="fa-solid fa-leaf"></i> Eco Donations</h3>
+        <p>Empowering environmental change through blockchain technology and transparent donations.</p>
+        <div class="footer__social">
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+            <i class="fa-brands fa-twitter"></i>
+          </a>
+          <a href="https://discord.com" target="_blank" rel="noopener" aria-label="Discord">
+            <i class="fa-brands fa-discord"></i>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__section">
+        <h3>Platform</h3>
+        <a href="donate.html">Make a Donation</a>
+        <a href="foundation.html">Browse Foundations</a>
+        <a href="governance.html">DAO Governance</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Resources</h3>
+        <a href="history.html">Transaction History</a>
+        <a href="whitepaper.html">Whitepaper</a>
+        <a href="#api">API Documentation</a>
+        <a href="#support">Support Center</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Legal</h3>
+        <a href="#terms">Terms of Service</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#cookies">Cookie Policy</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__bottom-content">
+        <p>© 2025 EcoCoin. Built with 💚 for the planet.</p>
+        <div class="footer__stats">
+          <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
+          <span><i class="fa-solid fa-leaf"></i> 100% Environmental Focus</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App logic -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="/scripts/contract-fix.js?v=1753062000"></script>
+  <script src="/scripts/main-wallet.js?v=1753062000"></script>
+  <script src="/src/services/wallet.js"></script>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    function toggleMobileMenu() {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+
+      nav.classList.toggle('mobile-nav-open');
+      toggle.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const header = document.querySelector('.header');
+
+      if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu when clicking nav links
+    document.querySelectorAll('.header__nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const nav = document.getElementById('mobileNav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      });
+    });
+  </script>
+
+  <!-- Enhanced Wallet Integration -->
+  <script src="/src/services/wallet-persistence.js"></script>
+  <script src="/src/services/transaction-tracker.js"></script>
+  <script src="/src/services/enhanced-wallet.js"></script>
+  <script src="/src/services/transaction-flow.js"></script>
+</body>
+</html>

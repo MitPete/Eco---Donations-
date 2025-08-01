@@ -1,9 +1,0 @@
-{
-  "ecoCoin": "0xdbC43Ba45381e02825b14322cDdd15eC4B3164E6",
-  "donationContract": "0x04C89607413713Ec9775E14b954286519d836FEf",
-  "autoDonationService": "0xDC11f7E700A4c898AE5CAddB1082cFfa76512aDD",
-  "multiSigWallet": "0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d",
-  "treasuryAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-  "chainId": 31337,
-  "platformFeePercentage": 3
-}

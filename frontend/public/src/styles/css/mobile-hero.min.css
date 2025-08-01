@@ -1,0 +1,1004 @@
+/* Hide bottom navigation completely - going back to hamburger menu */
+.bottom-nav {
+display: none !important;
+}
+/* Enhanced ECOIN Logo Styling for ALL devices */
+.header__logo {
+font-size: 1.5rem !important;
+font-weight: 900 !important;
+letter-spacing: 0.08em !important;
+background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+-webkit-background-clip: text !important;
+-webkit-text-fill-color: transparent !important;
+background-clip: text !important;
+text-transform: uppercase !important;
+font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+display: flex !important;
+align-items: center !important;
+gap: 0.5rem !important;
+text-decoration: none !important;
+}
+.header__logo i {
+color: #10b981 !important;
+font-size: 1.3rem !important;
+text-shadow: 0 2px 8px rgba(16,185,129,0.3) !important;
+-webkit-text-fill-color: #10b981 !important;
+}
+/* Mobile-First Hero Section Improvements for iPhone 16 and similar devices */
+/* Hide mobile menu toggle on desktop */
+.mobile-menu-toggle {
+display: none;
+}
+/* Hide mobile wallet button on desktop */
+.hero-wallet-mobile {
+display: none !important;
+}
+/* CRITICAL: Mobile Navigation - Works on ALL mobile devices including iPhone 16 */
+@media (max-width: 900px) {
+/* Override the purple body background for ALL pages with dark background */
+body.homepage, body.donatepage, body.historypage, body.foundationpage, body.governancepage, body.whitepaper-page, body.dashboardpage {
+background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+min-height: 100vh !important;
+height: auto !important; /* ALLOW BODY TO EXPAND */
+overflow-x: hidden !important; /* PREVENT HORIZONTAL SCROLL */
+overflow-y: auto !important; /* ALLOW VERTICAL SCROLL */
+}
+/* Force mobile layout - override ALL base.css styles */
+body.homepage .header, body.donatepage .header, body.historypage .header, body.foundationpage .header, body.governancepage .header, body.whitepaper-page .header, body.dashboardpage .header {
+flex-direction: row !important;
+padding: 0.4rem 0.8rem !important;
+min-height: 54px !important;
+max-height: 54px !important;
+gap: 0.3rem !important;
+position: sticky !important;
+top: 0 !important;
+left: 0 !important;
+width: 100% !important;
+z-index: 10000 !important;
+background: rgba(30, 41, 59, 0.95) !important;
+backdrop-filter: blur(18px) !important;
+border-radius: 0 !important;
+border-bottom: 1px solid rgba(52, 211, 153, 0.2) !important;
+box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+justify-content: space-between !important;
+align-items: center !important;
+}
+/* Remove container spacer since sticky positioning respects document flow */
+body.homepage .home-container::before {
+display: none !important;
+}
+/* Logo stays visible - COMPACT for mobile */
+body.homepage .header__logo, body.donatepage .header__logo, body.historypage .header__logo, body.foundationpage .header__logo, body.governancepage .header__logo, body.whitepaper-page, body.dashboardpage .header__logo, body.dashboardpage .header__logo {
+font-size: 1.3rem !important;
+font-weight: 900 !important;
+letter-spacing: 0.06em !important;
+background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+-webkit-background-clip: text !important;
+-webkit-text-fill-color: transparent !important;
+background-clip: text !important;
+flex-shrink: 0;
+text-transform: uppercase !important;
+text-shadow: none !important;
+font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+display: flex !important;
+align-items: center !important;
+gap: 0.3rem !important;
+order: 1 !important;
+min-width: fit-content !important;
+}
+body.homepage .header__logo i, body.donatepage .header__logo i, body.historypage .header__logo i, body.foundationpage .header__logo i, body.governancepage .header__logo i, body.whitepaper-page, body.dashboardpage .header__logo i {
+color: #10b981 !important;
+font-size: 1.1rem !important;
+text-shadow: 0 2px 8px rgba(16,185,129,0.3) !important;
+-webkit-text-fill-color: #10b981 !important;
+}
+/* Show hamburger menu button on mobile - RIGHT CORNER - COMPACT */
+body.homepage .mobile-menu-toggle, body.donatepage .mobile-menu-toggle, body.historypage .mobile-menu-toggle, body.foundationpage .mobile-menu-toggle, body.governancepage .mobile-menu-toggle, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle {
+display: flex !important;
+flex-direction: column !important;
+justify-content: center !important;
+width: 34px !important;
+height: 34px !important;
+background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+border-radius: 8px !important;
+border: 1px solid rgba(52, 211, 153, 0.4) !important;
+cursor: pointer !important;
+padding: 6px !important;
+transition: all 0.3s ease !important;
+backdrop-filter: blur(10px) !important;
+box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25) !important;
+order: 3 !important;
+flex-shrink: 0 !important;
+min-width: fit-content !important;
+}
+body.homepage .mobile-menu-toggle:hover, body.donatepage .mobile-menu-toggle:hover, body.historypage .mobile-menu-toggle:hover, body.foundationpage .mobile-menu-toggle:hover, body.governancepage .mobile-menu-toggle:hover, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle:hover {
+background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%) !important;
+transform: translateY(-1px) !important;
+box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35) !important;
+}
+body.homepage .mobile-menu-toggle span, body.donatepage .mobile-menu-toggle span, body.historypage .mobile-menu-toggle span, body.foundationpage .mobile-menu-toggle span, body.governancepage .mobile-menu-toggle span, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle span {
+display: block;
+height: 3px;
+width: 100%;
+background: #ffffff !important;
+margin: 3px 0;
+border-radius: 2px;
+transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
+}
+body.homepage .mobile-menu-toggle.active span:nth-child(1), body.donatepage .mobile-menu-toggle.active span:nth-child(1), body.historypage .mobile-menu-toggle.active span:nth-child(1), body.foundationpage .mobile-menu-toggle.active span:nth-child(1), body.governancepage .mobile-menu-toggle.active span:nth-child(1), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(1) {
+transform: rotate(45deg) translate(7px, 7px);
+}
+body.homepage .mobile-menu-toggle.active span:nth-child(2), body.donatepage .mobile-menu-toggle.active span:nth-child(2), body.historypage .mobile-menu-toggle.active span:nth-child(2), body.foundationpage .mobile-menu-toggle.active span:nth-child(2), body.governancepage .mobile-menu-toggle.active span:nth-child(2), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(2) {
+opacity: 0;
+}
+body.homepage .mobile-menu-toggle.active span:nth-child(3), body.donatepage .mobile-menu-toggle.active span:nth-child(3), body.historypage .mobile-menu-toggle.active span:nth-child(3), body.foundationpage .mobile-menu-toggle.active span:nth-child(3), body.governancepage .mobile-menu-toggle.active span:nth-child(3), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(3) {
+transform: rotate(-45deg) translate(7px, -7px);
+}
+/* Show main nav when hamburger is clicked */
+body.homepage .header__nav, body.donatepage .header__nav, body.historypage .header__nav, body.foundationpage .header__nav, body.governancepage .header__nav, body.whitepaper-page, body.dashboardpage .header__nav {
+display: none !important;
+position: fixed !important;
+top: 65px !important;
+left: 0 !important;
+width: 100% !important;
+background: rgba(30, 41, 59, 0.98) !important;
+backdrop-filter: blur(20px) !important;
+flex-direction: column !important;
+padding: 1.5rem 0 !important;
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+z-index: 499 !important;
+border-top: 1px solid rgba(52, 211, 153, 0.25) !important;
+gap: 0 !important;
+border-bottom: 1px solid rgba(52, 211, 153, 0.25) !important;
+}
+body.homepage .header__nav.mobile-nav-open, body.donatepage .header__nav.mobile-nav-open, body.historypage .header__nav.mobile-nav-open, body.foundationpage .header__nav.mobile-nav-open, body.governancepage .header__nav.mobile-nav-open, body.whitepaper-page, body.dashboardpage .header__nav.mobile-nav-open {
+display: flex !important;
+}
+body.homepage .header__nav-link, body.donatepage .header__nav-link, body.historypage .header__nav-link, body.foundationpage .header__nav-link, body.governancepage .header__nav-link, body.whitepaper-page, body.dashboardpage .header__nav-link {
+padding: 1rem 1.5rem !important;
+border-radius: 0 !important;
+width: 100% !important;
+text-align: left !important;
+border-bottom: none !important;
+font-size: 1.1rem !important;
+font-weight: 600 !important;
+color: rgba(255, 255, 255, 0.9) !important;
+background: none !important;
+margin: 0.15rem 0 !important;
+border-bottom: 2px solid transparent !important;
+transition: all 0.3s ease !important;
+position: relative !important;
+}
+body.homepage .header__nav-link::before, body.donatepage .header__nav-link::before, body.historypage .header__nav-link::before, body.foundationpage .header__nav-link::before, body.governancepage .header__nav-link::before, body.whitepaper-page, body.dashboardpage .header__nav-link::before {
+content: '';
+position: absolute;
+left: 0;
+top: 0;
+bottom: 0;
+width: 4px;
+background: #34d399;
+transform: scaleY(0);
+transition: transform 0.3s ease;
+}
+body.homepage .header__nav-link:hover::before, body.donatepage .header__nav-link:hover::before, body.historypage .header__nav-link:hover::before, body.foundationpage .header__nav-link:hover::before, body.governancepage .header__nav-link:hover::before, body.whitepaper-page, body.dashboardpage .header__nav-link:hover::before,
+body.homepage .header__nav-link.active::before, body.donatepage .header__nav-link.active::before, body.historypage .header__nav-link.active::before, body.foundationpage .header__nav-link.active::before, body.governancepage .header__nav-link.active::before, body.whitepaper-page, body.dashboardpage .header__nav-link.active::before {
+transform: scaleY(1);
+}
+body.homepage .header__nav-link:hover, body.donatepage .header__nav-link:hover, body.historypage .header__nav-link:hover, body.foundationpage .header__nav-link:hover, body.governancepage .header__nav-link:hover, body.whitepaper-page, body.dashboardpage .header__nav-link:hover {
+background: rgba(52, 211, 153, 0.15) !important;
+color: #34d399 !important;
+transform: translateX(8px) !important;
+}
+body.homepage .header__nav-link.active, body.donatepage .header__nav-link.active, body.historypage .header__nav-link.active, body.foundationpage .header__nav-link.active, body.governancepage .header__nav-link.active, body.whitepaper-page, body.dashboardpage .header__nav-link.active {
+background: rgba(52, 211, 153, 0.2) !important;
+color: #34d399 !important;
+font-weight: 700 !important;
+}
+body.homepage .header__nav-link:last-child, body.donatepage .header__nav-link:last-child, body.historypage .header__nav-link:last-child, body.foundationpage .header__nav-link:last-child, body.governancepage .header__nav-link:last-child, body.whitepaper-page, body.dashboardpage .header__nav-link:last-child {
+border-bottom: none !important;
+}
+/* Show compact wallet button in header on mobile - CENTER POSITION */
+body.homepage .header__wallet, body.donatepage .header__wallet, body.historypage .header__wallet, body.foundationpage .header__wallet, body.governancepage .header__wallet, body.whitepaper-page, body.dashboardpage .header__wallet {
+display: flex !important;
+flex-direction: row !important;
+gap: 0 !important;
+width: auto !important;
+align-items: center !important;
+order: 2 !important;
+flex: 1 !important;
+justify-content: center !important;
+}
+body.homepage .header__wallet-info, body.donatepage .header__wallet-info, body.historypage .header__wallet-info, body.foundationpage .header__wallet-info, body.governancepage .header__wallet-info, body.whitepaper-page, body.dashboardpage .header__wallet-info {
+display: none !important;
+}
+body.homepage .header__connect-button, body.donatepage .header__connect-button, body.historypage .header__connect-button, body.foundationpage .header__connect-button, body.governancepage .header__connect-button, body.whitepaper-page, body.dashboardpage .header__connect-button {
+width: auto !important;
+max-width: none !important;
+padding: 0.4rem 0.7rem !important;
+font-size: 0.75rem !important;
+font-weight: 600 !important;
+white-space: nowrap !important;
+margin-left: 0 !important;
+background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+color: #ffffff !important;
+border: 1px solid rgba(52, 211, 153, 0.4) !important;
+border-radius: 8px !important;
+backdrop-filter: blur(10px) !important;
+box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25) !important;
+transition: all 0.3s ease !important;
+letter-spacing: 0.01em !important;
+min-width: fit-content !important;
+}
+body.homepage .header__connect-button:hover, body.donatepage .header__connect-button:hover, body.historypage .header__connect-button:hover, body.foundationpage .header__connect-button:hover, body.governancepage .header__connect-button:hover, body.whitepaper-page, body.dashboardpage .header__connect-button:hover {
+background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%) !important;
+transform: translateY(-1px) !important;
+box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35) !important;
+}
+body.homepage .header__connect-button i, body.donatepage .header__connect-button i, body.historypage .header__connect-button i, body.foundationpage .header__connect-button i, body.governancepage .header__connect-button i, body.whitepaper-page, body.dashboardpage .header__connect-button i {
+display: inline !important;
+margin-right: 0.2rem !important;
+font-size: 0.7rem !important;
+color: #ffffff !important;
+}
+/* Extra optimizations for very small screens */
+@media (max-width: 375px) {
+body.homepage .header, body.donatepage .header, body.historypage .header, body.foundationpage .header, body.governancepage .header, body.whitepaper-page, body.dashboardpage .header {
+padding: 0.3rem 0.6rem !important;
+min-height: 50px !important;
+max-height: 50px !important;
+}
+body.homepage .header__connect-button {
+font-size: 0.7rem !important;
+padding: 0.3rem 0.5rem !important;
+}
+body.homepage .header__connect-button i {
+margin-right: 0.15rem !important;
+font-size: 0.65rem !important;
+}
+body.homepage .mobile-menu-toggle {
+width: 30px !important;
+height: 30px !important;
+padding: 5px !important;
+}
+body.homepage .header__logo {
+font-size: 1.2rem !important;
+gap: 0.25rem !important;
+}
+body.homepage .header__logo i {
+font-size: 1rem !important;
+}
+}
+/* Force bottom nav to never show */
+.bottom-nav,
+nav.bottom-nav,
+.bottom-nav__item {
+display: none !important;
+visibility: hidden !important;
+position: absolute !important;
+left: -9999px !important;
+}
+/* Make sure connect button text is visible */
+body.homepage .header__connect-button span {
+display: inline !important;
+font-weight: 600 !important;
+}
+/* Ensure home container starts properly - NO extra margins */
+body.homepage .home-container {
+margin-top: 0 !important;
+padding-top: 0 !important;
+background: transparent !important; /* NO WHITE BACKGROUND */
+width: 100% !important;
+height: auto !important; /* ALLOW CONTAINER TO EXPAND */
+min-height: auto !important; /* NO HEIGHT CONSTRAINTS */
+}
+/* Force hero section to start naturally after navbar */
+body.homepage .home-hero {
+margin-top: 65px !important; /* RESPECT NAVBAR HEIGHT */
+height: calc(100vh - 65px) !important; /* FULL VIEWPORT MINUS NAVBAR ONLY */
+min-height: calc(100vh - 65px) !important; /* ENSURE MINIMUM FULL HEIGHT */
+padding: 2rem 0.75rem 2rem !important; /* BALANCED PADDING */
+background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important; /* DARK BACKGROUND TO REPLACE PURPLE */
+position: relative !important;
+width: 100% !important;
+left: 0 !important;
+right: 0 !important;
+overflow: visible !important; /* ALLOW CONTENT TO EXTEND */
+display: flex !important;
+flex-direction: column !important;
+justify-content: center !important; /* CENTER CONTENT VERTICALLY */
+}
+/* Hide badge on mobile */
+body.homepage .hero-badge {
+display: none !important;
+}
+/* Force hero sections on ALL other pages to use dark background - FIX BLUE BLOCKS */
+body.donatepage .donate-hero,
+body.historypage .history-hero,
+body.foundationpage .foundation-hero,
+body.dashboardpage .dashboard-hero,
+body.governancepage .governance-hero,
+body.whitepaper-page .whitepaper-hero,
+body.donatepage .donate-container,
+body.historypage .history-container,
+body.foundationpage .foundation-container,
+body.dashboardpage .dashboard-container,
+body.governancepage .governance-container,
+body.whitepaper-page .whitepaper-container {
+background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+margin-top: 65px !important;
+padding-top: 2rem !important;
+}
+/* Override any blue/purple gradients in hero sections */
+body.donatepage *[style*="background"],
+body.historypage *[style*="background"],
+body.foundationpage *[style*="background"],
+body.dashboardpage *[style*="background"],
+body.governancepage *[style*="background"],
+body.whitepaper-page *[style*="background"] {
+background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+}
+}
+/* iPhone 16 and similar screen sizes (393px width) - EXPANDED to include iPhone 16 */
+@media (max-width: 500px) {
+/* Override the purple body background for homepage with dark background */
+body.homepage {
+background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+min-height: 100vh !important;
+height: auto !important; /* ALLOW BODY TO EXPAND */
+overflow-x: hidden !important; /* PREVENT HORIZONTAL SCROLL */
+overflow-y: auto !important; /* ALLOW VERTICAL SCROLL */
+}
+body.homepage .home-hero {
+margin-top: 0 !important; /* Minimal space above hero */
+height: 100vh !important; /* Use full viewport height */
+min-height: 100vh !important;
+padding: 0 0.75rem 1.5rem !important; /* Remove top padding */
+overflow: visible !important; /* Allow content to extend beyond */
+position: relative !important;
+touch-action: pan-y !important;
+background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important; /* DARK BACKGROUND TO REPLACE PURPLE */
+width: 100% !important;
+left: 0 !important;
+right: 0 !important;
+display: flex !important;
+flex-direction: column !important;
+justify-content: center !important; /* CENTER CONTENT VERTICALLY */
+}
+/* Remove the ::before spacer since container handles it */
+body.homepage .home-hero::before {
+display: none !important;
+}
+body.homepage .hero-content {
+padding: 0 1rem !important; /* Remove any top padding */
+max-width: 100% !important;
+display: flex !important;
+flex-direction: column !important;
+justify-content: center !important; /* CENTER CONTENT */
+align-items: center !important;
+text-align: center !important;
+height: 100% !important; /* TAKE FULL HEIGHT */
+min-height: auto !important;
+margin: 0 !important; /* NO MARGINS */
+position: relative !important;
+z-index: 1 !important;
+animation: fadeInUp 0.8s ease-out !important;
+}
+/* Add smooth entrance animation */
+@keyframes fadeInUp {
+0% {
+opacity: 0;
+transform: translateY(30px);
+}
+100% {
+opacity: 1;
+transform: translateY(0);
+}
+}
+/* Stunning gradient animation for badge */
+@keyframes gradientShift {
+0% {
+background-position: 0% 50%;
+}
+50% {
+background-position: 100% 50%;
+}
+100% {
+background-position: 0% 50%;
+}
+}
+/* Subtle pulsing effect for badge */
+@keyframes subtlePulse {
+0%, 100% {
+transform: translateX(-50%) scale(1);
+box-shadow:
+0 0 20px rgba(102, 126, 234, 0.4),
+0 0 40px rgba(245, 87, 108, 0.3),
+0 15px 35px rgba(0, 0, 0, 0.2),
+inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+50% {
+transform: translateX(-50%) scale(1.05);
+box-shadow:
+0 0 30px rgba(102, 126, 234, 0.6),
+0 0 60px rgba(245, 87, 108, 0.4),
+0 20px 40px rgba(0, 0, 0, 0.3),
+inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+}
+/* Hide badge on mobile */
+body.homepage .hero-badge {
+display: none !important;
+}
+body.homepage .hero-badge span:last-child {
+font-size: 0.75rem !important;
+opacity: 0.9 !important;
+display: block !important;
+margin-top: 0.2rem !important;
+font-weight: 400 !important;
+}
+body.homepage .hero-content h1 {
+font-size: 2.1rem !important; /* Slightly larger for better impact */
+line-height: 1.15 !important; /* Tighter for two lines */
+margin-bottom: 2rem !important; /* More space after title for paragraph separation */
+margin-top: 0 !important; /* No extra top margin */
+padding: 0 0.25rem !important; /* Less side padding */
+letter-spacing: -0.01em !important;
+position: relative !important;
+z-index: 1 !important;
+font-weight: 700 !important;
+max-width: 100% !important;
+white-space: normal !important; /* Allow wrapping, but force two lines below */
+/* CLEAN APPLE STYLE */
+color: #ffffff !important;
+text-shadow: none !important;
+animation: fadeInUp 0.8s ease-out 0.4s both !important;
+}
+/* Clean green accent for Web3 */
+body.homepage .hero-content h1 .gradient-text {
+color: #10b981 !important; /* Solid, high-contrast green */
+font-weight: 900 !important;
+text-shadow: 0 1px 2px rgba(0,0,0,0.18), 0 0px 1px #fff !important; /* Crisp, subtle shadow */
+display: block !important; /* Force new line */
+margin-top: 0.6rem !important; /* More space for separation */
+font-size: 1.45em !important; /* Even larger for visibility */
+white-space: normal !important;
+letter-spacing: 0.02em !important;
+line-height: 1.18 !important;
+}
+/* Remove coin completely - no ::before */
+/* Remove coin text - no ::after */
+/* Remove coin animation */
+body.homepage .hero-content h1 br {
+display: block !important; /* SHOW LINE BREAK ON MOBILE */
+}
+body.homepage .hero-subtitle {
+font-size: 1.1rem !important; /* SLIGHTLY LARGER SUBTITLE */
+line-height: 1.4 !important;
+margin-bottom: 2rem !important; /* REASONABLE SPACE BEFORE BUTTONS */
+padding: 0 0.5rem !important;
+opacity: 0.95 !important;
+font-weight: 400 !important;
+color: rgba(255, 255, 255, 0.9) !important;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+animation: fadeInUp 0.8s ease-out 0.7s both !important; /* Delayed entrance */
+max-width: 90% !important; /* CONSTRAIN WIDTH FOR READABILITY */
+}
+body.homepage .hero-actions {
+flex-direction: column !important;
+gap: 1rem !important; /* BETTER SPACING BETWEEN BUTTONS */
+width: 100% !important;
+margin-bottom: 1rem !important; /* BACK TO ORIGINAL SPACING */
+animation: fadeInUp 0.8s ease-out 0.8s both !important; /* Delayed entrance */
+}
+body.homepage .hero-btn,
+body.homepage .hero-actions .btn {
+width: 100% !important;
+max-width: 280px !important; /* SLIGHTLY LARGER BUTTONS */
+padding: 0.875rem 1.5rem !important; /* MORE COMFORTABLE PADDING */
+font-size: 1rem !important; /* BETTER FONT SIZE */
+font-weight: 600 !important;
+border-radius: 50px !important; /* More rounded for modern look */
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+gap: 0.5rem !important; /* BETTER ICON SPACING */
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Smooth easing */
+transform: translateY(0) !important;
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important; /* SUBTLE SHADOW */
+text-decoration: none !important;
+min-height: 52px !important; /* COMFORTABLE TOUCH TARGET */
+}
+/* Enhanced primary button - Target correct classes */
+body.homepage .hero-actions .btn.btn-primary {
+background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%) !important;
+color: rgba(0, 0, 0, 0.8) !important; /* Sophisticated dark text */
+border: 2px solid rgba(255, 255, 255, 0.3) !important;
+box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+position: relative !important;
+overflow: hidden !important;
+}
+body.homepage .hero-actions .btn.btn-primary::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent) !important; /* Subtle blue instead of green */
+transition: left 0.6s ease;
+}
+body.homepage .hero-actions .btn.btn-primary:hover::before {
+left: 100%;
+}
+body.homepage .hero-actions .btn.btn-primary:hover {
+transform: translateY(-2px) !important;
+box-shadow: 0 20px 40px rgba(255, 255, 255, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+/* Enhanced secondary button - Target correct classes */
+body.homepage .hero-actions .btn.btn-secondary {
+background: rgba(255, 255, 255, 0.1) !important;
+color: white !important;
+border: 2px solid rgba(255, 255, 255, 0.4) !important;
+backdrop-filter: blur(20px) !important;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+position: relative !important;
+overflow: hidden !important;
+}
+body.homepage .hero-actions .btn.btn-secondary::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+transition: left 0.6s ease;
+}
+body.homepage .hero-actions .btn.btn-secondary:hover::before {
+left: 100%;
+}
+body.homepage .hero-actions .btn.btn-secondary:hover {
+background: rgba(255, 255, 255, 0.2) !important;
+transform: translateY(-2px) !important;
+box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+body.homepage .hero-btn span {
+white-space: nowrap !important;
+}
+body.homepage .impact-ticker {
+flex-direction: row !important;
+justify-content: space-between !important;
+align-items: stretch !important;
+gap: 0.5rem !important; /* Small gap between items */
+padding: 1.2rem 0.5rem !important; /* Compact padding for horizontal layout */
+margin-top: 2rem !important;
+border-radius: 24px !important;
+width: 100% !important;
+max-width: 360px !important;
+background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+backdrop-filter: blur(30px) !important;
+border: 1px solid rgba(255, 255, 255, 0.2) !important;
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.2) inset !important;
+animation: fadeInUp 0.8s ease-out 1s both !important;
+position: relative !important;
+overflow: hidden !important;
+}
+/* Add subtle pulse effect to ticker */
+body.homepage .impact-ticker::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.02), transparent) !important; /* Very subtle blue */
+animation: pulse 4s ease-in-out infinite;
+border-radius: 24px;
+}
+@keyframes pulse {
+0%, 100% { opacity: 0; }
+50% { opacity: 1; }
+}
+.ticker-item {
+text-align: center;
+flex: 1 1 0 !important;
+min-width: 0 !important;
+padding: 0.5rem 0.2rem !important;
+position: relative !important;
+z-index: 2 !important;
+}
+.ticker-value {
+font-size: 2rem !important;
+font-weight: 900 !important;
+display: block;
+margin-bottom: 0.5rem;
+background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 50%, #ffffff 100%) !important;
+-webkit-background-clip: text !important;
+-webkit-text-fill-color: transparent !important;
+background-clip: text !important;
+text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+letter-spacing: -0.01em !important;
+filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
+}
+.ticker-label {
+font-size: 0.85rem;
+opacity: 0.9;
+font-weight: 500 !important;
+color: rgba(255, 255, 255, 0.8) !important;
+text-transform: uppercase !important;
+letter-spacing: 0.5px !important;
+}
+.ticker-separator {
+display: none; /* Hide separators on mobile */
+}
+/* Improve video background on mobile */
+.hero-video {
+object-fit: cover;
+width: 100%;
+height: 100%;
+}
+/* Better spacing for mobile viewport with enhanced background */
+.hero-overlay {
+position: absolute !important;
+top: 0 !important;
+left: 0 !important;
+width: 100% !important;
+height: 100% !important;
+background:
+linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%),
+linear-gradient(45deg, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+linear-gradient(-45deg, rgba(147, 197, 253, 0.06) 0%, transparent 50%),
+radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05) 0%, transparent 70%) !important;
+backdrop-filter: blur(1px) !important;
+z-index: -1 !important; /* ENSURE IT STAYS BEHIND EVERYTHING */
+}
+/* Add subtle floating animation to elements */
+@keyframes float {
+0%, 100% { transform: translateY(0px); }
+50% { transform: translateY(-10px); }
+}
+body.homepage .hero-badge {
+animation: fadeInUp 0.8s ease-out 0.2s both, float 6s ease-in-out infinite !important;
+}
+body.homepage .impact-ticker {
+animation: fadeInUp 0.8s ease-out 1s both, float 8s ease-in-out infinite !important;
+}
+/* Enhanced touch feedback for buttons */
+body.homepage .hero-btn:active {
+transform: translateY(1px) scale(0.98) !important;
+transition: all 0.1s ease !important;
+}
+}
+/* Extra small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+body.homepage .home-hero {
+padding: 1.5rem 0.5rem 1.5rem !important;
+height: calc(100vh - 65px) !important;
+min-height: calc(100vh - 65px) !important;
+}
+body.homepage .hero-content h1 {
+font-size: 2.4rem !important; /* SLIGHTLY SMALLER FOR TINY SCREENS */
+padding: 0 0.25rem !important;
+}
+body.homepage .hero-subtitle {
+font-size: 1rem !important;
+padding: 0 0.75rem !important;
+max-width: 95% !important;
+}
+body.homepage .hero-btn,
+body.homepage .hero-actions .btn {
+padding: 0.75rem 1.25rem !important;
+font-size: 0.95rem !important;
+max-width: 260px !important;
+}
+}
+/* Landscape orientation improvements */
+@media (max-width: 500px) and (orientation: landscape) {
+.home-hero {
+height: 100vh;
+min-height: 500px;
+padding: 1rem 0.75rem;
+}
+.hero-content {
+justify-content: flex-start;
+padding-top: 3rem; /* More top padding for landscape mode too */
+}
+.hero-badge {
+margin-bottom: 1rem;
+top: 75px !important; /* ENSURE PROPER POSITIONING IN LANDSCAPE */
+z-index: 999999 !important; /* ENSURE IT'S VISIBLE */
+}
+.hero-content h1 {
+font-size: 2rem !important;
+margin-bottom: 0.75rem;
+}
+.hero-subtitle {
+font-size: 0.9rem !important;
+margin-bottom: 1.5rem;
+}
+.impact-ticker {
+flex-direction: row;
+gap: 1rem;
+padding: 1rem;
+margin-top: 1.5rem;
+}
+.ticker-value {
+font-size: 1.25rem !important;
+}
+.ticker-label {
+font-size: 0.7rem;
+}
+}
+/* Ensure proper stacking and readability */
+@media (max-width: 500px) {
+/* FORCE ALL HERO CONTENT ELEMENTS TO STAY BELOW BADGE */
+body.homepage .hero-content * {
+position: relative !important;
+z-index: 1 !important; /* MUCH LOWER THAN BADGE */
+}
+/* Prevent touch manipulation issues */
+body.homepage .home-hero,
+body.homepage .hero-content,
+body.homepage .hero-badge,
+body.homepage .hero-content h1 {
+-webkit-user-select: none !important;
+user-select: none !important;
+-webkit-touch-callout: none !important;
+-webkit-tap-highlight-color: transparent !important;
+touch-action: manipulation !important;
+}
+/* Better button styling for mobile - UPDATED */
+body.homepage .hero-actions .btn.btn-primary {
+background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+color: rgba(0, 0, 0, 0.8) !important; /* Dark text instead of green */
+box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2) !important;
+border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+body.homepage .hero-actions .btn.btn-secondary {
+background: rgba(255, 255, 255, 0.15) !important;
+color: white !important;
+border: 2px solid rgba(255, 255, 255, 0.3) !important;
+backdrop-filter: blur(10px) !important;
+}
+/* Improve touch targets */
+.hero-btn {
+min-height: 48px; /* Minimum touch target size */
+touch-action: manipulation;
+}
+/* Prevent zoom on input focus */
+.hero-content input,
+.hero-content select,
+.hero-content textarea {
+font-size: 16px;
+}
+}
+/* DESKTOP NAVIGATION FIXES - Only applies to screens larger than 900px */
+@media (min-width: 901px) {
+/* Fix desktop header layout - restore proper spacing */
+body.homepage .header,
+body.donatepage .header,
+body.historypage .header,
+body.foundationpage .header,
+body.governancepage .header,
+body.whitepaper-page .header,
+body.dashboardpage .header {
+display: flex !important;
+justify-content: space-between !important;
+align-items: center !important;
+padding: 1rem 2rem !important;
+background: rgba(255, 255, 255, 0.95) !important;
+backdrop-filter: blur(10px) !important;
+min-height: 70px !important;
+position: sticky !important;
+top: 0 !important;
+z-index: 1000 !important;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+flex-wrap: nowrap !important;
+}
+/* Navigation should be centered with flex: 1 */
+body.homepage .header__nav,
+body.donatepage .header__nav,
+body.historypage .header__nav,
+body.foundationpage .header__nav,
+body.governancepage .header__nav,
+body.whitepaper-page .header__nav,
+body.dashboardpage .header__nav {
+display: flex !important;
+justify-content: center !important;
+align-items: center !important;
+flex: 1 !important;
+gap: 1.5rem !important;
+margin: 0 !important;
+max-width: none !important;
+min-width: 0 !important;
+order: 2 !important;
+}
+/* Navigation links styling for desktop */
+body.homepage .header__nav-link,
+body.donatepage .header__nav-link,
+body.historypage .header__nav-link,
+body.foundationpage .header__nav-link,
+body.governancepage .header__nav-link,
+body.whitepaper-page .header__nav-link,
+body.dashboardpage .header__nav-link {
+color: #374151 !important;
+font-weight: 500 !important;
+text-decoration: none !important;
+padding: 0.5rem 0.75rem !important;
+border-radius: 8px !important;
+transition: all 0.3s ease !important;
+white-space: nowrap !important;
+}
+/* Navigation link hover effects */
+body.homepage .header__nav-link:hover,
+body.donatepage .header__nav-link:hover,
+body.historypage .header__nav-link:hover,
+body.foundationpage .header__nav-link:hover,
+body.governancepage .header__nav-link:hover,
+body.whitepaper-page .header__nav-link:hover,
+body.dashboardpage .header__nav-link:hover {
+color: #10b981 !important;
+background: rgba(16, 185, 129, 0.05) !important;
+transform: translateY(-1px) !important;
+}
+/* Active navigation link styling */
+body.homepage .header__nav-link.active,
+body.donatepage .header__nav-link.active,
+body.historypage .header__nav-link.active,
+body.foundationpage .header__nav-link.active,
+body.governancepage .header__nav-link.active,
+body.whitepaper-page .header__nav-link.active,
+body.dashboardpage .header__nav-link.active {
+color: #10b981 !important;
+background: rgba(16, 185, 129, 0.1) !important;
+font-weight: 600 !important;
+box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important;
+}
+/* Hide mobile-specific elements on desktop */
+.mobile-menu-toggle,
+.hero-wallet-mobile {
+display: none !important;
+}
+/* Logo styling for desktop - fixed width for better centering */
+body.homepage .header__logo,
+body.donatepage .header__logo,
+body.historypage .header__logo,
+body.foundationpage .header__logo,
+body.governancepage .header__logo,
+body.whitepaper-page .header__logo,
+body.dashboardpage .header__logo {
+font-size: 1.5rem !important;
+font-weight: 700 !important;
+color: #10b981 !important;
+text-decoration: none !important;
+display: flex !important;
+align-items: center !important;
+gap: 0.5rem !important;
+flex-shrink: 0 !important;
+width: 180px !important;
+min-width: 180px !important;
+order: 1 !important;
+}
+/* Wallet section should stay on the right - fixed width for symmetry */
+body.homepage .header__wallet,
+body.donatepage .header__wallet,
+body.historypage .header__wallet,
+body.foundationpage .header__wallet,
+body.governancepage .header__wallet,
+body.whitepaper-page .header__wallet,
+body.dashboardpage .header__wallet {
+display: flex !important;
+align-items: center !important;
+justify-content: flex-end !important;
+gap: 1rem !important;
+flex-shrink: 0 !important;
+width: 200px !important;
+min-width: 200px !important;
+margin-left: auto !important;
+order: 3 !important;
+}
+/* Enhanced Connect Wallet button styling for desktop */
+body.homepage .header__connect-button,
+body.donatepage .header__connect-button,
+body.historypage .header__connect-button,
+body.foundationpage .header__connect-button,
+body.governancepage .header__connect-button,
+body.whitepaper-page .header__connect-button,
+body.dashboardpage .header__connect-button {
+background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+color: white !important;
+border: none !important;
+padding: 0.75rem 1.5rem !important;
+border-radius: 12px !important;
+font-weight: 600 !important;
+font-size: 0.9rem !important;
+box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+transition: all 0.3s ease !important;
+cursor: pointer !important;
+white-space: nowrap !important;
+}
+/* Connect Wallet button hover effect */
+body.homepage .header__connect-button:hover,
+body.donatepage .header__connect-button:hover,
+body.historypage .header__connect-button:hover,
+body.foundationpage .header__connect-button:hover,
+body.governancepage .header__connect-button:hover,
+body.whitepaper-page .header__connect-button:hover,
+body.dashboardpage .header__connect-button:hover {
+transform: translateY(-2px) !important;
+box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+/* Connect Wallet button styling for desktop */
+body.homepage .btn-connect-wallet,
+body.donatepage .btn-connect-wallet,
+body.historypage .btn-connect-wallet,
+body.foundationpage .btn-connect-wallet,
+body.governancepage .btn-connect-wallet,
+body.whitepaper-page .btn-connect-wallet,
+body.dashboardpage .btn-connect-wallet {
+margin-left: auto !important;
+order: 999 !important;
+}
+/* Restore original page-specific themed backgrounds on desktop */
+body.donatepage .donate-hero {
+background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #134e4a 100%) !important;
+margin-top: 70px !important;
+padding-top: 4rem !important;
+}
+body.historypage .history-hero {
+background: linear-gradient(135deg,
+rgba(16, 185, 129, 0.9) 0%,
+rgba(5, 150, 105, 0.85) 50%,
+rgba(4, 120, 87, 0.9) 100%
+) !important;
+margin-top: 70px !important;
+padding-top: 4rem !important;
+}
+body.foundationpage .foundation-hero {
+background: linear-gradient(135deg,
+rgba(16, 185, 129, 0.9) 0%,
+rgba(5, 150, 105, 0.85) 50%,
+rgba(4, 120, 87, 0.9) 100%
+) !important;
+margin-top: 70px !important;
+padding-top: 4rem !important;
+}
+body.governancepage .governance-hero {
+background: linear-gradient(135deg,
+rgba(79, 70, 229, 0.9) 0%,
+rgba(67, 56, 202, 0.85) 50%,
+rgba(55, 48, 163, 0.9) 100%
+) !important;
+margin-top: 70px !important;
+padding-top: 4rem !important;
+}
+body.whitepaper-page .whitepaper-hero {
+background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
+margin-top: 70px !important;
+padding-top: 4rem !important;
+}
+/* Dashboard gets special green treatment to match its design */
+body.dashboardpage .dashboard-hero {
+background: linear-gradient(135deg,
+rgba(16, 185, 129, 0.9) 0%,
+rgba(5, 150, 105, 0.85) 50%,
+rgba(4, 120, 87, 0.9) 100%
+) !important;
+margin-top: 70px !important;
+padding-top: 4rem !important;
+}
+/* Override body background only for non-homepage pages on desktop */
+body.donatepage,
+body.historypage,
+body.foundationpage,
+body.governancepage,
+body.whitepaper-page {
+background: #ffffff !important;
+}
+/* Dashboard keeps its designed background */
+body.dashboardpage {
+background: #f8fafc !important;
+}
+}
