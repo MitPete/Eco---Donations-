@@ -49,55 +49,86 @@ class DeploymentHelpers {
    * @param {string} ecoTokenAddress - Address of deployed EcoCoin
    * @param {string} multiSigAddress - Address of MultiSigWallet
    * @param {string} treasuryAddress - Address of treasury
-   * @param {Array} foundationUris - Array of foundation URIs
+   * @param {Array} foundationAddresses - Array of foundation addresses (optional, uses default URIs)
    * @returns {Object} Deployed DonationContract
    */
-  static async deployDonationContract(ecoTokenAddress, multiSigAddress, treasuryAddress, foundationUris = []) {
+  static async deployDonationContract(ecoTokenAddress, multiSigAddress, treasuryAddress, foundationAddresses = []) {
     const DonationContract = await ethers.getContractFactory("DonationContract");
-
+    
     // Default URIs for foundations
     const defaultUris = [
       "https://example.com/ocean.json",
-      "https://example.com/forest.json",
+      "https://example.com/forest.json", 
       "https://example.com/wildlife.json",
       "https://example.com/climate.json"
     ];
-
-    const uris = foundationUris.length >= 4 ? foundationUris.slice(0, 4) : defaultUris;
-
+    
     const donation = await DonationContract.deploy(
       ecoTokenAddress,
       multiSigAddress,
       treasuryAddress,
-      uris
+      defaultUris
     );
     await donation.deployed();
+    
+    // Set foundation addresses if provided
+    if (foundationAddresses.length >= 4) {
+      for (let i = 0; i < 4; i++) {
+        await donation.setFoundationAddress(i, foundationAddresses[i]);
+      }
+    }
+    
+    return donation;
+  }
+   * @returns {Object} Deployed DonationContract
+   */
+  static async deployDonationContract(ecoTokenAddress, foundationAddresses) {
+    if (foundationAddresses.length !== 5) {
+      throw new Error("Exactly 5 foundation addresses required");
+    }
 
+    const DonationContract = await ethers.getContractFactory("DonationContract");
+    const donation = await DonationContract.deploy(
+      ecoTokenAddress,
+      ...foundationAddresses
+    );
+    await donation.deployed();
     return donation;
   }
 
   /**
    * Deploy EcoGovernance with specified parameters
    * @param {string} ecoTokenAddress - Address of deployed EcoCoin
+   * @param {Object} params - Governance parameters
    * @returns {Object} Deployed EcoGovernance contract
    */
-  static async deployEcoGovernance(ecoTokenAddress) {
+  static async deployEcoGovernance(ecoTokenAddress, params = {}) {
+    const {
+      proposalThreshold = ethers.utils.parseEther("100"),
+      votingDelay = 1,
+      votingPeriod = 50
+    } = params;
+
     const EcoGovernance = await ethers.getContractFactory("EcoGovernance");
-    const governance = await EcoGovernance.deploy(ecoTokenAddress);
+    const governance = await EcoGovernance.deploy(
+      ecoTokenAddress,
+      proposalThreshold,
+      votingDelay,
+      votingPeriod
+    );
     await governance.deployed();
     return governance;
   }
 
   /**
-   * Deploy AutoDonationContract
+   * Deploy AutoDonationService
    * @param {string} donationAddress - Address of deployed DonationContract
    * @param {string} ecoTokenAddress - Address of deployed EcoCoin
-   * @param {string} multiSigAddress - Address of deployed MultiSigWallet
-   * @returns {Object} Deployed AutoDonationContract contract
+   * @returns {Object} Deployed AutoDonationService contract
    */
-  static async deployAutoDonation(donationAddress, ecoTokenAddress, multiSigAddress) {
-    const AutoDonation = await ethers.getContractFactory("AutoDonationContract");
-    const autoDonation = await AutoDonation.deploy(donationAddress, ecoTokenAddress, multiSigAddress);
+  static async deployAutoDonation(donationAddress, ecoTokenAddress) {
+    const AutoDonation = await ethers.getContractFactory("AutoDonationService");
+    const autoDonation = await AutoDonation.deploy(donationAddress, ecoTokenAddress);
     await autoDonation.deployed();
     return autoDonation;
   }
@@ -111,62 +142,44 @@ class DeploymentHelpers {
   static async deployCompleteEcosystem(signers, params = {}) {
     const [owner, ...foundations] = signers;
 
-    if (foundations.length < 3) {
-      throw new Error("At least 4 signers required (1 owner + 3 foundations)");
+    if (foundations.length < 5) {
+      throw new Error("At least 6 signers required (1 owner + 5 foundations)");
     }
 
     // Extract deployment parameters
     const {
+      ecoMaxSupply = "1000000",
       multiSigOwners = [owner.address, foundations[0].address, foundations[1].address],
-      multiSigRequired = 2
+      multiSigRequired = 2,
+      governanceParams = {}
     } = params;
 
     console.log("🚀 Deploying complete Eco Donations ecosystem...");
 
-    // 1. Deploy MultiSigWallet first (no dependencies)
-    console.log("1️⃣ Deploying MultiSigWallet...");
+    // 1. Deploy EcoCoin
+    console.log("1️⃣ Deploying EcoCoin...");
+    const ecoCoin = await this.deployEcoCoin(ecoMaxSupply);
+
+    // 2. Deploy MultiSigWallet
+    console.log("2️⃣ Deploying MultiSigWallet...");
     const multiSigWallet = await this.deployMultiSigWallet(multiSigOwners, multiSigRequired);
 
-    // 2. Deploy SecurityConfig (depends on MultiSig)
-    console.log("2️⃣ Deploying SecurityConfig...");
+    // 3. Deploy SecurityConfig
+    console.log("3️⃣ Deploying SecurityConfig...");
     const securityConfig = await this.deploySecurityConfig(multiSigWallet.address);
 
-    // 3. Create a placeholder DonationContract to resolve circular dependency
-    console.log("3️⃣ Deploying placeholder DonationContract...");
-    const PlaceholderContract = await ethers.getContractFactory("MultiSigWallet"); // Use any simple contract as placeholder
-    const placeholder = await PlaceholderContract.deploy([owner.address], 1);
-    await placeholder.deployed();
+    // 4. Deploy DonationContract
+    console.log("4️⃣ Deploying DonationContract...");
+    const foundationAddresses = foundations.slice(0, 5).map(f => f.address);
+    const donation = await this.deployDonationContract(ecoCoin.address, foundationAddresses);
 
-    // 4. Deploy EcoCoin with placeholder address
-    console.log("4️⃣ Deploying EcoCoin...");
-    const ecoCoin = await this.deployEcoCoin(placeholder.address, multiSigWallet.address);
+    // 5. Deploy EcoGovernance
+    console.log("5️⃣ Deploying EcoGovernance...");
+    const governance = await this.deployEcoGovernance(ecoCoin.address, governanceParams);
 
-    // 5. Deploy real DonationContract now that we have EcoCoin
-    console.log("5️⃣ Deploying DonationContract...");
-    const donation = await this.deployDonationContract(
-      ecoCoin.address,
-      multiSigWallet.address,
-      owner.address
-    );
-
-    // 5a. Set foundation addresses for testing
-    console.log("📍 Setting foundation addresses...");
-    const foundationAddrs = foundations.slice(0, 4).map(f => f.address);
-    for (let i = 0; i < 4; i++) {
-      await donation.connect(owner).setFoundationAddress(i, foundationAddrs[i]);
-    }
-
-    // 5b. Authorize donation contract to mint ECO tokens
-    console.log("🔑 Authorizing donation contract to mint ECO tokens...");
-    await ecoCoin.connect(owner).setAuthorizedMinter(donation.address, true);
-
-    // 6. Deploy EcoGovernance
-    console.log("6️⃣ Deploying EcoGovernance...");
-    const governance = await this.deployEcoGovernance(ecoCoin.address);
-
-    // 7. Deploy AutoDonation
-    console.log("7️⃣ Deploying AutoDonation...");
-    const autoDonation = await this.deployAutoDonation(donation.address, ecoCoin.address, multiSigWallet.address);
+    // 6. Deploy AutoDonation
+    console.log("6️⃣ Deploying AutoDonation...");
+    const autoDonation = await this.deployAutoDonation(donation.address, ecoCoin.address);
 
     console.log("✅ Complete ecosystem deployed successfully!");
 
@@ -181,7 +194,7 @@ class DeploymentHelpers {
       },
       accounts: {
         owner,
-        foundations: foundations.slice(0, 3),
+        foundations: foundations.slice(0, 5),
         multiSigOwners: multiSigOwners.map(addr =>
           signers.find(s => s.address === addr)
         ).filter(Boolean)
@@ -210,16 +223,11 @@ class DeploymentHelpers {
   static async deployMinimalSetup(signers) {
     const [owner, foundation1, foundation2] = signers;
 
+    const ecoCoin = await this.deployEcoCoin("100000");
     const multiSig = await this.deployMultiSigWallet([owner.address, foundation1.address], 2);
-
-    // Use placeholder for EcoCoin deployment
-    const placeholder = await this.deployMultiSigWallet([owner.address], 1);
-    const ecoCoin = await this.deployEcoCoin(placeholder.address, multiSig.address);
-
     const donation = await this.deployDonationContract(
       ecoCoin.address,
-      multiSig.address,
-      owner.address
+      [foundation1.address, foundation2.address, owner.address, owner.address, owner.address]
     );
 
     return {

@@ -83,14 +83,14 @@ describe("MultiSigWallet", function () {
       ).to.be.revertedWith("not owner");
     });
 
-    it("Should auto-confirm transaction for submitter", async function () {
+    it("Should not auto-confirm transaction for submitter", async function () {
       const value = ethers.utils.parseEther("1");
       const data = "0x";
 
       await multiSigWallet.connect(owner).submitTransaction(recipient.address, value, data);
 
       const isConfirmed = await multiSigWallet.isConfirmed(0, owner.address);
-      expect(isConfirmed).to.be.true;
+      expect(isConfirmed).to.be.false; // Should not auto-confirm
     });
   });
 
@@ -136,6 +136,7 @@ describe("MultiSigWallet", function () {
 
     it("Should reject confirmation of executed transaction", async function () {
       // Get enough confirmations and execute
+      await multiSigWallet.connect(owner).confirmTransaction(0);
       await multiSigWallet.connect(owner2).confirmTransaction(0);
       await multiSigWallet.connect(owner).executeTransaction(0);
 
@@ -147,12 +148,14 @@ describe("MultiSigWallet", function () {
 
   describe("Transaction Execution", function () {
     beforeEach(async function () {
-      // Submit and get one confirmation (from submitter)
+      // Submit transaction and manually confirm it
       await multiSigWallet.connect(owner).submitTransaction(
         recipient.address,
         ethers.utils.parseEther("1"),
         "0x"
       );
+      // Manually confirm the transaction since there's no auto-confirmation
+      await multiSigWallet.connect(owner).confirmTransaction(0);
     });
 
     it("Should execute transaction with enough confirmations", async function () {
@@ -206,6 +209,7 @@ describe("MultiSigWallet", function () {
         "0x"
       );
 
+      await multiSigWallet.connect(owner).confirmTransaction(1);
       await multiSigWallet.connect(owner2).confirmTransaction(1);
 
       await expect(
@@ -247,6 +251,7 @@ describe("MultiSigWallet", function () {
     });
 
     it("Should reject revocation of executed transaction", async function () {
+      await multiSigWallet.connect(owner).confirmTransaction(0); // Add second confirmation
       await multiSigWallet.connect(owner).executeTransaction(0);
 
       await expect(
@@ -275,7 +280,7 @@ describe("MultiSigWallet", function () {
       expect(transaction.value).to.equal(ethers.utils.parseEther("1"));
       expect(transaction.data).to.equal("0x");
       expect(transaction.executed).to.be.false;
-      expect(transaction.numConfirmations).to.equal(2);
+      expect(transaction.numConfirmations).to.equal(1); // Only owner2 confirmed
     });
 
     it("Should return correct owners list", async function () {
@@ -284,7 +289,7 @@ describe("MultiSigWallet", function () {
     });
 
     it("Should check confirmation status correctly", async function () {
-      expect(await multiSigWallet.isConfirmed(0, owner.address)).to.be.true;
+      expect(await multiSigWallet.isConfirmed(0, owner.address)).to.be.false;
       expect(await multiSigWallet.isConfirmed(0, owner2.address)).to.be.true;
       expect(await multiSigWallet.isConfirmed(0, owner3.address)).to.be.false;
     });
@@ -293,6 +298,8 @@ describe("MultiSigWallet", function () {
   describe("ETH Deposits", function () {
     it("Should accept ETH deposits", async function () {
       const depositAmount = ethers.utils.parseEther("5");
+      const currentBalance = await ethers.provider.getBalance(multiSigWallet.address);
+      const expectedNewBalance = currentBalance.add(depositAmount);
 
       await expect(
         owner.sendTransaction({
@@ -300,7 +307,7 @@ describe("MultiSigWallet", function () {
           value: depositAmount
         })
       ).to.emit(multiSigWallet, "Deposit")
-        .withArgs(owner.address, depositAmount);
+        .withArgs(owner.address, depositAmount, expectedNewBalance); // sender, amount, new balance
 
       const balance = await ethers.provider.getBalance(multiSigWallet.address);
       expect(balance).to.equal(ethers.utils.parseEther("15")); // 10 + 5

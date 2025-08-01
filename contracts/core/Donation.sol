@@ -183,7 +183,7 @@ contract DonationContract is
 
         // Mint ECO tokens (10x the net donation amount)
         uint256 ecoAmount = donationAmount * 10;
-        eco.mintTokens(msg.sender, ecoAmount);
+        eco.mint(msg.sender, ecoAmount);
 
         emit DonationMade(f, msg.sender, donationAmount, message_);
         emit PlatformFeeCollected(msg.sender, platformFee, donationAmount);
@@ -243,7 +243,7 @@ contract DonationContract is
 
         // Mint ECO tokens to beneficiary based on net donation
         uint256 ecoAmount = donationAmount * 10;
-        eco.mintTokens(beneficiary, ecoAmount);
+        eco.mint(beneficiary, ecoAmount);
 
         emit DonationMade(f, beneficiary, donationAmount, message_);
         emit PlatformFeeCollected(msg.sender, platformFee, donationAmount);

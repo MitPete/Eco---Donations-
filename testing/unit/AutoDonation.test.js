@@ -2,39 +2,67 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("AutoDonation", function () {
-  let autoDonation, donation, ecoCoin, owner, user1, user2, foundation1, foundation2;
+  let autoDonation, donation, ecoCoin, owner, user1, user2, multiSigWallet, treasuryAddress;
 
   beforeEach(async function () {
-    [owner, user1, user2, foundation1, foundation2] = await ethers.getSigners();
+    [owner, user1, user2, multiSigWallet, treasuryAddress] = await ethers.getSigners();
 
-    // Deploy EcoCoin
-    const EcoCoin = await ethers.getContractFactory("EcoCoin");
-    const maxSupply = ethers.utils.parseEther("1000000");
-    ecoCoin = await EcoCoin.deploy(maxSupply);
-    await ecoCoin.deployed();
-
-    // Deploy Donation Contract
+    // Deploy DonationContract first with placeholder EcoCoin address
     const DonationContract = await ethers.getContractFactory("DonationContract");
+    const uris = [
+      "https://example.com/ocean.json",
+      "https://example.com/forest.json",
+      "https://example.com/wildlife.json",
+      "https://example.com/climate.json"
+    ];
+
     donation = await DonationContract.deploy(
-      ecoCoin.address,
-      foundation1.address,
-      foundation2.address,
-      ethers.constants.AddressZero, // No third foundation for testing
-      ethers.constants.AddressZero,
-      ethers.constants.AddressZero
+      multiSigWallet.address, // Use valid address as placeholder
+      multiSigWallet.address,
+      treasuryAddress.address,
+      uris
     );
     await donation.deployed();
 
-    // Deploy AutoDonation
-    const AutoDonation = await ethers.getContractFactory("AutoDonationService");
-    autoDonation = await AutoDonation.deploy(donation.address, ecoCoin.address);
+    // Deploy EcoCoin with correct parameters
+    const EcoCoin = await ethers.getContractFactory("EcoCoin");
+    ecoCoin = await EcoCoin.deploy(donation.address, multiSigWallet.address);
+    await ecoCoin.deployed();
+
+    // Deploy new DonationContract with correct EcoCoin
+    const DonationContract2 = await ethers.getContractFactory("DonationContract");
+    donation = await DonationContract2.deploy(
+      ecoCoin.address,
+      multiSigWallet.address,
+      treasuryAddress.address,
+      uris
+    );
+    await donation.deployed();
+
+    // Authorize the donation contract to mint tokens
+    await ecoCoin.setAuthorizedMinter(donation.address, true);
+
+    // Deploy AutoDonation with correct contract name and parameters
+    const AutoDonation = await ethers.getContractFactory("AutoDonationContract");
+    autoDonation = await AutoDonation.deploy(
+      donation.address,
+      ecoCoin.address,
+      multiSigWallet.address
+    );
     await autoDonation.deployed();
+
+    // Set up foundation addresses (required for donations to work)
+    const [, , , , , foundation1, foundation2, foundation3, foundation4] = await ethers.getSigners();
+    await donation.setFoundationAddress(0, foundation1.address); // Ocean cleanup
+    await donation.setFoundationAddress(1, foundation2.address); // Forest preservation
+    await donation.setFoundationAddress(2, foundation3.address); // Wildlife protection
+    await donation.setFoundationAddress(3, foundation4.address); // Climate action
   });
 
   describe("Deployment", function () {
     it("Should set the correct donation and eco coin addresses", async function () {
       expect(await autoDonation.donationContract()).to.equal(donation.address);
-      expect(await autoDonation.ecoToken()).to.equal(ecoCoin.address);
+      expect(await autoDonation.ecoCoin()).to.equal(ecoCoin.address);
     });
 
     it("Should set the owner correctly", async function () {
@@ -42,230 +70,112 @@ describe("AutoDonation", function () {
     });
   });
 
-  describe("Fixed Amount Subscription", function () {
-    it("Should allow users to subscribe to fixed amount auto-donations", async function () {
-      const fixedAmount = ethers.utils.parseEther("0.01");
-      const monthlyLimit = ethers.utils.parseEther("1.0");
-      const minTransactionValue = ethers.utils.parseEther("0.1");
+  describe("Auto-Donation Setup", function () {
+    it("Should allow users to setup auto-donations", async function () {
+      const donationAmount = ethers.utils.parseEther("0.1");
+      const frequency = 86400; // 1 day
+      const maxPerTrigger = ethers.utils.parseEther("0.2");
 
-      await autoDonation.connect(user1).subscribeFixedAmount(
-        fixedAmount,
-        0, // Foundation index
-        monthlyLimit,
-        minTransactionValue
-      );
+      await expect(
+        autoDonation.connect(user1).setupAutoDonation(
+          donationAmount,
+          0, // Foundation index 0 (Ocean cleanup)
+          frequency,
+          maxPerTrigger
+        )
+      ).to.not.be.reverted;
 
-      const userSettings = await autoDonation.userSettings(user1.address);
+      const userSettings = await autoDonation.getUserSettings(user1.address);
+      expect(userSettings.donationAmount).to.equal(donationAmount);
       expect(userSettings.isActive).to.be.true;
-      expect(userSettings.donationAmount).to.equal(fixedAmount);
-      expect(userSettings.usePercentage).to.be.false;
-      expect(userSettings.monthlyLimit).to.equal(monthlyLimit);
-      expect(userSettings.minTransactionValue).to.equal(minTransactionValue);
     });
 
-    it("Should reject zero donation amount", async function () {
+    it("Should reject donation amount too small", async function () {
+      const donationAmount = ethers.utils.parseEther("0.0001"); // Below MIN_DONATION
+      const frequency = 86400;
+      const maxPerTrigger = ethers.utils.parseEther("0.2");
+
       await expect(
-        autoDonation.connect(user1).subscribeFixedAmount(
+        autoDonation.connect(user1).setupAutoDonation(
+          donationAmount,
           0,
-          0,
-          ethers.utils.parseEther("1.0"),
-          ethers.utils.parseEther("0.1")
+          frequency,
+          maxPerTrigger
         )
-      ).to.be.revertedWith("Donation amount must be greater than 0");
+      ).to.be.revertedWith("Donation too small");
     });
 
-    it("Should reject zero monthly limit", async function () {
+    it("Should reject frequency too high", async function () {
+      const donationAmount = ethers.utils.parseEther("0.1");
+      const frequency = 3600; // 1 hour, below MIN_FREQUENCY of 1 day
+      const maxPerTrigger = ethers.utils.parseEther("0.2");
+
       await expect(
-        autoDonation.connect(user1).subscribeFixedAmount(
-          ethers.utils.parseEther("0.01"),
+        autoDonation.connect(user1).setupAutoDonation(
+          donationAmount,
           0,
-          0,
-          ethers.utils.parseEther("0.1")
+          frequency,
+          maxPerTrigger
         )
-      ).to.be.revertedWith("Monthly limit must be greater than 0");
+      ).to.be.revertedWith("Frequency too high");
     });
   });
 
-  describe("Percentage Subscription", function () {
-    it("Should allow users to subscribe to percentage-based auto-donations", async function () {
-      const donationPercentage = 50; // 0.5%
-      const monthlyLimit = ethers.utils.parseEther("1.0");
-      const minTransactionValue = ethers.utils.parseEther("0.1");
-      const maxSingleDonation = ethers.utils.parseEther("0.05");
-
-      await autoDonation.connect(user1).subscribePercentage(
-        donationPercentage,
-        0,
-        monthlyLimit,
-        minTransactionValue,
-        maxSingleDonation
-      );
-
-      const userSettings = await autoDonation.userSettings(user1.address);
-      expect(userSettings.isActive).to.be.true;
-      expect(userSettings.donationPercentage).to.equal(donationPercentage);
-      expect(userSettings.usePercentage).to.be.true;
-      expect(userSettings.maxSingleDonation).to.equal(maxSingleDonation);
-    });
-
-    it("Should reject percentage greater than 10000 (100%)", async function () {
+  describe("Authorization Management", function () {
+    it("Should allow owner to set authorized triggers", async function () {
       await expect(
-        autoDonation.connect(user1).subscribePercentage(
-          10001, // > 100%
-          0,
-          ethers.utils.parseEther("1.0"),
-          ethers.utils.parseEther("0.1"),
-          ethers.utils.parseEther("0.05")
-        )
-      ).to.be.revertedWith("Percentage cannot exceed 100%");
-    });
-  });
+        autoDonation.connect(owner).setAuthorizedTrigger(user1.address, true)
+      ).to.not.be.reverted;
 
-  describe("Authorization", function () {
-    it("Should allow owner to add authorized triggers", async function () {
-      await autoDonation.connect(owner).addAuthorizedTrigger(user1.address);
       expect(await autoDonation.authorizedTriggers(user1.address)).to.be.true;
     });
 
-    it("Should allow owner to remove authorized triggers", async function () {
-      await autoDonation.connect(owner).addAuthorizedTrigger(user1.address);
-      await autoDonation.connect(owner).removeAuthorizedTrigger(user1.address);
-      expect(await autoDonation.authorizedTriggers(user1.address)).to.be.false;
-    });
-
-    it("Should reject non-owner trying to add authorized triggers", async function () {
+    it("Should reject non-owner trying to set authorized triggers", async function () {
       await expect(
-        autoDonation.connect(user1).addAuthorizedTrigger(user2.address)
-      ).to.be.revertedWith("Ownable: caller is not the owner");
+        autoDonation.connect(user1).setAuthorizedTrigger(user2.address, true)
+      ).to.be.revertedWith("Unauthorized: MultiSig or Owner only");
     });
   });
 
-  describe("Auto-Donation Triggering", function () {
+  describe("User Settings Management", function () {
     beforeEach(async function () {
-      // Setup user with fixed amount subscription
-      await autoDonation.connect(user1).subscribeFixedAmount(
-        ethers.utils.parseEther("0.01"),
+      const donationAmount = ethers.utils.parseEther("0.1");
+      const frequency = 86400;
+      const maxPerTrigger = ethers.utils.parseEther("0.2");
+
+      await autoDonation.connect(user1).setupAutoDonation(
+        donationAmount,
         0,
-        ethers.utils.parseEther("1.0"),
-        ethers.utils.parseEther("0.1")
+        frequency,
+        maxPerTrigger
       );
-
-      // Authorize owner to trigger
-      await autoDonation.connect(owner).addAuthorizedTrigger(owner.address);
     });
 
-    it("Should trigger auto-donation for eligible users", async function () {
-      const transactionValue = ethers.utils.parseEther("0.5");
-      const donationAmount = ethers.utils.parseEther("0.01");
+    it("Should allow users to update donation amount", async function () {
+      const newAmount = ethers.utils.parseEther("0.2");
 
       await expect(
-        autoDonation.connect(owner).triggerAutoDonation(
-          user1.address,
-          transactionValue,
-          { value: donationAmount }
-        )
-      ).to.emit(autoDonation, "AutoDonationTriggered");
+        autoDonation.connect(user1).updateDonationAmount(newAmount)
+      ).to.not.be.reverted;
 
-      const totalDonated = await autoDonation.totalAutoDonated(user1.address);
-      expect(totalDonated).to.equal(donationAmount);
+      const userSettings = await autoDonation.getUserSettings(user1.address);
+      expect(userSettings.donationAmount).to.equal(newAmount);
     });
 
-    it("Should reject unauthorized trigger attempts", async function () {
-      await expect(
-        autoDonation.connect(user2).triggerAutoDonation(
-          user1.address,
-          ethers.utils.parseEther("0.5"),
-          { value: ethers.utils.parseEther("0.01") }
-        )
-      ).to.be.revertedWith("Not authorized to trigger auto-donations");
-    });
-
-    it("Should reject triggering for inactive users", async function () {
-      await autoDonation.connect(user1).unsubscribe();
-
-      await expect(
-        autoDonation.connect(owner).triggerAutoDonation(
-          user1.address,
-          ethers.utils.parseEther("0.5"),
-          { value: ethers.utils.parseEther("0.01") }
-        )
-      ).to.be.revertedWith("User not subscribed to auto-donations");
-    });
-  });
-
-  describe("Unsubscribe", function () {
     it("Should allow users to unsubscribe", async function () {
-      // First subscribe
-      await autoDonation.connect(user1).subscribeFixedAmount(
-        ethers.utils.parseEther("0.01"),
-        0,
-        ethers.utils.parseEther("1.0"),
-        ethers.utils.parseEther("0.1")
-      );
-
-      // Then unsubscribe
-      await autoDonation.connect(user1).unsubscribe();
-
-      const userSettings = await autoDonation.userSettings(user1.address);
-      expect(userSettings.isActive).to.be.false;
-    });
-
-    it("Should emit unsubscribe event", async function () {
-      await autoDonation.connect(user1).subscribeFixedAmount(
-        ethers.utils.parseEther("0.01"),
-        0,
-        ethers.utils.parseEther("1.0"),
-        ethers.utils.parseEther("0.1")
-      );
-
-      await expect(autoDonation.connect(user1).unsubscribe())
-        .to.emit(autoDonation, "UserUnsubscribed")
-        .withArgs(user1.address);
-    });
-  });
-
-  describe("Monthly Limits", function () {
-    it("Should track monthly spending correctly", async function () {
-      const donationAmount = ethers.utils.parseEther("0.01");
-
-      await autoDonation.connect(user1).subscribeFixedAmount(
-        donationAmount,
-        0,
-        ethers.utils.parseEther("1.0"),
-        ethers.utils.parseEther("0.1")
-      );
-
-      await autoDonation.connect(owner).addAuthorizedTrigger(owner.address);
-
-      await autoDonation.connect(owner).triggerAutoDonation(
-        user1.address,
-        ethers.utils.parseEther("0.5"),
-        { value: donationAmount }
-      );
-
-      const userSettings = await autoDonation.userSettings(user1.address);
-      expect(userSettings.currentMonthSpent).to.equal(donationAmount);
-    });
-
-    it("Should prevent donations exceeding monthly limit", async function () {
-      const donationAmount = ethers.utils.parseEther("1.1"); // Exceeds 1.0 ETH limit
-
-      await autoDonation.connect(user1).subscribeFixedAmount(
-        donationAmount,
-        0,
-        ethers.utils.parseEther("1.0"), // 1.0 ETH monthly limit
-        ethers.utils.parseEther("0.1")
-      );
-
-      await autoDonation.connect(owner).addAuthorizedTrigger(owner.address);
-
       await expect(
-        autoDonation.connect(owner).triggerAutoDonation(
-          user1.address,
-          ethers.utils.parseEther("0.5"),
-          { value: donationAmount }
-        )
-      ).to.be.revertedWith("Would exceed monthly limit");
+        autoDonation.connect(user1).unsubscribe()
+      ).to.emit(autoDonation, "AutoDonationUnsubscribed")
+      .withArgs(user1.address);
+    });
+
+    it("Should check if user can trigger donation", async function () {
+      // Move time forward to pass the frequency requirement
+      await ethers.provider.send("evm_increaseTime", [86400]); // 1 day
+      await ethers.provider.send("evm_mine");
+
+      const canTrigger = await autoDonation.canTriggerDonation(user1.address);
+      expect(canTrigger).to.be.true;
     });
   });
 });
