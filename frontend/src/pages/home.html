@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecoin - Blockchain Environmental Impact</title>
+  <meta name="description" content="Make environmental donations with Ethereum and earn ECO tokens. Support ocean cleanup, forest protection, and renewable energy projects.">
+  <meta name="keywords" content="blockchain, donations, environment, ethereum, eco tokens, sustainability">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://eco-donations.com/">
+  <meta property="og:title" content="Ecoin - Blockchain Environmental Impact">
+  <meta property="og:description" content="Make environmental donations with Ethereum and earn ECO tokens.">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://eco-donations.com/">
+  <meta property="twitter:title" content="Ecoin - Blockchain Environmental Impact">
+  <meta property="twitter:description" content="Make environmental donations with Ethereum and earn ECO tokens.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/css/home.css" id="page-css">
+  <link rel="stylesheet" href="/css/mobile-hero.css" id="mobile-css">
+  <link rel="stylesheet" href="/css/mobile.css" id="mobile-responsive-css">
+  <link rel="stylesheet" href="/css/wallet-selector.css" id="wallet-css">
+  <link rel="stylesheet" href="/css/transaction-flow.css" id="transaction-css">
+
+  <!-- Browser Compatibility -->
+  <script src="/js/browser-polyfills.js"></script>
+  <script>
+    // Dynamic cache busting - always load fresh CSS
+    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/css/home.css?t=' + Date.now();
+    document.getElementById('mobile-css').href = '/css/mobile-hero.css?t=' + Date.now();
+  </script>
+</head>
+<body class="homepage">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      EcoCoin
+    </a>
+
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
+    </div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav" id="mobileNav">
+      <a href="index.html" class="header__nav-link active">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="home-container">
+    <section class="home-hero">
+      <div class="hero-background">
+        <video id="heroVideo" class="hero-video" autoplay muted loop playsinline>
+          <source src="assets/hero-bg.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Powered by Blockchain Technology</span>
+        </div>
+        <h1>Environmental Impact<br><span class="gradient-text">Through Web3</span></h1>
+        <p class="hero-subtitle">Join the future of sustainable giving. Every donation creates measurable environmental impact while earning you ECO governance tokens on the Ethereum blockchain.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="donate.html">
+            <span>Start Your Impact Journey</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+          <a class="btn btn-secondary" href="foundation.html">
+            <span>Explore Projects</span>
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+
+        <!-- Live Impact Ticker -->
+        <div class="impact-ticker">
+          <div class="ticker-item">
+            <span class="ticker-value" id="liveTotal">$0</span>
+            <span class="ticker-label">Total Impact</span>
+          </div>
+          <div class="ticker-separator"></div>
+          <div class="ticker-item">
+            <span class="ticker-value" id="liveChampions">0</span>
+            <span class="ticker-label">Eco Champions</span>
+          </div>
+          <div class="ticker-separator"></div>
+          <div class="ticker-item">
+            <span class="ticker-value" id="liveCO2">0t</span>
+            <span class="ticker-label">CO₂ Offset</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact Metrics Dashboard -->
+    <section class="metrics-dashboard">
+      <div class="container">
+        <div class="dashboard-header">
+          <div class="header-content">
+            <h2>Real-Time Environmental Impact</h2>
+            <p>Every transaction creates measurable change for our planet</p>
+          </div>
+          <div class="header-actions">
+            <button class="refresh-btn" onclick="updateLiveStats()">
+              <i class="fas fa-sync-alt"></i>
+              <span>Live Data</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-hand-holding-usd"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+12.5%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="totalFunding">$0</div>
+              <div class="metric-label">Environmental Funding</div>
+              <div class="metric-subtitle">Total value directed to conservation</div>
+            </div>
+            <div class="metric-chart">
+              <div class="chart-bar" style="height: 60%"></div>
+              <div class="chart-bar" style="height: 80%"></div>
+              <div class="chart-bar" style="height: 45%"></div>
+              <div class="chart-bar" style="height: 90%"></div>
+              <div class="chart-bar" style="height: 75%"></div>
+            </div>
+          </div>
+
+          <div class="metric-card secondary">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+8.2%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="carbonOffset">0</div>
+              <div class="metric-label">CO₂ Offset (Tons)</div>
+              <div class="metric-subtitle">Carbon emissions prevented</div>
+            </div>
+            <div class="metric-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 73%"></div>
+              </div>
+              <span class="progress-text">73% of monthly goal</span>
+            </div>
+          </div>
+
+          <div class="metric-card accent">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+15.7%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="areasProtected">0</div>
+              <div class="metric-label">Protected Areas</div>
+              <div class="metric-subtitle">Acres under conservation</div>
+            </div>
+            <div class="metric-visual">
+              <div class="protection-rings">
+                <div class="ring ring-1"></div>
+                <div class="ring ring-2"></div>
+                <div class="ring ring-3"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-card success">
+            <div class="metric-header">
+              <div class="metric-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="metric-trend positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>+24.1%</span>
+              </div>
+            </div>
+            <div class="metric-content">
+              <div class="metric-value" id="activeChampions">0</div>
+              <div class="metric-label">Eco Champions</div>
+              <div class="metric-subtitle">Active community members</div>
+            </div>
+            <div class="metric-avatars">
+              <div class="avatar-stack">
+                <div class="avatar">🌱</div>
+                <div class="avatar">🌍</div>
+                <div class="avatar">♻️</div>
+                <div class="avatar-more">+<span id="moreCount">97</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact-section">
+      <div class="section-header">
+        <h2>Making a Real Impact</h2>
+        <p>Every donation creates measurable environmental change</p>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-icon">
+            <i class="fa-solid fa-water"></i>
+          </div>
+          <h3>Ocean Conservation</h3>
+          <p>Protecting marine ecosystems and removing plastic waste from our oceans</p>
+          <div class="impact-stat">
+            <span class="impact-number" id="oceanImpact">0</span>
+            <span class="impact-unit">tons plastic removed</span>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">
+            <i class="fa-solid fa-tree"></i>
+          </div>
+          <h3>Forest Protection</h3>
+          <p>Safeguarding biodiversity hotspots and preventing deforestation</p>
+          <div class="impact-stat">
+            <span class="impact-number" id="forestImpact">0</span>
+            <span class="impact-unit">acres protected</span>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h3>Clean Energy</h3>
+          <p>Accelerating renewable energy adoption in underserved communities</p>
+          <div class="impact-stat">
+            <span class="impact-number" id="energyImpact">0</span>
+            <span class="impact-unit">MWh generated</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <h2>How Ecoin Works</h2>
+          <p>Four simple steps to maximize your environmental impact</p>
+        </div>
+        <div class="steps-container">
+          <div class="steps-grid">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <div class="step-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="step-content">
+                <h3>Connect Your Wallet</h3>
+                <p>Securely link your Ethereum wallet to get started with blockchain donations</p>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <div class="step-icon">
+                <i class="fas fa-globe"></i>
+              </div>
+              <div class="step-content">
+                <h3>Choose Your Cause</h3>
+                <p>Select from our vetted environmental organizations making real impact</p>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <div class="step-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <div class="step-content">
+                <h3>Make Your Donation</h3>
+                <p>Contribute any amount to your chosen environmental project</p>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <div class="step-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="step-content">
+                <h3>Earn ECO Rewards</h3>
+                <p>Receive 10 ECO tokens for every 1 ETH donated and track your impact</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Foundations -->
+    <section class="featured-foundations">
+      <div class="section-header">
+        <h2>Our Partner Foundations</h2>
+        <p>Trusted organizations making a real difference in environmental conservation</p>
+      </div>
+      <div class="foundations-grid">
+        <div class="foundation-card" onclick="location.href='foundation.html?id=0'" role="button" tabindex="0" aria-label="Learn more about Save The Oceans foundation">
+          <div class="foundation-header">
+            <div class="foundation-badge" id="badge-oceans">0 ETH Raised</div>
+          </div>
+          <div class="foundation-content">
+            <h3>Save The Oceans</h3>
+            <p>Protecting marine ecosystems and removing plastic pollution from our oceans worldwide</p>
+            <div class="foundation-stats">
+              <div class="foundation-stat">
+                <span class="stat-value" id="oceans-projects">12</span>
+                <span class="stat-label">Active Projects</span>
+              </div>
+              <div class="foundation-stat">
+                <span class="stat-value" id="oceans-impact">0</span>
+                <span class="stat-label">Tons Removed</span>
+              </div>
+            </div>
+          </div>
+          <div class="foundation-actions">
+            <a class="foundation-cta primary" href="donate.html?foundation=0">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a class="foundation-cta secondary" href="foundation.html?id=0">
+              <i class="fas fa-info-circle"></i>
+              Learn More
+            </a>
+          </div>
+        </div>
+
+        <div class="foundation-card" onclick="location.href='foundation.html?id=1'" role="button" tabindex="0" aria-label="Learn more about Protect The Rainforest foundation">
+          <div class="foundation-header">
+            <div class="foundation-badge" id="badge-forest">0 ETH Raised</div>
+          </div>
+          <div class="foundation-content">
+            <h3>Protect The Rainforest</h3>
+            <p>Safeguarding biodiversity hotspots and preventing deforestation across the Amazon basin</p>
+            <div class="foundation-stats">
+              <div class="foundation-stat">
+                <span class="stat-value" id="forest-projects">8</span>
+                <span class="stat-label">Active Projects</span>
+              </div>
+              <div class="foundation-stat">
+                <span class="stat-value" id="forest-impact">0</span>
+                <span class="stat-label">Acres Protected</span>
+              </div>
+            </div>
+          </div>
+          <div class="foundation-actions">
+            <a class="foundation-cta primary" href="donate.html?foundation=1">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a class="foundation-cta secondary" href="foundation.html?id=1">
+              <i class="fas fa-info-circle"></i>
+              Learn More
+            </a>
+          </div>
+        </div>
+
+        <div class="foundation-card" onclick="location.href='foundation.html?id=2'">
+          <div class="foundation-header">
+            <div class="foundation-badge" id="badge-sequoia">0 ETH Raised</div>
+          </div>
+          <div class="foundation-content">
+            <h3>Protect The Sequoias</h3>
+            <p>Preserving ancient giant trees against wildfires and climate change pressures</p>
+            <div class="foundation-stats">
+              <div class="foundation-stat">
+                <span class="stat-value" id="sequoia-projects">6</span>
+                <span class="stat-label">Active Projects</span>
+              </div>
+              <div class="foundation-stat">
+                <span class="stat-value" id="sequoia-impact">0</span>
+                <span class="stat-label">Trees Protected</span>
+              </div>
+            </div>
+          </div>
+          <div class="foundation-actions">
+            <a class="foundation-cta primary" href="donate.html?foundation=2">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a class="foundation-cta secondary" href="foundation.html?id=2">
+              <i class="fas fa-info-circle"></i>
+              Learn More
+            </a>
+          </div>
+        </div>
+
+        <div class="foundation-card" onclick="location.href='foundation.html?id=3'">
+          <div class="foundation-header">
+            <div class="foundation-badge" id="badge-energy">0 ETH Raised</div>
+          </div>
+          <div class="foundation-content">
+            <h3>Clean Energy</h3>
+            <p>Accelerating renewable energy installations in underserved communities worldwide</p>
+            <div class="foundation-stats">
+              <div class="foundation-stat">
+                <span class="stat-value" id="energy-projects">15</span>
+                <span class="stat-label">Active Projects</span>
+              </div>
+              <div class="foundation-stat">
+                <span class="stat-value" id="energy-impact">0</span>
+                <span class="stat-label">MWh Generated</span>
+              </div>
+            </div>
+          </div>
+          <div class="foundation-actions">
+            <a class="foundation-cta primary" href="donate.html?foundation=3">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a class="foundation-cta secondary" href="foundation.html?id=3">
+              <i class="fas fa-info-circle"></i>
+              Learn More
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tokenomics -->
+    <section class="tokenomics">
+      <div class="section-header">
+        <h2>ECO Token Benefits</h2>
+        <p>Earn rewards while making a difference</p>
+      </div>
+      <div class="tokenomics-grid">
+        <div class="tokenomics-card">
+          <div class="tokenomics-icon">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <h3>Fixed Supply</h3>
+          <p>Only 1 million ECO tokens will ever exist, ensuring scarcity and value</p>
+        </div>
+        <div class="tokenomics-card">
+          <div class="tokenomics-icon">
+            <i class="fa-solid fa-link"></i>
+          </div>
+          <h3>ERC-20 Standard</h3>
+          <p>Fully compatible with DeFi protocols and cryptocurrency exchanges</p>
+        </div>
+        <div class="tokenomics-card">
+          <div class="tokenomics-icon">
+            <i class="fa-solid fa-medal"></i>
+          </div>
+          <h3>Proof of Impact</h3>
+          <p>Optional soul-bound tokens proving your environmental contributions</p>
+        </div>
+        <div class="tokenomics-card">
+          <div class="tokenomics-icon">
+            <i class="fa-solid fa-vote-yea"></i>
+          </div>
+          <h3>Future Governance</h3>
+          <p>Vote on foundation partnerships and platform improvements</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+      <div class="cta-content">
+        <h2>Ready to Make a Difference?</h2>
+        <p>Join thousands of donors making real environmental impact while earning rewards</p>
+        <div class="cta-buttons">
+          <a class="cta-primary" href="donate.html">
+            <i class="fa-solid fa-heart"></i>
+            Start Donating
+          </a>
+          <a class="cta-secondary" href="history.html">
+            <i class="fa-solid fa-chart-line"></i>
+            View Impact
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__content">
+      <div class="footer__section">
+        <h3><i class="fa-solid fa-leaf"></i> EcoCoin</h3>
+        <p>Empowering environmental change through blockchain technology and transparent donations.</p>
+        <div class="footer__social">
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+            <i class="fa-brands fa-twitter"></i>
+          </a>
+          <a href="https://discord.com" target="_blank" rel="noopener" aria-label="Discord">
+            <i class="fa-brands fa-discord"></i>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__section">
+        <h3>Platform</h3>
+        <a href="donate.html">Make a Donation</a>
+        <a href="foundation.html">Browse Foundations</a>
+        <a href="governance.html">DAO Governance</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Resources</h3>
+        <a href="history.html">Transaction History</a>
+        <a href="whitepaper.html">Whitepaper</a>
+        <a href="#api">API Documentation</a>
+        <a href="#support">Support Center</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Legal</h3>
+        <a href="#terms">Terms of Service</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#cookies">Cookie Policy</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__bottom-content">
+        <p>© 2025 EcoCoin. Built with 💚 for the planet.</p>
+        <div class="footer__stats">
+          <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
+          <span><i class="fa-solid fa-leaf"></i> 100% Environmental Focus</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Scripts -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="contract-fix.js?v=1753062000"></script>
+  <script src="main-wallet.js?v=1753062000"></script>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    function toggleMobileMenu() {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+
+      nav.classList.toggle('mobile-nav-open');
+      toggle.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const header = document.querySelector('.header');
+
+      if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu when clicking nav links
+    document.querySelectorAll('.header__nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const nav = document.getElementById('mobileNav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      });
+    });
+  </script>
+
+  <!-- Enhanced Wallet Integration -->
+  <script src="js/wallet-persistence.js"></script>
+  <script src="js/transaction-tracker.js"></script>
+  <script src="js/enhanced-wallet.js"></script>
+  <script src="js/transaction-flow.js"></script>
+
+  <!-- Beta Testing Scripts -->
+  <script type="module" src="js/config.js"></script>
+  <script type="module" src="js/beta-feedback.js"></script>
+</body>
+</html>

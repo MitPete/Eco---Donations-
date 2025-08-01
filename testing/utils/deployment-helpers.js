@@ -1,0 +1,292 @@
+const { ethers } = require("hardhat");
+
+/**
+ * Contract Deployment Utilities
+ * Centralized deployment functions for consistent testing
+ */
+
+class DeploymentHelpers {
+  /**
+   * Deploy EcoCoin contract with specified parameters
+   * @param {string} maxSupply - Maximum supply in ETH units (default: "1000000")
+   * @returns {Object} Deployed EcoCoin contract
+   */
+  static async deployEcoCoin(maxSupply = "1000000") {
+    const EcoCoin = await ethers.getContractFactory("EcoCoin");
+    const maxSupplyWei = ethers.utils.parseEther(maxSupply);
+    const ecoCoin = await EcoCoin.deploy(maxSupplyWei);
+    await ecoCoin.deployed();
+    return ecoCoin;
+  }
+
+  /**
+   * Deploy MultiSigWallet with specified owners and required confirmations
+   * @param {Array} owners - Array of owner addresses
+   * @param {number} requiredConfirmations - Number of required confirmations
+   * @returns {Object} Deployed MultiSigWallet contract
+   */
+  static async deployMultiSigWallet(owners, requiredConfirmations = 2) {
+    const MultiSigWallet = await ethers.getContractFactory("MultiSigWallet");
+    const multiSig = await MultiSigWallet.deploy(owners, requiredConfirmations);
+    await multiSig.deployed();
+    return multiSig;
+  }
+
+  /**
+   * Deploy SecurityConfig with MultiSigWallet integration
+   * @param {string} multiSigAddress - Address of deployed MultiSigWallet
+   * @returns {Object} Deployed SecurityConfig contract
+   */
+  static async deploySecurityConfig(multiSigAddress) {
+    const SecurityConfig = await ethers.getContractFactory("SecurityConfig");
+    const securityConfig = await SecurityConfig.deploy(multiSigAddress);
+    await securityConfig.deployed();
+    return securityConfig;
+  }
+
+  /**
+   * Deploy DonationContract with all foundation addresses
+   * @param {string} ecoTokenAddress - Address of deployed EcoCoin
+   * @param {Array} foundationAddresses - Array of 5 foundation addresses
+   * @returns {Object} Deployed DonationContract
+   */
+  static async deployDonationContract(ecoTokenAddress, foundationAddresses) {
+    if (foundationAddresses.length !== 5) {
+      throw new Error("Exactly 5 foundation addresses required");
+    }
+
+    const DonationContract = await ethers.getContractFactory("DonationContract");
+    const donation = await DonationContract.deploy(
+      ecoTokenAddress,
+      ...foundationAddresses
+    );
+    await donation.deployed();
+    return donation;
+  }
+
+  /**
+   * Deploy EcoGovernance with specified parameters
+   * @param {string} ecoTokenAddress - Address of deployed EcoCoin
+   * @param {Object} params - Governance parameters
+   * @returns {Object} Deployed EcoGovernance contract
+   */
+  static async deployEcoGovernance(ecoTokenAddress, params = {}) {
+    const {
+      proposalThreshold = ethers.utils.parseEther("100"),
+      votingDelay = 1,
+      votingPeriod = 50
+    } = params;
+
+    const EcoGovernance = await ethers.getContractFactory("EcoGovernance");
+    const governance = await EcoGovernance.deploy(
+      ecoTokenAddress,
+      proposalThreshold,
+      votingDelay,
+      votingPeriod
+    );
+    await governance.deployed();
+    return governance;
+  }
+
+  /**
+   * Deploy AutoDonationService
+   * @param {string} donationAddress - Address of deployed DonationContract
+   * @param {string} ecoTokenAddress - Address of deployed EcoCoin
+   * @returns {Object} Deployed AutoDonationService contract
+   */
+  static async deployAutoDonation(donationAddress, ecoTokenAddress) {
+    const AutoDonation = await ethers.getContractFactory("AutoDonationService");
+    const autoDonation = await AutoDonation.deploy(donationAddress, ecoTokenAddress);
+    await autoDonation.deployed();
+    return autoDonation;
+  }
+
+  /**
+   * Deploy complete ecosystem with all contracts
+   * @param {Array} signers - Array of signers for foundations
+   * @param {Object} params - Deployment parameters
+   * @returns {Object} All deployed contracts with metadata
+   */
+  static async deployCompleteEcosystem(signers, params = {}) {
+    const [owner, ...foundations] = signers;
+
+    if (foundations.length < 5) {
+      throw new Error("At least 6 signers required (1 owner + 5 foundations)");
+    }
+
+    // Extract deployment parameters
+    const {
+      ecoMaxSupply = "1000000",
+      multiSigOwners = [owner.address, foundations[0].address, foundations[1].address],
+      multiSigRequired = 2,
+      governanceParams = {}
+    } = params;
+
+    console.log("🚀 Deploying complete Eco Donations ecosystem...");
+
+    // 1. Deploy EcoCoin
+    console.log("1️⃣ Deploying EcoCoin...");
+    const ecoCoin = await this.deployEcoCoin(ecoMaxSupply);
+
+    // 2. Deploy MultiSigWallet
+    console.log("2️⃣ Deploying MultiSigWallet...");
+    const multiSigWallet = await this.deployMultiSigWallet(multiSigOwners, multiSigRequired);
+
+    // 3. Deploy SecurityConfig
+    console.log("3️⃣ Deploying SecurityConfig...");
+    const securityConfig = await this.deploySecurityConfig(multiSigWallet.address);
+
+    // 4. Deploy DonationContract
+    console.log("4️⃣ Deploying DonationContract...");
+    const foundationAddresses = foundations.slice(0, 5).map(f => f.address);
+    const donation = await this.deployDonationContract(ecoCoin.address, foundationAddresses);
+
+    // 5. Deploy EcoGovernance
+    console.log("5️⃣ Deploying EcoGovernance...");
+    const governance = await this.deployEcoGovernance(ecoCoin.address, governanceParams);
+
+    // 6. Deploy AutoDonation
+    console.log("6️⃣ Deploying AutoDonation...");
+    const autoDonation = await this.deployAutoDonation(donation.address, ecoCoin.address);
+
+    console.log("✅ Complete ecosystem deployed successfully!");
+
+    return {
+      contracts: {
+        ecoCoin,
+        multiSigWallet,
+        securityConfig,
+        donation,
+        governance,
+        autoDonation
+      },
+      accounts: {
+        owner,
+        foundations: foundations.slice(0, 5),
+        multiSigOwners: multiSigOwners.map(addr =>
+          signers.find(s => s.address === addr)
+        ).filter(Boolean)
+      },
+      addresses: {
+        ecoCoin: ecoCoin.address,
+        multiSigWallet: multiSigWallet.address,
+        securityConfig: securityConfig.address,
+        donation: donation.address,
+        governance: governance.address,
+        autoDonation: autoDonation.address
+      },
+      deploymentInfo: {
+        timestamp: Date.now(),
+        network: (await ethers.provider.getNetwork()).name,
+        deployer: owner.address
+      }
+    };
+  }
+
+  /**
+   * Deploy minimal test setup (just core contracts)
+   * @param {Array} signers - Array of signers
+   * @returns {Object} Minimal contract deployment
+   */
+  static async deployMinimalSetup(signers) {
+    const [owner, foundation1, foundation2] = signers;
+
+    const ecoCoin = await this.deployEcoCoin("100000");
+    const multiSig = await this.deployMultiSigWallet([owner.address, foundation1.address], 2);
+    const donation = await this.deployDonationContract(
+      ecoCoin.address,
+      [foundation1.address, foundation2.address, owner.address, owner.address, owner.address]
+    );
+
+    return {
+      ecoCoin,
+      multiSig,
+      donation,
+      owner,
+      foundation1,
+      foundation2
+    };
+  }
+
+  /**
+   * Verify deployment by checking basic contract functionality
+   * @param {Object} contracts - Deployed contracts object
+   * @returns {Object} Verification results
+   */
+  static async verifyDeployment(contracts) {
+    const results = {
+      ecoCoin: false,
+      multiSigWallet: false,
+      securityConfig: false,
+      donation: false,
+      governance: false,
+      autoDonation: false
+    };
+
+    try {
+      // Verify EcoCoin
+      if (contracts.ecoCoin) {
+        const maxSupply = await contracts.ecoCoin.maxSupply();
+        results.ecoCoin = maxSupply.gt(0);
+      }
+
+      // Verify MultiSigWallet
+      if (contracts.multiSigWallet) {
+        const owners = await contracts.multiSigWallet.getOwners();
+        results.multiSigWallet = owners.length > 0;
+      }
+
+      // Verify SecurityConfig
+      if (contracts.securityConfig) {
+        const params = await contracts.securityConfig.securityParams();
+        results.securityConfig = params.maxTransactionAmount.gt(0);
+      }
+
+      // Verify DonationContract
+      if (contracts.donation) {
+        const ecoToken = await contracts.donation.ecoToken();
+        results.donation = ecoToken !== ethers.constants.AddressZero;
+      }
+
+      // Verify EcoGovernance
+      if (contracts.governance) {
+        const token = await contracts.governance.token();
+        results.governance = token !== ethers.constants.AddressZero;
+      }
+
+      // Verify AutoDonation
+      if (contracts.autoDonation) {
+        const donationContract = await contracts.autoDonation.donationContract();
+        results.autoDonation = donationContract !== ethers.constants.AddressZero;
+      }
+
+    } catch (error) {
+      console.error("Verification error:", error.message);
+    }
+
+    return results;
+  }
+
+  /**
+   * Get deployment gas costs
+   * @param {Object} deploymentTx - Deployment transaction
+   * @returns {Object} Gas cost information
+   */
+  static async getDeploymentCosts(deploymentTx) {
+    const receipt = await deploymentTx.wait();
+    const gasUsed = receipt.gasUsed;
+    const gasPrice = deploymentTx.gasPrice;
+    const cost = gasUsed.mul(gasPrice);
+
+    return {
+      gasUsed: gasUsed.toString(),
+      gasPrice: ethers.utils.formatUnits(gasPrice, "gwei"),
+      costWei: cost.toString(),
+      costEth: ethers.utils.formatEther(cost)
+    };
+  }
+}
+
+module.exports = {
+  DeploymentHelpers
+};

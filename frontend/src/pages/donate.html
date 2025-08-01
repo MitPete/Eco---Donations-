@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; font-src https:; img-src 'self' https: data:; connect-src *;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donate - Eco Donations</title>
+  <meta name="description" content="Make environmental donations with Ethereum and earn ECO tokens. Support ocean cleanup, forest protection, and renewable energy projects.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/base.css" id="base-css">
+  <link rel="stylesheet" href="/css/donate.css" id="page-css">
+  <link rel="stylesheet" href="/css/mobile-hero.css" id="mobile-css">
+  <link rel="stylesheet" href="/css/mobile.css" id="mobile-responsive-css">
+  <link rel="stylesheet" href="/css/toast.css" id="toast-css">
+  <link rel="stylesheet" href="/css/wallet-selector.css" id="wallet-css">
+  <link rel="stylesheet" href="/css/transaction-flow.css" id="transaction-css">
+
+  <!-- Browser Compatibility -->
+  <script src="/js/browser-polyfills.js"></script>
+  <script>
+    // Dynamic cache busting - always load fresh CSS
+    document.getElementById('base-css').href = '/css/base.css?t=' + Date.now();
+    document.getElementById('page-css').href = '/css/donate.css?t=' + Date.now();
+    document.getElementById('mobile-css').href = '/css/mobile-hero.css?t=' + Date.now();
+
+    // Fallback: define missing functions to prevent JS error
+    function prefillDonationForm() {}
+    function initializeDonationPage() {}
+  </script>
+</head>
+<body class="donatepage" onload="prefillDonationForm(); initializeDonationPage()">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      EcoCoin
+    </a>
+
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
+    </div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav" id="mobileNav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link active">Donate</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="foundation.html" class="header__nav-link">Foundations</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+      <a href="governance.html" class="header__nav-link">Governance</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="donate-container">
+    <!-- Hero Section with Animated Background -->
+    <div class="donate-hero">
+      <div class="hero-background-animation">
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+      </div>
+      <div class="donate-hero__content">
+        <div class="hero-icon-wrapper">
+          <div class="hero-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+        </div>
+        <h1 class="donate-hero__title">Create Lasting Environmental Impact</h1>
+        <p class="donate-hero__subtitle">Transform your generosity into measurable change with blockchain-verified donations</p>
+        <div class="hero-stats-mini">
+          <div class="mini-stat">
+            <span class="mini-stat-value">$2.4M+</span>
+            <span class="mini-stat-label">Total Donated</span>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat-value">15K+</span>
+            <span class="mini-stat-label">Donations Made</span>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat-value">98%</span>
+            <span class="mini-stat-label">Goes to Causes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Foundation Selection Cards -->
+    <div class="foundation-selection">
+      <h2 class="section-title">Choose Your Cause</h2>
+      <div class="foundation-grid">
+        <div class="foundation-card" data-foundation="0">
+          <div class="foundation-card__icon">🌊</div>
+          <h3>Save The Oceans</h3>
+          <p>Protect marine ecosystems and combat ocean pollution</p>
+          <div class="foundation-stats">
+            <span class="stat">45% funded</span>
+            <span class="stat">$890K raised</span>
+          </div>
+          <div class="foundation-card__overlay"></div>
+        </div>
+        <div class="foundation-card" data-foundation="1">
+          <div class="foundation-card__icon">🌳</div>
+          <h3>Protect The Rainforest</h3>
+          <p>Preserve biodiversity and fight deforestation</p>
+          <div class="foundation-stats">
+            <span class="stat">67% funded</span>
+            <span class="stat">$1.2M raised</span>
+          </div>
+          <div class="foundation-card__overlay"></div>
+        </div>
+        <div class="foundation-card" data-foundation="2">
+          <div class="foundation-card__icon">🌲</div>
+          <h3>Protect The Sequoias</h3>
+          <p>Safeguard ancient giants for future generations</p>
+          <div class="foundation-stats">
+            <span class="stat">23% funded</span>
+            <span class="stat">$340K raised</span>
+          </div>
+          <div class="foundation-card__overlay"></div>
+        </div>
+        <div class="foundation-card" data-foundation="3">
+          <div class="foundation-card__icon">⚡</div>
+          <h3>Clean Energy</h3>
+          <p>Accelerate the transition to renewable energy</p>
+          <div class="foundation-stats">
+            <span class="stat">78% funded</span>
+            <span class="stat">$1.8M raised</span>
+          </div>
+          <div class="foundation-card__overlay"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donation Form Section -->
+    <div class="donate-form-section">
+      <div class="donate-form-container">
+        <!-- Enhanced Donation Form -->
+        <div class="donate-form-card">
+          <div class="donate-form-header">
+            <div class="form-header-icon">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <h2>Make Your Donation</h2>
+            <p>Every contribution creates measurable environmental impact and earns you ECO tokens.</p>
+          </div>
+
+          <form id="donationForm" onsubmit="return sendDonation(event)" class="donate-form">
+            <div class="form-group">
+              <label for="foundation" class="form-label">
+                <i class="fas fa-globe"></i>
+                Foundation
+              </label>
+              <div class="select-wrapper">
+                <select id="foundation" class="form-select">
+                  <option value="0">🌊 Save The Oceans</option>
+                  <option value="1">🌳 Protect The Rainforest</option>
+                  <option value="2">🌲 Protect The Sequoias</option>
+                  <option value="3">⚡ Clean Energy</option>
+                </select>
+                <i class="fas fa-chevron-down select-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="amount" class="form-label">
+                <i class="fab fa-ethereum"></i>
+                Amount (ETH)
+                <span class="usd-equivalent" id="usdEquivalent">≈ $0.00 USD</span>
+              </label>
+              <div class="amount-input-wrapper">
+                <input type="number" id="amount" step="0.01" min="0" required class="form-input" placeholder="0.1" />
+                <div class="quick-amounts">
+                  <button type="button" class="quick-amount" data-amount="0.1">0.1</button>
+                  <button type="button" class="quick-amount" data-amount="0.5">0.5</button>
+                  <button type="button" class="quick-amount" data-amount="1">1.0</button>
+                  <button type="button" class="quick-amount" data-amount="5">5.0</button>
+                </div>
+              </div>
+              <div class="impact-preview" id="impactPreview">
+                <i class="fas fa-leaf"></i>
+                <span>You'll earn approximately <strong id="ecoTokens">0</strong> ECO tokens</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-label">
+                <i class="fas fa-message"></i>
+                Message (Optional)
+              </label>
+              <textarea id="message" rows="3" class="form-textarea" placeholder="Share your motivation for this donation..."></textarea>
+            </div>
+
+            <button type="submit" class="donate-button">
+              <div class="button-content">
+                <i class="fas fa-heart"></i>
+                <span>Donate Now</span>
+                <div class="button-shine"></div>
+              </div>
+            </button>
+          </form>
+
+          <div id="badgeContainer" class="badge-container"></div>
+          <div id="txStatus" class="tx-status"></div>
+        </div>
+
+        <!-- Enhanced Benefits Card -->
+        <div class="donate-info-card">
+          <div class="info-header">
+            <div class="info-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <h3>Why Choose Eco Donations?</h3>
+          </div>
+
+          <div class="donate-benefits">
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="benefit-content">
+                <h4>Earn ECO Tokens</h4>
+                <p>Receive valuable ECO tokens for every donation made</p>
+                <div class="benefit-detail">1 ETH = 100 ECO tokens</div>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="benefit-content">
+                <h4>Verified Impact</h4>
+                <p>100% of donations go directly to environmental causes</p>
+                <div class="benefit-detail">Blockchain transparency</div>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="benefit-content">
+                <h4>Secure & Transparent</h4>
+                <p>All transactions are immutably recorded on-chain</p>
+                <div class="benefit-detail">Ethereum blockchain</div>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <div class="benefit-content">
+                <h4>Exclusive Badges</h4>
+                <p>Unlock special NFT badges for your contributions</p>
+                <div class="benefit-detail">Collectible achievements</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Impact Calculator -->
+          <div class="impact-calculator">
+            <h4><i class="fas fa-calculator"></i> Impact Calculator</h4>
+            <div class="calculator-item">
+              <span>Trees Planted:</span>
+              <span id="treesPlanted">0</span>
+            </div>
+            <div class="calculator-item">
+              <span>CO₂ Offset:</span>
+              <span id="co2Offset">0 kg</span>
+            </div>
+            <div class="calculator-item">
+              <span>Ocean Area Protected:</span>
+              <span id="oceanArea">0 m²</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Indicators -->
+    <div class="trust-section">
+      <h3>Trusted by Environmental Leaders</h3>
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <i class="fas fa-certificate"></i>
+          <span>UN Climate Partner</span>
+        </div>
+        <div class="trust-badge">
+          <i class="fas fa-award"></i>
+          <span>Carbon Neutral Certified</span>
+        </div>
+        <div class="trust-badge">
+          <i class="fas fa-shield-check"></i>
+          <span>Transparency Verified</span>
+        </div>
+        <div class="trust-badge">
+          <i class="fas fa-globe"></i>
+          <span>Global Impact</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__content">
+      <div class="footer__section">
+        <h3><i class="fa-solid fa-leaf"></i> Eco Donations</h3>
+        <p>Empowering environmental change through blockchain technology and transparent donations.</p>
+        <div class="footer__social">
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+            <i class="fa-brands fa-twitter"></i>
+          </a>
+          <a href="https://discord.com" target="_blank" rel="noopener" aria-label="Discord">
+            <i class="fa-brands fa-discord"></i>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__section">
+        <h3>Platform</h3>
+        <a href="donate.html">Make a Donation</a>
+        <a href="foundation.html">Browse Foundations</a>
+        <a href="governance.html">DAO Governance</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Resources</h3>
+        <a href="history.html">Transaction History</a>
+        <a href="whitepaper.html">Whitepaper</a>
+        <a href="#api">API Documentation</a>
+        <a href="#support">Support Center</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Legal</h3>
+        <a href="#terms">Terms of Service</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#cookies">Cookie Policy</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__bottom-content">
+        <p>© 2025 Eco Donations. Built with 💚 for the planet.</p>
+        <div class="footer__stats">
+          <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
+          <span><i class="fa-solid fa-leaf"></i> 100% Environmental Focus</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Donation Confirmation Modal -->
+  <div id="donationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <div class="modal-header">
+        <i class="fas fa-check-circle"></i>
+        <h2>Thank You for Your Donation!</h2>
+      </div>
+      <div class="modal-body">
+        <div class="coin-display">
+          <div class="eco-coin">
+            <div class="oval">
+              <div class="inner-oval front">
+                <span class="coin-icon">🍃</span>
+                <span class="coin-label">ECO&nbsp;COIN</span>
+              </div>
+            </div>
+            <div class="coin__edge"></div>
+            <div class="oval-back">
+              <div class="inner-oval back">
+                <span class="coin-icon-back">🍃</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="modalMessage"></p>
+        <div class="modal-actions">
+          <a href="history.html" class="modal-button primary">
+            <i class="fas fa-history"></i>
+            View History
+          </a>
+          <button onclick="closeModal()" class="modal-button secondary">
+            <i class="fas fa-times"></i>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App logic -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="contract-fix.js?v=1753062000"></script>
+  <script src="main-wallet.js?v=1753062000"></script>
+  <script src="js/modules/auto-donation.js?v=1753062000"></script>
+  <script>
+    // Enhanced Donate Page Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeDonatePageEnhancements();
+    });
+
+    function initializeDonatePageEnhancements() {
+      setupFoundationCards();
+      setupQuickAmounts();
+      setupAmountInput();
+      setupImpactCalculator();
+      animateHero();
+    }
+
+    // Foundation Card Selection
+    function setupFoundationCards() {
+      const cards = document.querySelectorAll('.foundation-card');
+      const select = document.getElementById('foundation');
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          // Remove active class from all cards
+          cards.forEach(c => c.classList.remove('active'));
+          // Add active class to clicked card
+          card.classList.add('active');
+          // Update select value
+          const foundation = card.dataset.foundation;
+          select.value = foundation;
+          // Trigger change event
+          select.dispatchEvent(new Event('change'));
+        });
+      });
+
+      // Set initial active card
+      if (cards.length > 0) {
+        cards[0].classList.add('active');
+      }
+    }
+
+    // Quick Amount Buttons
+    function setupQuickAmounts() {
+      const quickAmounts = document.querySelectorAll('.quick-amount');
+      const amountInput = document.getElementById('amount');
+
+      quickAmounts.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons
+          quickAmounts.forEach(b => b.classList.remove('active'));
+          // Add active class to clicked button
+          btn.classList.add('active');
+          // Set amount
+          amountInput.value = btn.dataset.amount;
+          // Trigger input event
+          amountInput.dispatchEvent(new Event('input'));
+        });
+      });
+    }
+
+    // Amount Input with USD Conversion and ECO Token Calculation
+    function setupAmountInput() {
+      const amountInput = document.getElementById('amount');
+      const usdEquivalent = document.getElementById('usdEquivalent');
+      const ecoTokens = document.getElementById('ecoTokens');
+
+      // Mock ETH to USD rate (in production, fetch from API)
+      const ethToUsd = 2000;
+
+      amountInput.addEventListener('input', (e) => {
+        const ethAmount = parseFloat(e.target.value) || 0;
+        const usdAmount = (ethAmount * ethToUsd).toFixed(2);
+        const tokenAmount = Math.floor(ethAmount * 100); // 1 ETH = 100 ECO tokens
+
+        usdEquivalent.textContent = `≈ $${usdAmount} USD`;
+        ecoTokens.textContent = tokenAmount;
+
+        updateImpactCalculator(ethAmount);
+      });
+    }
+
+    // Impact Calculator
+    function setupImpactCalculator() {
+      updateImpactCalculator(0);
+    }
+
+    function updateImpactCalculator(ethAmount) {
+      const treesPlanted = Math.floor(ethAmount * 50); // 1 ETH = 50 trees
+      const co2Offset = Math.floor(ethAmount * 2200); // 1 ETH = 2200 kg CO2
+      const oceanArea = Math.floor(ethAmount * 1000); // 1 ETH = 1000 m²
+
+      document.getElementById('treesPlanted').textContent = treesPlanted.toLocaleString();
+      document.getElementById('co2Offset').textContent = co2Offset.toLocaleString() + ' kg';
+      document.getElementById('oceanArea').textContent = oceanArea.toLocaleString() + ' m²';
+    }
+
+    // Hero Animation
+    function animateHero() {
+      const particles = document.querySelectorAll('.floating-particle');
+
+      particles.forEach((particle, index) => {
+        // Random position and animation
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = (index * 0.5) + 's';
+        particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+      });
+    }
+
+    // Enhanced Modal Functionality
+    window.onclick = function(event) {
+      const modal = document.getElementById('donationModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+
+    // Add success animation to donation button
+    function animateDonationSuccess() {
+      const button = document.querySelector('.donate-button');
+      button.classList.add('success-animation');
+
+      setTimeout(() => {
+        button.classList.remove('success-animation');
+      }, 2000);
+    }
+
+    // Override default donation success to include animation
+    if (typeof sendDonation === 'function') {
+      const originalSendDonation = sendDonation;
+      sendDonation = function(event) {
+        const result = originalSendDonation(event);
+        if (result !== false) {
+          animateDonationSuccess();
+        }
+        return result;
+      };
+    }
+
+    // Mobile Menu Toggle Script
+    function toggleMobileMenu() {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+
+      nav.classList.toggle('mobile-nav-open');
+      toggle.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const nav = document.getElementById('mobileNav');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const header = document.querySelector('.header');
+
+      if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu when clicking nav links
+    document.querySelectorAll('.header__nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const nav = document.getElementById('mobileNav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        nav.classList.remove('mobile-nav-open');
+        toggle.classList.remove('active');
+      });
+    });
+  </script>
+
+  <!-- Enhanced Wallet Integration -->
+  <script src="js/wallet-persistence.js"></script>
+  <script src="js/transaction-tracker.js"></script>
+  <script src="js/enhanced-wallet.js"></script>
+  <script src="js/transaction-flow.js"></script>
+
+  <!-- Mobile Enhancements -->
+  <script src="/js/mobile-enhancements.js"></script>
+</body>
+</html>

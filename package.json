@@ -1,9 +1,61 @@
 {
-  "name": "hardhat-project",
+  "name": "eco-donations-platform",
+  "version": "2.0.0",
+  "description": "Blockchain-powered environmental donation platform with DAO governance",
+  "main": "index.js",
   "scripts": {
-    "dev": "cd frontend && python3 -m http.server 8888",
-    "start": "./start-dev-server.sh",
-    "dev-clean": "pkill -f 'python3 -m http.server' 2>/dev/null || true && cd frontend && python3 -m http.server 8888"
+    "// === DEVELOPMENT ===": "",
+    "dev": "cd frontend && npm run dev",
+    "dev:contracts": "npx hardhat node",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:full": "concurrently \"npm run dev:contracts\" \"npm run dev:frontend\"",
+
+    "// === BUILDING ===": "",
+    "build": "npm run build:contracts && npm run build:frontend",
+    "build:contracts": "npx hardhat compile",
+    "build:frontend": "cd frontend && npm run build",
+    "clean": "npx hardhat clean && rm -rf frontend/dist",
+
+    "// === TESTING ===": "",
+    "test": "npm run test:contracts",
+    "test:contracts": "npx hardhat test",
+    "test:unit": "npx hardhat test testing/unit/**/*.test.js",
+    "test:integration": "npx hardhat test testing/integration/**/*.test.js",
+    "test:security": "npx hardhat test testing/security/**/*.js",
+    "test:e2e": "npx hardhat test testing/e2e/**/*.test.js",
+    "test:coverage": "npx hardhat coverage",
+    "test:gas": "REPORT_GAS=true npx hardhat test",
+
+    "// === DEPLOYMENT ===": "",
+    "deploy:local": "npx hardhat run scripts/deployment/deploy-local.js --network localhost",
+    "deploy:testnet": "npx hardhat run scripts/deployment/deploy-testnet.js --network sepolia",
+    "deploy:production": "npx hardhat run scripts/deployment/deploy-production.js --network mainnet",
+    "deploy:organized": "npx hardhat run scripts/deployment/deploy-organized.js",
+
+    "// === VERIFICATION ===": "",
+    "verify:contracts": "node scripts/utils/verify-contracts.js",
+    "verify:sepolia": "npm run verify:contracts -- --network sepolia",
+
+    "// === SECURITY ===": "",
+    "security:analyze": "./run-security-analysis.sh",
+    "security:slither": "./security-slither-analysis.sh",
+    "security:audit": "node scripts/testing/security-audit.js",
+
+    "// === UTILITIES ===": "",
+    "setup:dev": "npm install && cd frontend && npm install",
+    "setup:accounts": "node scripts/utils/setup-accounts.js",
+    "analyze:gas": "node scripts/utils/gas-analysis.js",
+    "check:network": "node scripts/utils/network-check.js",
+
+    "// === DATA & SAMPLES ===": "",
+    "generate:testdata": "node scripts/samples/populate-test-data.js",
+    "create:samples": "node scripts/samples/create-donations.js",
+    "create:proposals": "node scripts/samples/create-proposals.js",
+
+    "// === MAINTENANCE ===": "",
+    "lint": "eslint . --ext .js",
+    "format": "prettier --write \"**/*.{js,json,md,sol}\"",
+    "postinstall": "npm run build:contracts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
