@@ -13,16 +13,82 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="/src/styles/css/base.css" id="base-css">
-  <link rel="stylesheet" href="/src/styles/css/dashboard.css" id="page-css">
-  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css" id="mobile-css">
-  <link rel="stylesheet" href="/src/styles/css/mobile.css" id="mobile-responsive-css">
-  <link rel="stylesheet" href="/src/styles/css/toast.css" id="toast-css">
+  <!-- Critical CSS - Inline to prevent FOUC -->
+  <style>
+    /* Critical base styles to prevent flash */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      visibility: hidden; /* Hide until CSS loads */
+    }
+    body.css-loaded { visibility: visible; }
+    .header {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header__logo {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    /* Loading animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <!-- Anti-FOUC Script - Load first -->
+  <script src="/js/anti-fouc.js"></script>
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/src/styles/css/base.css" as="style">
+  <link rel="preload" href="/src/styles/css/dashboard.css" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
+
+  <!-- Stylesheets with consistent cache busting -->
+  <link rel="stylesheet" href="/src/styles/css/base.css?v=2" id="base-css">
+  <link rel="stylesheet" href="/src/styles/css/dashboard.css?v=2" id="page-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css?v=2" id="mobile-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile.css?v=2" id="mobile-responsive-css">
+  <link rel="stylesheet" href="/src/styles/css/toast.css?v=2" id="toast-css">
 
   <!-- Browser Compatibility -->
   <script src="/js/browser-polyfills.js"></script>
-  <link rel="stylesheet" href="/src/styles/css/performance.css" id="performance-css">
+  <link rel="stylesheet" href="/src/styles/css/performance.css?v=2" id="performance-css">
+
+  <!-- Service Worker Registration for CSS Caching -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('✅ SW: Service worker registered for CSS caching');
+          })
+          .catch(function(error) {
+            console.warn('⚠️ SW: Service worker registration failed:', error);
+          });
+      });
+    }
+  </script>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -32,10 +98,24 @@
   <script src="/scripts/main-wallet.js"></script>
   <script src="/src/modules/auto-donation.js"></script>
   <script>
-    // Dynamic cache busting - always load fresh CSS
-    document.getElementById('base-css').href = '/src/styles/css/base.css?t=' + Date.now();
-    document.getElementById('page-css').href = '/src/styles/css/dashboard.css?t=' + Date.now();
-    document.getElementById('mobile-css').href = '/src/styles/css/mobile-hero.css?t=' + Date.now();
+    // Remove FOUC by showing content once CSS is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.body.classList.add('css-loaded');
+      }, 50);
+    });
+
+    // Ensure CSS loads quickly with fallback
+    (function() {
+      var cssLoadTimeout = setTimeout(function() {
+        document.body.classList.add('css-loaded');
+      }, 500);
+
+      window.addEventListener('load', function() {
+        clearTimeout(cssLoadTimeout);
+        document.body.classList.add('css-loaded');
+      });
+    })();
   </script>
 </head>
 <body class="dashboardpage" onload="loadDashboard()">

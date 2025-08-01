@@ -13,22 +13,184 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="/src/styles/css/base.css" id="base-css">
-  <link rel="stylesheet" href="/src/styles/css/donate.css" id="page-css">
-  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css" id="mobile-css">
-  <link rel="stylesheet" href="/src/styles/css/mobile.css" id="mobile-responsive-css">
-  <link rel="stylesheet" href="/src/styles/css/toast.css" id="toast-css">
-  <link rel="stylesheet" href="/src/styles/css/wallet-selector.css" id="wallet-css">
-  <link rel="stylesheet" href="/src/styles/css/transaction-flow.css" id="transaction-css">
+  <!-- Critical CSS - Inline to prevent FOUC -->
+    <!-- Critical CSS - Inline to prevent FOUC -->
+  <style>
+    /* Critical base styles to prevent flash */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      visibility: hidden; /* Hide until CSS loads */
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    body.css-loaded {
+      visibility: visible;
+      opacity: 1;
+    }
+    .header {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1000;
+    }
+    .header__logo {
+      color: white;
+      text-decoration: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .header__nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .header__nav-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header__wallet {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .header__connect-button {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    /* Donate page specific critical styles */
+    .donate-container {
+      min-height: 100vh;
+      padding: 2rem 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      color: white;
+    }
+    /* Loading animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <!-- Anti-FOUC Script - Load first -->
+  <script src="/js/anti-fouc.js"></script>
+
+  <!-- Preload critical resources with high priority -->
+  <link rel="preload" href="/src/styles/css/base.css" as="style" importance="high">
+  <link rel="preload" href="/src/styles/css/donate.css" as="style" importance="high">
+  <link rel="preload" href="/src/styles/css/wallet-selector.css" as="style" importance="high">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" crossorigin>
+
+  <!-- Critical stylesheets loaded immediately -->
+  <link rel="stylesheet" href="/src/styles/css/base.css?v=2" id="base-css" importance="high">
+  <link rel="stylesheet" href="/src/styles/css/donate.css?v=2" id="page-css" importance="high">
+  <link rel="stylesheet" href="/src/styles/css/wallet-selector.css?v=2" id="wallet-css" importance="high">
+
+  <!-- Secondary stylesheets with lower priority -->
+  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css?v=2" id="mobile-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile.css?v=2" id="mobile-responsive-css">
+  <link rel="stylesheet" href="/src/styles/css/toast.css?v=2" id="toast-css">
+  <link rel="stylesheet" href="/src/styles/css/transaction-flow.css?v=2" id="transaction-css">
+
+  <!-- Browser Compatibility -->
+  <script src="/js/browser-polyfills.js"></script>
+
+  <!-- Service Worker Registration for CSS Caching -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('✅ SW: Service worker registered for CSS caching');
+          })
+          .catch(function(error) {
+            console.warn('⚠️ SW: Service worker registration failed:', error);
+          });
+      });
+    }
+
+    // Fallback: define missing functions to prevent JS error
+    function prefillDonationForm() {}
+    function initializeDonationPage() {}
+  </script>
+
+  <!-- Preload critical CSS -->
+  <link rel="preload" href="/src/styles/css/base.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="/src/styles/css/donate.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- Stylesheets with cache busting in href directly -->
+  <link rel="stylesheet" href="/src/styles/css/base.css?v=1" id="base-css">
+  <link rel="stylesheet" href="/src/styles/css/donate.css?v=1" id="page-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css?v=1" id="mobile-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile.css?v=1" id="mobile-responsive-css">
+  <link rel="stylesheet" href="/src/styles/css/toast.css?v=1" id="toast-css">
+  <link rel="stylesheet" href="/src/styles/css/wallet-selector.css?v=1" id="wallet-css">
+  <link rel="stylesheet" href="/src/styles/css/transaction-flow.css?v=1" id="transaction-css">
 
   <!-- Browser Compatibility -->
   <script src="/js/browser-polyfills.js"></script>
   <script>
-    // Dynamic cache busting - always load fresh CSS
-    document.getElementById('base-css').href = '/src/styles/css/base.css?t=' + Date.now();
-    document.getElementById('page-css').href = '/src/styles/css/donate.css?t=' + Date.now();
-    document.getElementById('mobile-css').href = '/src/styles/css/mobile-hero.css?t=' + Date.now();
+    // Remove FOUC by showing content once CSS is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.body.classList.add('css-loaded');
+      }, 50);
+    });
+
+    // Ensure CSS loads quickly with fallback
+    (function() {
+      var cssLoadTimeout = setTimeout(function() {
+        document.body.classList.add('css-loaded');
+      }, 500);
+
+      window.addEventListener('load', function() {
+        clearTimeout(cssLoadTimeout);
+        document.body.classList.add('css-loaded');
+      });
+    })();
 
     // Fallback: define missing functions to prevent JS error
     function prefillDonationForm() {}
