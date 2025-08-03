@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Organization - EcoCoin Admin</title>
+  <link rel="stylesheet" href="../src/css/base.css?v=10">
+  <style>
+    /* Admin-specific styles */
+    .admin-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .admin-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .admin-header h1 {
+      font-size: 2.5rem;
+      color: #2c5530;
+      margin-bottom: 0.5rem;
+    }
+
+    .admin-header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    .two-column-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .two-column-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .admin-form {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section {
+      margin-bottom: 2rem;
+    }
+
+    .form-section h2 {
+      color: #2c5530;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      padding: 0.75rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .array-input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .array-input-group input {
+      flex: 1;
+    }
+
+    .add-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background: #45a049;
+    }
+
+    .array-display {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .array-item {
+      background: #e8f5e8;
+      color: #2c5530;
+      padding: 0.5rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .remove-item {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .remove-item:hover {
+      background: #c82333;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+    }
+
+    .btn {
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    /* Preview Panel Styles */
+    .preview-panel {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 2rem;
+    }
+
+    .preview-panel h2 {
+      color: #2c5530;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .organization-preview {
+      background: #f8f9fa;
+      border: 2px dashed #dee2e6;
+      border-radius: 12px;
+      padding: 1.5rem;
+      min-height: 200px;
+    }
+
+    .preview-placeholder {
+      text-align: center;
+      color: #6c757d;
+      font-style: italic;
+      padding: 2rem;
+    }
+
+    .organization-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .organization-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .org-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .org-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid #eee;
+    }
+
+    .org-info h3 {
+      margin: 0;
+      color: #333;
+      font-size: 1.3rem;
+    }
+
+    .org-category {
+      margin: 0.25rem 0 0 0;
+      color: #666;
+      font-size: 0.9rem;
+      text-transform: capitalize;
+    }
+
+    .verified-badge {
+      background: #28a745;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+
+    .org-description {
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .org-details {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .org-website {
+      display: inline-block;
+      background: #007bff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .org-website:hover {
+      background: #0056b3;
+      color: white;
+    }
+
+    /* Message styling */
+    .message {
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .message.info {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .logo-preview {
+      margin-top: 0.5rem;
+    }
+
+    .logo-preview img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header__logo">
+      <img src="../assets/images/EcoCoin_Logo.png" alt="EcoCoin Logo">
+    </div>
+    <nav class="header__nav">
+      <a href="index.html">Home</a>
+      <a href="admin-organizations.html" class="active">Admin</a>
+    </nav>
+    <div class="header__wallet">
+      <button class="btn-secondary">Admin Panel</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1>🌱 Add New Organization</h1>
+        <p>Add verified environmental organizations to the EcoCoin platform</p>
+      </div>
+
+      <div class="two-column-layout">
+        <!-- Form Column -->
+        <div>
+          <form class="admin-form" id="organizationForm">
+            <div class="form-section">
+              <h2>📋 Basic Information</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="name">Organization Name *</label>
+                  <input type="text" id="name" class="form-input" required
+                         placeholder="e.g., Ocean Cleanup Foundation">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="category">Category *</label>
+                  <select id="category" class="form-select" required>
+                    <option value="">Select Category</option>
+                    <option value="ocean">Ocean Conservation</option>
+                    <option value="forest">Forest Protection</option>
+                    <option value="climate">Climate Action</option>
+                    <option value="energy">Clean Energy</option>
+                    <option value="wildlife">Wildlife Protection</option>
+                    <option value="water">Clean Water</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="description">Description *</label>
+                <textarea id="description" class="form-textarea" required
+                          placeholder="Describe the organization's mission and environmental impact..."></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="website">Website URL</label>
+                  <input type="url" id="website" class="form-input"
+                         placeholder="https://example.org">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="logoUrl">Logo URL</label>
+                  <input type="url" id="logoUrl" class="form-input"
+                         placeholder="https://example.org/logo.png">
+                  <div id="logoPreview" class="logo-preview" style="display: none;">
+                    <img id="logoImg" alt="Logo preview">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h2>🎯 Focus Areas</h2>
+
+              <div class="form-group">
+                <label class="form-label" for="causeInput">Causes *</label>
+                <div class="array-input-group">
+                  <input type="text" id="causeInput" class="form-input"
+                         placeholder="e.g., Ocean Cleanup, Marine Life Protection">
+                  <button type="button" class="add-btn" onclick="addToArray('causeInput', 'causesDisplay')">Add</button>
+                </div>
+                <div id="causesDisplay" class="array-display"></div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="locationInput">Locations *</label>
+                <div class="array-input-group">
+                  <input type="text" id="locationInput" class="form-input"
+                         placeholder="e.g., Pacific Ocean, California">
+                  <button type="button" class="add-btn" onclick="addToArray('locationInput', 'locationsDisplay')">Add</button>
+                </div>
+                <div id="locationsDisplay" class="array-display"></div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h2>📊 Metrics & Status</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="totalDonated">Total Donated ($)</label>
+                  <input type="number" id="totalDonated" class="form-input"
+                         placeholder="0" min="0" step="0.01">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="donorCount">Donor Count</label>
+                  <input type="number" id="donorCount" class="form-input"
+                         placeholder="0" min="0">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="projectsActive">Active Projects</label>
+                  <input type="number" id="projectsActive" class="form-input"
+                         placeholder="0" min="0">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="verified">
+                    <input type="checkbox" id="verified" style="margin-right: 0.5rem;">
+                    Verified Organization
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="impactMetric">Impact Metric</label>
+                  <input type="text" id="impactMetric" class="form-input"
+                         placeholder="e.g., Trees Planted, Tons Removed">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="impactValue">Current Impact Value</label>
+                  <input type="number" id="impactValue" class="form-input"
+                         placeholder="0" min="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" id="clearBtn" class="btn btn-secondary">Clear Form</button>
+              <button type="submit" class="btn btn-primary">Add Organization</button>
+            </div>
+          </form>
+
+          <div id="message" class="message" style="display: none;"></div>
+        </div>
+
+        <!-- Preview Column -->
+        <div class="preview-panel">
+          <h2>🌟 Live Preview</h2>
+          <div id="organizationPreview" class="organization-preview">
+            <div class="preview-placeholder">
+              <p>🏢 Fill out the form to see a live preview of how this organization will appear on the site</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/organizations.js"></script>
+  <script>
+    // Array management for causes and locations
+    function addToArray(inputId, displayId) {
+      const input = document.getElementById(inputId);
+      const display = document.getElementById(displayId);
+      const value = input.value.trim();
+
+      if (value && !isAlreadyAdded(displayId, value)) {
+        const item = document.createElement('div');
+        item.className = 'array-item';
+        item.innerHTML = `${value} <button class="remove-item" onclick="removeArrayItem(this)">×</button>`;
+        display.appendChild(item);
+        input.value = '';
+        updatePreview();
+      }
+    }
+
+    function removeArrayItem(element) {
+      element.parentElement.remove();
+      updatePreview();
+    }
+
+    function isAlreadyAdded(displayId, value) {
+      const display = document.getElementById(displayId);
+      const items = display.querySelectorAll('.array-item');
+      for (let item of items) {
+        if (item.textContent.slice(0, -1) === value) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Enter key handlers for array inputs
+    document.getElementById('causeInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addToArray('causeInput', 'causesDisplay');
+      }
+    });
+
+    document.getElementById('locationInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addToArray('locationInput', 'locationsDisplay');
+      }
+    });
+
+    // Logo preview functionality
+    document.getElementById('logoUrl').addEventListener('input', function() {
+      const logoUrl = this.value;
+      const logoPreview = document.getElementById('logoPreview');
+      const logoImg = document.getElementById('logoImg');
+
+      if (logoUrl && isValidUrl(logoUrl)) {
+        logoImg.src = logoUrl;
+        logoImg.onload = function() {
+          logoPreview.style.display = 'block';
+        };
+        logoImg.onerror = function() {
+          logoPreview.style.display = 'none';
+        };
+      } else {
+        logoPreview.style.display = 'none';
+      }
+
+      updatePreview();
+    });
+
+    // Form validation and submission handling
+    document.getElementById('organizationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      try {
+        const formData = collectFormData();
+
+        if (!validateFormData(formData)) {
+          return;
+        }
+
+        // Add the organization to the data structure
+        if (window.OrganizationsManager) {
+          OrganizationsManager.addOrganization(formData);
+        }
+
+        showMessage('✅ Organization added successfully!', 'success');
+
+        // Reset form after success
+        setTimeout(() => {
+          this.reset();
+          clearArrayDisplays();
+          updatePreview();
+          document.getElementById('logoPreview').style.display = 'none';
+        }, 1500);
+
+      } catch (error) {
+        console.error('Error adding organization:', error);
+        showMessage('❌ Error adding organization: ' + error.message, 'error');
+      }
+    });
+
+    // Clear button functionality
+    document.getElementById('clearBtn').addEventListener('click', function() {
+      if (confirm('Are you sure you want to clear all form data?')) {
+        document.getElementById('organizationForm').reset();
+        clearArrayDisplays();
+        updatePreview();
+        document.getElementById('logoPreview').style.display = 'none';
+        showMessage('📝 Form cleared', 'info');
+      }
+    });
+
+    function collectFormData() {
+      return {
+        name: document.getElementById('name').value.trim(),
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value.trim(),
+        website: document.getElementById('website').value.trim(),
+        logoUrl: document.getElementById('logoUrl').value.trim(),
+        causes: Array.from(document.querySelectorAll('#causesDisplay .array-item')).map(item => item.textContent.slice(0, -1)),
+        locations: Array.from(document.querySelectorAll('#locationsDisplay .array-item')).map(item => item.textContent.slice(0, -1)),
+        totalDonated: parseFloat(document.getElementById('totalDonated').value) || 0,
+        donorCount: parseInt(document.getElementById('donorCount').value) || 0,
+        projectsActive: parseInt(document.getElementById('projectsActive').value) || 0,
+        verified: document.getElementById('verified').checked,
+        impactMetric: document.getElementById('impactMetric').value.trim(),
+        impactValue: parseInt(document.getElementById('impactValue').value) || 0
+      };
+    }
+
+    function validateFormData(data) {
+      if (!data.name) {
+        showMessage('❌ Organization name is required', 'error');
+        return false;
+      }
+
+      if (!data.category) {
+        showMessage('❌ Please select a category', 'error');
+        return false;
+      }
+
+      if (!data.description) {
+        showMessage('❌ Description is required', 'error');
+        return false;
+      }
+
+      if (data.causes.length === 0) {
+        showMessage('❌ Please add at least one cause', 'error');
+        return false;
+      }
+
+      if (data.locations.length === 0) {
+        showMessage('❌ Please add at least one location', 'error');
+        return false;
+      }
+
+      if (data.website && !isValidUrl(data.website)) {
+        showMessage('❌ Please enter a valid website URL', 'error');
+        return false;
+      }
+
+      if (data.logoUrl && !isValidUrl(data.logoUrl)) {
+        showMessage('❌ Please enter a valid logo URL', 'error');
+        return false;
+      }
+
+      return true;
+    }
+
+    function isValidUrl(string) {
+      try {
+        new URL(string);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function showMessage(text, type) {
+      const messageEl = document.getElementById('message');
+      messageEl.textContent = text;
+      messageEl.className = `message ${type}`;
+      messageEl.style.display = 'block';
+
+      setTimeout(() => {
+        messageEl.style.display = 'none';
+      }, 4000);
+    }
+
+    function clearArrayDisplays() {
+      document.getElementById('causesDisplay').innerHTML = '';
+      document.getElementById('locationsDisplay').innerHTML = '';
+    }
+
+    // Live preview functionality
+    function updatePreview() {
+      const previewEl = document.getElementById('organizationPreview');
+      const formData = collectFormData();
+
+      if (!formData.name) {
+        previewEl.innerHTML = `
+          <div class="preview-placeholder">
+            <p>🏢 Fill out the form to see a live preview of how this organization will appear on the site</p>
+          </div>
+        `;
+        return;
+      }
+
+      previewEl.innerHTML = generateOrganizationCard(formData);
+    }
+
+    function generateOrganizationCard(org) {
+      return `
+        <div class="organization-card">
+          <div class="org-header">
+            ${org.logoUrl ? `<img src="${org.logoUrl}" alt="${org.name}" class="org-logo" onerror="this.style.display='none'">` : ''}
+            <div class="org-info">
+              <h3>${org.name || 'Organization Name'}</h3>
+              <p class="org-category">${org.category || 'Category'}</p>
+              ${org.verified ? '<span class="verified-badge">✅ Verified</span>' : ''}
+            </div>
+          </div>
+
+          <p class="org-description">${org.description || 'Organization description...'}</p>
+
+          <div class="org-details">
+            <div class="detail-row">
+              <span>🎯 Causes:</span>
+              <span>${org.causes.length > 0 ? org.causes.join(', ') : 'None added'}</span>
+            </div>
+            <div class="detail-row">
+              <span>📍 Locations:</span>
+              <span>${org.locations.length > 0 ? org.locations.join(', ') : 'None added'}</span>
+            </div>
+            <div class="detail-row">
+              <span>💰 Total Donated:</span>
+              <span>$${org.totalDonated.toLocaleString()}</span>
+            </div>
+            <div class="detail-row">
+              <span>👥 Donors:</span>
+              <span>${org.donorCount.toLocaleString()}</span>
+            </div>
+            <div class="detail-row">
+              <span>🚀 Active Projects:</span>
+              <span>${org.projectsActive}</span>
+            </div>
+            ${org.impactMetric ? `
+            <div class="detail-row">
+              <span>📊 ${org.impactMetric}:</span>
+              <span>${org.impactValue.toLocaleString()}</span>
+            </div>
+            ` : ''}
+          </div>
+
+          ${org.website ? `<a href="${org.website}" target="_blank" class="org-website">🌐 Visit Website</a>` : ''}
+        </div>
+      `;
+    }
+
+    // Add event listeners for live preview updates
+    document.addEventListener('DOMContentLoaded', function() {
+      const formInputs = document.querySelectorAll('#organizationForm input, #organizationForm select, #organizationForm textarea');
+      formInputs.forEach(input => {
+        input.addEventListener('input', updatePreview);
+      });
+
+      // Initial preview
+      updatePreview();
+    });
+  </script>
+</body>
+</html>

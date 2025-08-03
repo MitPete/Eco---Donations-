@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Add Organizations - EcoCoin</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/src/styles/css/base.css">
+
+  <style>
+    .admin-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .admin-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .admin-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .admin-form {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-array {
+      margin-top: 1rem;
+    }
+
+    .array-item {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .array-input {
+      flex: 1;
+    }
+
+    .btn-remove {
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem;
+      cursor: pointer;
+      width: 40px;
+    }
+
+    .btn-add {
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .preview-section {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: #f8fafc;
+      border-radius: 16px;
+    }
+
+    .preview-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+    }
+
+    .success-message {
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+      border-left: 4px solid #10b981;
+    }
+
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+      border-left: 4px solid #ef4444;
+    }
+
+    .form-group img {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+
+    .logo-preview {
+      width: 80px;
+      height: 80px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.5rem;
+      border: 2px dashed #d1d5db;
+    }
+
+    .live-preview {
+      position: sticky;
+      top: 2rem;
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+    }
+
+    .preview-org-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 2px solid #e5e7eb;
+      transition: all 0.3s ease;
+    }
+
+    .preview-org-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      border-color: #10b981;
+    }
+
+    .org-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .two-column-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      EcoCoin Admin
+    </a>
+
+    <nav class="header__nav">
+      <a href="organizations.html" class="header__nav-link">View Organizations</a>
+      <a href="admin-organizations.html" class="header__nav-link active">Add Organization</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1>Add New Organization</h1>
+        <p>Add verified environmental organizations to the EcoCoin platform</p>
+      </div>
+
+      <div class="two-column-layout">
+        <!-- Form Column -->
+        <div>
+          <form class="admin-form" id="organizationForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="orgId">Organization ID *</label>
+            <input type="text" id="orgId" class="form-input" required
+                   placeholder="e.g., ocean_cleanup_foundation">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="category">Category *</label>
+            <select id="category" class="form-select" required>
+              <option value="">Select Category</option>
+              <option value="ocean">Ocean Conservation</option>
+              <option value="forest">Forest Protection</option>
+              <option value="climate">Climate Action</option>
+              <option value="energy">Clean Energy</option>
+              <option value="wildlife">Wildlife Protection</option>
+              <option value="water">Clean Water</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="orgName">Organization Name *</label>
+            <input type="text" id="orgName" class="form-input" required
+                   placeholder="e.g., Ocean Cleanup Foundation">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="logoUrl">Logo URL</label>
+            <input type="url" id="logoUrl" class="form-input"
+                   placeholder="https://example.org/logo.png">
+            <div class="logo-preview" id="logoPreview">
+              <i class="fas fa-image" style="color: #9ca3af;"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="website">Website *</label>
+            <input type="url" id="website" class="form-input" required
+                   placeholder="https://example.org">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ein">EIN (Tax ID)</label>
+            <input type="text" id="ein" class="form-input"
+                   placeholder="e.g., 12-3456789">
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label" for="description">Description *</label>
+          <textarea id="description" class="form-textarea" required
+                    placeholder="Brief description of the organization's mission and work"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="projectsActive">Active Projects</label>
+            <input type="number" id="projectsActive" class="form-input"
+                   placeholder="0" min="0">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="verified">
+              <input type="checkbox" id="verified" style="margin-right: 0.5rem;">
+              Verified Organization
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="impactMetric">Impact Metric</label>
+            <input type="text" id="impactMetric" class="form-input"
+                   placeholder="e.g., Trees Planted, Tons Removed">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="impactValue">Current Impact Value</label>
+            <input type="number" id="impactValue" class="form-input"
+                   placeholder="0" min="0">
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Focus Areas (Causes)</label>
+          <div class="form-array" id="causesArray">
+            <div class="array-item">
+              <input type="text" class="form-input array-input"
+                     placeholder="e.g., Ocean cleanup" name="causes">
+              <button type="button" class="btn-remove" onclick="removeArrayItem(this)">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="btn-add" onclick="addArrayItem('causesArray', 'causes', 'Focus area')">
+            <i class="fas fa-plus"></i> Add Cause
+          </button>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Locations</label>
+          <div class="form-array" id="locationsArray">
+            <div class="array-item">
+              <input type="text" class="form-input array-input"
+                     placeholder="e.g., Global, United States" name="locations">
+              <button type="button" class="btn-remove" onclick="removeArrayItem(this)">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="btn-add" onclick="addArrayItem('locationsArray', 'locations', 'Location')">
+            <i class="fas fa-plus"></i> Add Location
+          </button>
+        </div>
+
+        <div class="form-group full-width">
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+            <i class="fas fa-plus"></i>
+            Add Organization
+          </button>
+        </div>
+
+        <div class="success-message" id="successMessage">
+          Organization added successfully! You can now view it on the organizations page.
+        </div>
+      </form>
+
+      <!-- Preview Section -->
+      <div class="preview-section" id="previewSection" style="display: none;">
+        <h3>Preview</h3>
+        <div class="preview-card" id="previewCard">
+          <!-- Preview will be generated here -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { OrganizationsManager } from '/src/scripts/organizations.js';
+
+    // Array management functions
+    window.addArrayItem = function(containerId, name, placeholder) {
+      const container = document.getElementById(containerId);
+      const newItem = document.createElement('div');
+      newItem.className = 'array-item';
+      newItem.innerHTML = `
+        <input type="text" class="form-input array-input"
+               placeholder="${placeholder}" name="${name}">
+        <button type="button" class="btn-remove" onclick="removeArrayItem(this)">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      container.appendChild(newItem);
+    };
+
+    window.removeArrayItem = function(button) {
+      button.parentElement.remove();
+    };
+
+    // Form submission
+    document.getElementById('organizationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const causes = Array.from(document.querySelectorAll('input[name="causes"]'))
+        .map(input => input.value)
+        .filter(value => value.trim() !== '');
+
+      const locations = Array.from(document.querySelectorAll('input[name="locations"]'))
+        .map(input => input.value)
+        .filter(value => value.trim() !== '');
+
+      const orgData = {
+        id: formData.get('orgId') || document.getElementById('orgId').value,
+        name: formData.get('orgName') || document.getElementById('orgName').value,
+        description: formData.get('description') || document.getElementById('description').value,
+        website: formData.get('website') || document.getElementById('website').value,
+        ein: formData.get('ein') || document.getElementById('ein').value,
+        verified: document.getElementById('verified').checked,
+        projectsActive: parseInt(document.getElementById('projectsActive').value) || 0,
+        impactMetric: document.getElementById('impactMetric').value || 'Impact Created',
+        impactValue: 0,
+        totalRaised: 0,
+        causes: causes,
+        locations: locations
+      };
+
+      const category = document.getElementById('category').value;
+
+      // Add to organizations (this would normally save to database)
+      if (window.organizationsManager) {
+        window.organizationsManager.addOrganization(category, orgData);
+      }
+
+      // Show success message
+      document.getElementById('successMessage').style.display = 'block';
+
+      // Reset form
+      this.reset();
+
+      // Log the data (in production, this would be sent to your backend)
+      console.log('New organization added:', { category, orgData });
+
+      setTimeout(() => {
+        document.getElementById('successMessage').style.display = 'none';
+      }, 3000);
+    });
+
+    // Initialize organizations manager
+    document.addEventListener('DOMContentLoaded', () => {
+      window.organizationsManager = new OrganizationsManager();
+    });
+  </script>
+</body>
+</html>

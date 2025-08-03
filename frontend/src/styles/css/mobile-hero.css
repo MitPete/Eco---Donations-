@@ -42,7 +42,7 @@
 /* CRITICAL: Mobile Navigation - Works on ALL mobile devices including iPhone 16 */
 @media (max-width: 900px) {
   /* Override the purple body background for ALL pages with dark background */
-  body.homepage, body.donatepage, body.historypage, body.foundationpage, body.governancepage, body.whitepaper-page, body.dashboardpage {
+  body.homepage, body.donatepage, body.historypage, body.foundationpage, body.governancepage, body.whitepaper-page, body.dashboardpage, body.causespage, body.organizationspage {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
     min-height: 100vh !important;
     height: auto !important; /* ALLOW BODY TO EXPAND */
@@ -51,7 +51,7 @@
   }
 
   /* Force mobile layout - override ALL base.css styles */
-  body.homepage .header, body.donatepage .header, body.historypage .header, body.foundationpage .header, body.governancepage .header, body.whitepaper-page .header, body.dashboardpage .header {
+  body.homepage .header, body.donatepage .header, body.historypage .header, body.foundationpage .header, body.governancepage .header, body.whitepaper-page .header, body.dashboardpage .header, body.causespage .header, body.organizationspage .header {
     flex-direction: row !important;
     padding: 0.4rem 0.8rem !important;
     min-height: 54px !important;
@@ -77,7 +77,7 @@
   }
 
   /* Logo stays visible - COMPACT for mobile */
-  body.homepage .header__logo, body.donatepage .header__logo, body.historypage .header__logo, body.foundationpage .header__logo, body.governancepage .header__logo, body.whitepaper-page, body.dashboardpage .header__logo, body.dashboardpage .header__logo {
+  body.homepage .header__logo, body.donatepage .header__logo, body.historypage .header__logo, body.foundationpage .header__logo, body.governancepage .header__logo, body.whitepaper-page, body.dashboardpage .header__logo, body.dashboardpage .header__logo, body.causespage .header__logo, body.organizationspage .header__logo {
     font-size: 1.3rem !important;
     font-weight: 900 !important;
     letter-spacing: 0.06em !important;
@@ -96,7 +96,7 @@
     min-width: fit-content !important;
   }
 
-  body.homepage .header__logo i, body.donatepage .header__logo i, body.historypage .header__logo i, body.foundationpage .header__logo i, body.governancepage .header__logo i, body.whitepaper-page, body.dashboardpage .header__logo i {
+  body.homepage .header__logo i, body.donatepage .header__logo i, body.historypage .header__logo i, body.foundationpage .header__logo i, body.governancepage .header__logo i, body.whitepaper-page, body.dashboardpage .header__logo i, body.causespage .header__logo i, body.organizationspage .header__logo i {
     color: #10b981 !important;
     font-size: 1.1rem !important;
     text-shadow: 0 2px 8px rgba(16,185,129,0.3) !important;
@@ -104,7 +104,7 @@
   }
 
   /* Show hamburger menu button on mobile - RIGHT CORNER - COMPACT */
-  body.homepage .mobile-menu-toggle, body.donatepage .mobile-menu-toggle, body.historypage .mobile-menu-toggle, body.foundationpage .mobile-menu-toggle, body.governancepage .mobile-menu-toggle, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle {
+  body.homepage .mobile-menu-toggle, body.donatepage .mobile-menu-toggle, body.historypage .mobile-menu-toggle, body.foundationpage .mobile-menu-toggle, body.governancepage .mobile-menu-toggle, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle, body.causespage .mobile-menu-toggle, body.organizationspage .mobile-menu-toggle {
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
@@ -123,13 +123,13 @@
     min-width: fit-content !important;
   }
 
-  body.homepage .mobile-menu-toggle:hover, body.donatepage .mobile-menu-toggle:hover, body.historypage .mobile-menu-toggle:hover, body.foundationpage .mobile-menu-toggle:hover, body.governancepage .mobile-menu-toggle:hover, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle:hover {
+  body.homepage .mobile-menu-toggle:hover, body.donatepage .mobile-menu-toggle:hover, body.historypage .mobile-menu-toggle:hover, body.foundationpage .mobile-menu-toggle:hover, body.governancepage .mobile-menu-toggle:hover, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle:hover, body.causespage .mobile-menu-toggle:hover, body.organizationspage .mobile-menu-toggle:hover {
     background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%) !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35) !important;
   }
 
-  body.homepage .mobile-menu-toggle span, body.donatepage .mobile-menu-toggle span, body.historypage .mobile-menu-toggle span, body.foundationpage .mobile-menu-toggle span, body.governancepage .mobile-menu-toggle span, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle span {
+  body.homepage .mobile-menu-toggle span, body.donatepage .mobile-menu-toggle span, body.historypage .mobile-menu-toggle span, body.foundationpage .mobile-menu-toggle span, body.governancepage .mobile-menu-toggle span, body.whitepaper-page, body.dashboardpage .mobile-menu-toggle span, body.causespage .mobile-menu-toggle span, body.organizationspage .mobile-menu-toggle span {
     display: block;
     height: 3px;
     width: 100%;
@@ -140,20 +140,20 @@
     box-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
   }
 
-  body.homepage .mobile-menu-toggle.active span:nth-child(1), body.donatepage .mobile-menu-toggle.active span:nth-child(1), body.historypage .mobile-menu-toggle.active span:nth-child(1), body.foundationpage .mobile-menu-toggle.active span:nth-child(1), body.governancepage .mobile-menu-toggle.active span:nth-child(1), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(1) {
+  body.homepage .mobile-menu-toggle.active span:nth-child(1), body.donatepage .mobile-menu-toggle.active span:nth-child(1), body.historypage .mobile-menu-toggle.active span:nth-child(1), body.foundationpage .mobile-menu-toggle.active span:nth-child(1), body.governancepage .mobile-menu-toggle.active span:nth-child(1), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(1), body.causespage .mobile-menu-toggle.active span:nth-child(1), body.organizationspage .mobile-menu-toggle.active span:nth-child(1) {
     transform: rotate(45deg) translate(7px, 7px);
   }
 
-  body.homepage .mobile-menu-toggle.active span:nth-child(2), body.donatepage .mobile-menu-toggle.active span:nth-child(2), body.historypage .mobile-menu-toggle.active span:nth-child(2), body.foundationpage .mobile-menu-toggle.active span:nth-child(2), body.governancepage .mobile-menu-toggle.active span:nth-child(2), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(2) {
+  body.homepage .mobile-menu-toggle.active span:nth-child(2), body.donatepage .mobile-menu-toggle.active span:nth-child(2), body.historypage .mobile-menu-toggle.active span:nth-child(2), body.foundationpage .mobile-menu-toggle.active span:nth-child(2), body.governancepage .mobile-menu-toggle.active span:nth-child(2), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(2), body.causespage .mobile-menu-toggle.active span:nth-child(2), body.organizationspage .mobile-menu-toggle.active span:nth-child(2) {
     opacity: 0;
   }
 
-  body.homepage .mobile-menu-toggle.active span:nth-child(3), body.donatepage .mobile-menu-toggle.active span:nth-child(3), body.historypage .mobile-menu-toggle.active span:nth-child(3), body.foundationpage .mobile-menu-toggle.active span:nth-child(3), body.governancepage .mobile-menu-toggle.active span:nth-child(3), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(3) {
+  body.homepage .mobile-menu-toggle.active span:nth-child(3), body.donatepage .mobile-menu-toggle.active span:nth-child(3), body.historypage .mobile-menu-toggle.active span:nth-child(3), body.foundationpage .mobile-menu-toggle.active span:nth-child(3), body.governancepage .mobile-menu-toggle.active span:nth-child(3), body.whitepaper-page, body.dashboardpage .mobile-menu-toggle.active span:nth-child(3), body.causespage .mobile-menu-toggle.active span:nth-child(3), body.organizationspage .mobile-menu-toggle.active span:nth-child(3) {
     transform: rotate(-45deg) translate(7px, -7px);
   }
 
   /* Show main nav when hamburger is clicked */
-  body.homepage .header__nav, body.donatepage .header__nav, body.historypage .header__nav, body.foundationpage .header__nav, body.governancepage .header__nav, body.whitepaper-page, body.dashboardpage .header__nav {
+  body.homepage .header__nav, body.donatepage .header__nav, body.historypage .header__nav, body.foundationpage .header__nav, body.governancepage .header__nav, body.whitepaper-page, body.dashboardpage .header__nav, body.causespage .header__nav, body.organizationspage .header__nav {
     display: none !important;
     position: fixed !important;
     top: 65px !important;
@@ -170,11 +170,11 @@
     border-bottom: 1px solid rgba(52, 211, 153, 0.25) !important;
   }
 
-  body.homepage .header__nav.mobile-nav-open, body.donatepage .header__nav.mobile-nav-open, body.historypage .header__nav.mobile-nav-open, body.foundationpage .header__nav.mobile-nav-open, body.governancepage .header__nav.mobile-nav-open, body.whitepaper-page, body.dashboardpage .header__nav.mobile-nav-open {
+  body.homepage .header__nav.mobile-nav-open, body.donatepage .header__nav.mobile-nav-open, body.historypage .header__nav.mobile-nav-open, body.foundationpage .header__nav.mobile-nav-open, body.governancepage .header__nav.mobile-nav-open, body.whitepaper-page, body.dashboardpage .header__nav.mobile-nav-open, body.causespage .header__nav.mobile-nav-open, body.organizationspage .header__nav.mobile-nav-open {
     display: flex !important;
   }
 
-  body.homepage .header__nav-link, body.donatepage .header__nav-link, body.historypage .header__nav-link, body.foundationpage .header__nav-link, body.governancepage .header__nav-link, body.whitepaper-page, body.dashboardpage .header__nav-link {
+  body.homepage .header__nav-link, body.donatepage .header__nav-link, body.historypage .header__nav-link, body.foundationpage .header__nav-link, body.governancepage .header__nav-link, body.whitepaper-page, body.dashboardpage .header__nav-link, body.causespage .header__nav-link, body.organizationspage .header__nav-link {
     padding: 1rem 1.5rem !important;
     border-radius: 0 !important;
     width: 100% !important;
@@ -190,7 +190,7 @@
     position: relative !important;
   }
 
-  body.homepage .header__nav-link::before, body.donatepage .header__nav-link::before, body.historypage .header__nav-link::before, body.foundationpage .header__nav-link::before, body.governancepage .header__nav-link::before, body.whitepaper-page, body.dashboardpage .header__nav-link::before {
+  body.homepage .header__nav-link::before, body.donatepage .header__nav-link::before, body.historypage .header__nav-link::before, body.foundationpage .header__nav-link::before, body.governancepage .header__nav-link::before, body.whitepaper-page, body.dashboardpage .header__nav-link::before, body.causespage .header__nav-link::before, body.organizationspage .header__nav-link::before {
     content: '';
     position: absolute;
     left: 0;
@@ -202,29 +202,29 @@
     transition: transform 0.3s ease;
   }
 
-  body.homepage .header__nav-link:hover::before, body.donatepage .header__nav-link:hover::before, body.historypage .header__nav-link:hover::before, body.foundationpage .header__nav-link:hover::before, body.governancepage .header__nav-link:hover::before, body.whitepaper-page, body.dashboardpage .header__nav-link:hover::before,
-  body.homepage .header__nav-link.active::before, body.donatepage .header__nav-link.active::before, body.historypage .header__nav-link.active::before, body.foundationpage .header__nav-link.active::before, body.governancepage .header__nav-link.active::before, body.whitepaper-page, body.dashboardpage .header__nav-link.active::before {
+  body.homepage .header__nav-link:hover::before, body.donatepage .header__nav-link:hover::before, body.historypage .header__nav-link:hover::before, body.foundationpage .header__nav-link:hover::before, body.governancepage .header__nav-link:hover::before, body.whitepaper-page, body.dashboardpage .header__nav-link:hover::before, body.causespage .header__nav-link:hover::before, body.organizationspage .header__nav-link:hover::before,
+  body.homepage .header__nav-link.active::before, body.donatepage .header__nav-link.active::before, body.historypage .header__nav-link.active::before, body.foundationpage .header__nav-link.active::before, body.governancepage .header__nav-link.active::before, body.whitepaper-page, body.dashboardpage .header__nav-link.active::before, body.causespage .header__nav-link.active::before, body.organizationspage .header__nav-link.active::before {
     transform: scaleY(1);
   }
 
-  body.homepage .header__nav-link:hover, body.donatepage .header__nav-link:hover, body.historypage .header__nav-link:hover, body.foundationpage .header__nav-link:hover, body.governancepage .header__nav-link:hover, body.whitepaper-page, body.dashboardpage .header__nav-link:hover {
+  body.homepage .header__nav-link:hover, body.donatepage .header__nav-link:hover, body.historypage .header__nav-link:hover, body.foundationpage .header__nav-link:hover, body.governancepage .header__nav-link:hover, body.whitepaper-page, body.dashboardpage .header__nav-link:hover, body.causespage .header__nav-link:hover, body.organizationspage .header__nav-link:hover {
     background: rgba(52, 211, 153, 0.15) !important;
     color: #34d399 !important;
     transform: translateX(8px) !important;
   }
 
-  body.homepage .header__nav-link.active, body.donatepage .header__nav-link.active, body.historypage .header__nav-link.active, body.foundationpage .header__nav-link.active, body.governancepage .header__nav-link.active, body.whitepaper-page, body.dashboardpage .header__nav-link.active {
+  body.homepage .header__nav-link.active, body.donatepage .header__nav-link.active, body.historypage .header__nav-link.active, body.foundationpage .header__nav-link.active, body.governancepage .header__nav-link.active, body.whitepaper-page, body.dashboardpage .header__nav-link.active, body.causespage .header__nav-link.active, body.organizationspage .header__nav-link.active {
     background: rgba(52, 211, 153, 0.2) !important;
     color: #34d399 !important;
     font-weight: 700 !important;
   }
 
-  body.homepage .header__nav-link:last-child, body.donatepage .header__nav-link:last-child, body.historypage .header__nav-link:last-child, body.foundationpage .header__nav-link:last-child, body.governancepage .header__nav-link:last-child, body.whitepaper-page, body.dashboardpage .header__nav-link:last-child {
+  body.homepage .header__nav-link:last-child, body.donatepage .header__nav-link:last-child, body.historypage .header__nav-link:last-child, body.foundationpage .header__nav-link:last-child, body.governancepage .header__nav-link:last-child, body.whitepaper-page, body.dashboardpage .header__nav-link:last-child, body.causespage .header__nav-link:last-child, body.organizationspage .header__nav-link:last-child {
     border-bottom: none !important;
   }
 
   /* Show compact wallet button in header on mobile - CENTER POSITION */
-  body.homepage .header__wallet, body.donatepage .header__wallet, body.historypage .header__wallet, body.foundationpage .header__wallet, body.governancepage .header__wallet, body.whitepaper-page, body.dashboardpage .header__wallet {
+  body.homepage .header__wallet, body.donatepage .header__wallet, body.historypage .header__wallet, body.foundationpage .header__wallet, body.governancepage .header__wallet, body.whitepaper-page, body.dashboardpage .header__wallet, body.causespage .header__wallet, body.organizationspage .header__wallet {
     display: flex !important;
     flex-direction: row !important;
     gap: 0 !important;
@@ -235,7 +235,7 @@
     justify-content: center !important;
   }
 
-  body.homepage .header__wallet-info, body.donatepage .header__wallet-info, body.historypage .header__wallet-info, body.foundationpage .header__wallet-info, body.governancepage .header__wallet-info, body.whitepaper-page, body.dashboardpage .header__wallet-info {
+  body.homepage .header__wallet-info, body.donatepage .header__wallet-info, body.historypage .header__wallet-info, body.foundationpage .header__wallet-info, body.governancepage .header__wallet-info, body.whitepaper-page, body.dashboardpage .header__wallet-info, body.causespage .header__wallet-info, body.organizationspage .header__wallet-info {
     display: none !important;
   }
 
@@ -884,7 +884,9 @@
   body.foundationpage .header,
   body.governancepage .header,
   body.whitepaper-page .header,
-  body.dashboardpage .header {
+  body.dashboardpage .header,
+  body.causespage .header,
+  body.organizationspage .header {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -906,7 +908,9 @@
   body.foundationpage .header__nav,
   body.governancepage .header__nav,
   body.whitepaper-page .header__nav,
-  body.dashboardpage .header__nav {
+  body.dashboardpage .header__nav,
+  body.causespage .header__nav,
+  body.organizationspage .header__nav {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -925,7 +929,9 @@
   body.foundationpage .header__nav-link,
   body.governancepage .header__nav-link,
   body.whitepaper-page .header__nav-link,
-  body.dashboardpage .header__nav-link {
+  body.dashboardpage .header__nav-link,
+  body.causespage .header__nav-link,
+  body.organizationspage .header__nav-link {
     color: #374151 !important;
     font-weight: 500 !important;
     text-decoration: none !important;
@@ -942,7 +948,9 @@
   body.foundationpage .header__nav-link:hover,
   body.governancepage .header__nav-link:hover,
   body.whitepaper-page .header__nav-link:hover,
-  body.dashboardpage .header__nav-link:hover {
+  body.dashboardpage .header__nav-link:hover,
+  body.causespage .header__nav-link:hover,
+  body.organizationspage .header__nav-link:hover {
     color: #10b981 !important;
     background: rgba(16, 185, 129, 0.05) !important;
     transform: translateY(-1px) !important;
@@ -955,7 +963,9 @@
   body.foundationpage .header__nav-link.active,
   body.governancepage .header__nav-link.active,
   body.whitepaper-page .header__nav-link.active,
-  body.dashboardpage .header__nav-link.active {
+  body.dashboardpage .header__nav-link.active,
+  body.causespage .header__nav-link.active,
+  body.organizationspage .header__nav-link.active {
     color: #10b981 !important;
     background: rgba(16, 185, 129, 0.1) !important;
     font-weight: 600 !important;
@@ -975,7 +985,9 @@
   body.foundationpage .header__logo,
   body.governancepage .header__logo,
   body.whitepaper-page .header__logo,
-  body.dashboardpage .header__logo {
+  body.dashboardpage .header__logo,
+  body.causespage .header__logo,
+  body.organizationspage .header__logo {
     font-size: 1.5rem !important;
     font-weight: 700 !important;
     color: #10b981 !important;
@@ -996,7 +1008,9 @@
   body.foundationpage .header__wallet,
   body.governancepage .header__wallet,
   body.whitepaper-page .header__wallet,
-  body.dashboardpage .header__wallet {
+  body.dashboardpage .header__wallet,
+  body.causespage .header__wallet,
+  body.organizationspage .header__wallet {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
@@ -1015,7 +1029,9 @@
   body.foundationpage .header__connect-button,
   body.governancepage .header__connect-button,
   body.whitepaper-page .header__connect-button,
-  body.dashboardpage .header__connect-button {
+  body.dashboardpage .header__connect-button,
+  body.causespage .header__connect-button,
+  body.organizationspage .header__connect-button {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     color: white !important;
     border: none !important;
@@ -1036,7 +1052,9 @@
   body.foundationpage .header__connect-button:hover,
   body.governancepage .header__connect-button:hover,
   body.whitepaper-page .header__connect-button:hover,
-  body.dashboardpage .header__connect-button:hover {
+  body.dashboardpage .header__connect-button:hover,
+  body.causespage .header__connect-button:hover,
+  body.organizationspage .header__connect-button:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
     background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;

@@ -34,7 +34,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background: white;
       color: white;
       visibility: hidden; /* Hide until CSS loads */
       opacity: 0;
@@ -168,6 +168,236 @@
       animation: spin 1s ease-in-out infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Critical styles for new sections */
+    .live-proof-section {
+      padding: 6rem 0;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: #1e293b;
+    }
+    .live-proof-section .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .live-proof-section .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .proof-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .proof-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.1);
+    }
+    .proof-card.highlight {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+    .proof-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: white;
+      font-size: 1.5rem;
+    }
+    .proof-value {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+    .proof-card.highlight .proof-value {
+      color: white;
+    }
+    .why-ecocoin {
+      padding: 6rem 0;
+      background: white;
+      color: #1e293b;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .benefit-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .benefit-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: white;
+      font-size: 2rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .proof-metrics {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+      }
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Critical styles for How It Works section */
+    .how-it-works {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      align-items: stretch;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .step-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 280px;
+      justify-content: flex-start;
+    }
+    .step-connector {
+      display: none;
+    }
+    .step-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    .step-number {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .step-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 24px;
+      color: #3b82f6;
+      border: 2px solid #e5e7eb;
+    }
+    .step-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .step-content h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 15px;
+      margin-top: 10px;
+    }
+    .step-content p {
+      color: #6b7280;
+      line-height: 1.6;
+      flex-grow: 1;
+    }
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .step-card {
+        min-height: 200px;
+        padding: 20px;
+      }
+    }
+
+    /* Critical styles for Featured Foundations section */
+    .featured-foundations {
+      padding: 80px 0;
+      background: white;
+    }
+    .homepage .foundations-grid,
+    .foundations-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .foundation-card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+    }
+    .foundation-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    @media (max-width: 768px) {
+      .homepage .foundations-grid,
+      .foundations-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+      }
+    }
   </style>
 
   <!-- Anti-FOUC Script - Load first -->
@@ -180,14 +410,14 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" crossorigin>
 
   <!-- Critical stylesheets loaded immediately -->
-  <link rel="stylesheet" href="/src/styles/css/base.css?v=2" id="base-css" importance="high">
-  <link rel="stylesheet" href="/src/styles/css/home.css?v=2" id="page-css" importance="high">
+  <link rel="stylesheet" href="/src/styles/css/base.css?v=3" id="base-css" importance="high">
+  <link rel="stylesheet" href="/src/styles/css/home.css?v=3" id="page-css" importance="high">
 
   <!-- Secondary stylesheets with lower priority -->
-  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css?v=2" id="mobile-css">
-  <link rel="stylesheet" href="/src/styles/css/mobile.css?v=2" id="mobile-responsive-css">
-  <link rel="stylesheet" href="/src/styles/css/wallet-selector.css?v=2" id="wallet-css">
-  <link rel="stylesheet" href="/src/styles/css/transaction-flow.css?v=2" id="transaction-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css?v=3" id="mobile-css">
+  <link rel="stylesheet" href="/src/styles/css/mobile.css?v=3" id="mobile-responsive-css">
+  <link rel="stylesheet" href="/src/styles/css/wallet-selector.css?v=3" id="wallet-css">
+  <link rel="stylesheet" href="/src/styles/css/transaction-flow.css?v=3" id="transaction-css">
 
   <!-- Browser Compatibility -->
   <script src="/js/browser-polyfills.js"></script>
@@ -236,10 +466,10 @@
     <nav class="header__nav" id="mobileNav">
       <a href="index.html" class="header__nav-link active">Home</a>
       <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="causes.html" class="header__nav-link">Causes</a>
+      <a href="organizations.html" class="header__nav-link">Organizations</a>
       <a href="history.html" class="header__nav-link">History</a>
-      <a href="foundation.html" class="header__nav-link">Foundations</a>
       <a href="dashboard.html" class="header__nav-link">Dashboard</a>
-      <a href="governance.html" class="header__nav-link">Governance</a>
     </nav>
   </header>
 
@@ -291,159 +521,96 @@
     </section>
 
     <!-- Impact Metrics Dashboard -->
-    <section class="metrics-dashboard">
+    <section class="live-proof-section">
       <div class="container">
-        <div class="dashboard-header">
-          <div class="header-content">
-            <h2>Real-Time Environmental Impact</h2>
-            <p>Every transaction creates measurable change for our planet</p>
-          </div>
-          <div class="header-actions">
-            <button class="refresh-btn" onclick="updateLiveStats()">
-              <i class="fas fa-sync-alt"></i>
-              <span>Live Data</span>
-            </button>
-          </div>
+        <div class="section-header">
+          <h2>Proven Environmental Impact</h2>
+          <p>Real numbers from verified environmental projects funded by our community</p>
         </div>
 
-        <div class="metrics-grid">
-          <div class="metric-card primary">
-            <div class="metric-header">
-              <div class="metric-icon">
-                <i class="fas fa-hand-holding-usd"></i>
-              </div>
-              <div class="metric-trend positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>+12.5%</span>
-              </div>
+        <div class="proof-metrics">
+          <div class="proof-card highlight">
+            <div class="proof-icon">
+              <i class="fas fa-hand-holding-usd"></i>
             </div>
-            <div class="metric-content">
-              <div class="metric-value" id="totalFunding">$0</div>
-              <div class="metric-label">Environmental Funding</div>
-              <div class="metric-subtitle">Total value directed to conservation</div>
-            </div>
-            <div class="metric-chart">
-              <div class="chart-bar" style="height: 60%"></div>
-              <div class="chart-bar" style="height: 80%"></div>
-              <div class="chart-bar" style="height: 45%"></div>
-              <div class="chart-bar" style="height: 90%"></div>
-              <div class="chart-bar" style="height: 75%"></div>
+            <div class="proof-content">
+              <div class="proof-value" id="totalFunding">$847,250</div>
+              <div class="proof-label">Total Environmental Funding</div>
+              <div class="proof-detail">Directly sent to verified conservation projects</div>
             </div>
           </div>
 
-          <div class="metric-card secondary">
-            <div class="metric-header">
-              <div class="metric-icon">
-                <i class="fas fa-leaf"></i>
-              </div>
-              <div class="metric-trend positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>+8.2%</span>
-              </div>
+          <div class="proof-card">
+            <div class="proof-icon">
+              <i class="fas fa-leaf"></i>
             </div>
-            <div class="metric-content">
-              <div class="metric-value" id="carbonOffset">0</div>
-              <div class="metric-label">CO₂ Offset (Tons)</div>
-              <div class="metric-subtitle">Carbon emissions prevented</div>
-            </div>
-            <div class="metric-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 73%"></div>
-              </div>
-              <span class="progress-text">73% of monthly goal</span>
+            <div class="proof-content">
+              <div class="proof-value" id="carbonOffset">1,247</div>
+              <div class="proof-label">Tons CO₂ Offset</div>
+              <div class="proof-detail">Verified carbon emissions prevented</div>
             </div>
           </div>
 
-          <div class="metric-card accent">
-            <div class="metric-header">
-              <div class="metric-icon">
-                <i class="fas fa-shield-alt"></i>
-              </div>
-              <div class="metric-trend positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>+15.7%</span>
-              </div>
+          <div class="proof-card">
+            <div class="proof-icon">
+              <i class="fas fa-shield-alt"></i>
             </div>
-            <div class="metric-content">
-              <div class="metric-value" id="areasProtected">0</div>
-              <div class="metric-label">Protected Areas</div>
-              <div class="metric-subtitle">Acres under conservation</div>
-            </div>
-            <div class="metric-visual">
-              <div class="protection-rings">
-                <div class="ring ring-1"></div>
-                <div class="ring ring-2"></div>
-                <div class="ring ring-3"></div>
-              </div>
+            <div class="proof-content">
+              <div class="proof-value" id="areasProtected">3,420</div>
+              <div class="proof-label">Acres Protected</div>
+              <div class="proof-detail">Land conserved from destruction</div>
             </div>
           </div>
 
-          <div class="metric-card success">
-            <div class="metric-header">
-              <div class="metric-icon">
-                <i class="fas fa-users"></i>
-              </div>
-              <div class="metric-trend positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>+24.1%</span>
-              </div>
+          <div class="proof-card">
+            <div class="proof-icon">
+              <i class="fas fa-users"></i>
             </div>
-            <div class="metric-content">
-              <div class="metric-value" id="activeChampions">0</div>
-              <div class="metric-label">Eco Champions</div>
-              <div class="metric-subtitle">Active community members</div>
-            </div>
-            <div class="metric-avatars">
-              <div class="avatar-stack">
-                <div class="avatar">🌱</div>
-                <div class="avatar">🌍</div>
-                <div class="avatar">♻️</div>
-                <div class="avatar-more">+<span id="moreCount">97</span></div>
-              </div>
+            <div class="proof-content">
+              <div class="proof-value" id="activeChampions">892</div>
+              <div class="proof-label">Eco Champions</div>
+              <div class="proof-detail">Active donors making a difference</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Impact Section -->
-    <section class="impact-section">
-      <div class="section-header">
-        <h2>Making a Real Impact</h2>
-        <p>Every donation creates measurable environmental change</p>
-      </div>
-      <div class="impact-grid">
-        <div class="impact-card">
-          <div class="impact-icon">
-            <i class="fa-solid fa-water"></i>
-          </div>
-          <h3>Ocean Conservation</h3>
-          <p>Protecting marine ecosystems and removing plastic waste from our oceans</p>
-          <div class="impact-stat">
-            <span class="impact-number" id="oceanImpact">0</span>
-            <span class="impact-unit">tons plastic removed</span>
-          </div>
+    <!-- Why Choose EcoCoin -->
+    <section class="why-ecocoin">
+      <div class="container">
+        <div class="section-header">
+          <h2>Why Choose EcoCoin</h2>
+          <p>The most trusted and transparent platform for environmental impact</p>
         </div>
-        <div class="impact-card">
-          <div class="impact-icon">
-            <i class="fa-solid fa-tree"></i>
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fa-solid fa-shield-check"></i>
+            </div>
+            <h3>100% Verified Impact</h3>
+            <p>Every donation is tracked on the blockchain with verified environmental outcomes from our partner organizations</p>
           </div>
-          <h3>Forest Protection</h3>
-          <p>Safeguarding biodiversity hotspots and preventing deforestation</p>
-          <div class="impact-stat">
-            <span class="impact-number" id="forestImpact">0</span>
-            <span class="impact-unit">acres protected</span>
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fa-solid fa-eye"></i>
+            </div>
+            <h3>Complete Transparency</h3>
+            <p>View exactly where your money goes, what projects it funds, and the real-world environmental impact created</p>
           </div>
-        </div>
-        <div class="impact-card">
-          <div class="impact-icon">
-            <i class="fa-solid fa-bolt"></i>
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fa-solid fa-coins"></i>
+            </div>
+            <h3>Earn ECO Rewards</h3>
+            <p>Receive governance tokens for donations, giving you a voice in selecting future environmental projects</p>
           </div>
-          <h3>Clean Energy</h3>
-          <p>Accelerating renewable energy adoption in underserved communities</p>
-          <div class="impact-stat">
-            <span class="impact-number" id="energyImpact">0</span>
-            <span class="impact-unit">MWh generated</span>
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3>Instant Global Impact</h3>
+            <p>Funds reach environmental projects immediately, enabling rapid response to urgent conservation needs</p>
           </div>
         </div>
       </div>
@@ -506,169 +673,131 @@
       </div>
     </section>
 
-    <!-- Featured Foundations -->
+    <!-- Featured Causes Preview -->
     <section class="featured-foundations">
       <div class="section-header">
-        <h2>Our Partner Foundations</h2>
-        <p>Trusted organizations making a real difference in environmental conservation</p>
+        <h2>Environmental Causes We Support</h2>
+        <p>Make an impact across six major environmental areas - each donation earns ECO tokens</p>
       </div>
       <div class="foundations-grid">
-        <div class="foundation-card" onclick="location.href='foundation.html?id=0'" role="button" tabindex="0" aria-label="Learn more about Save The Oceans foundation">
+        <div class="foundation-card" onclick="location.href='causes.html#ocean'" role="button" tabindex="0" aria-label="Learn more about Ocean Conservation">
           <div class="foundation-header">
-            <div class="foundation-badge" id="badge-oceans">0 ETH Raised</div>
+            <div class="foundation-badge" style="background: #0ea5e9;">Ocean Conservation</div>
           </div>
           <div class="foundation-content">
-            <h3>Save The Oceans</h3>
+            <h3><i class="fas fa-water" style="color: #0ea5e9; margin-right: 0.5rem;"></i>Ocean Conservation</h3>
             <p>Protecting marine ecosystems and removing plastic pollution from our oceans worldwide</p>
             <div class="foundation-stats">
               <div class="foundation-stat">
-                <span class="stat-value" id="oceans-projects">12</span>
-                <span class="stat-label">Active Projects</span>
+                <span class="stat-value">15</span>
+                <span class="stat-label">Organizations</span>
               </div>
               <div class="foundation-stat">
-                <span class="stat-value" id="oceans-impact">0</span>
-                <span class="stat-label">Tons Removed</span>
+                <span class="stat-value">$125K</span>
+                <span class="stat-label">Total Raised</span>
               </div>
             </div>
           </div>
           <div class="foundation-actions">
-            <a class="foundation-cta primary" href="donate.html?foundation=0">
+            <a class="foundation-cta primary" href="donate.html?cause=ocean">
               <i class="fas fa-heart"></i>
               Donate Now
             </a>
-            <a class="foundation-cta secondary" href="foundation.html?id=0">
-              <i class="fas fa-info-circle"></i>
-              Learn More
+            <a class="foundation-cta secondary" href="organizations.html?filter=ocean">
+              <i class="fas fa-list"></i>
+              View Organizations
             </a>
           </div>
         </div>
 
-        <div class="foundation-card" onclick="location.href='foundation.html?id=1'" role="button" tabindex="0" aria-label="Learn more about Protect The Rainforest foundation">
+        <div class="foundation-card" onclick="location.href='causes.html#forest'" role="button" tabindex="0" aria-label="Learn more about Forest Protection">
           <div class="foundation-header">
-            <div class="foundation-badge" id="badge-forest">0 ETH Raised</div>
+            <div class="foundation-badge" style="background: #22c55e;">Forest Protection</div>
           </div>
           <div class="foundation-content">
-            <h3>Protect The Rainforest</h3>
-            <p>Safeguarding biodiversity hotspots and preventing deforestation across the Amazon basin</p>
+            <h3><i class="fas fa-tree" style="color: #22c55e; margin-right: 0.5rem;"></i>Forest Protection</h3>
+            <p>Preventing deforestation and protecting biodiversity hotspots across the globe</p>
             <div class="foundation-stats">
               <div class="foundation-stat">
-                <span class="stat-value" id="forest-projects">8</span>
-                <span class="stat-label">Active Projects</span>
+                <span class="stat-value">12</span>
+                <span class="stat-label">Organizations</span>
               </div>
               <div class="foundation-stat">
-                <span class="stat-value" id="forest-impact">0</span>
-                <span class="stat-label">Acres Protected</span>
+                <span class="stat-value">$200K</span>
+                <span class="stat-label">Total Raised</span>
               </div>
             </div>
           </div>
           <div class="foundation-actions">
-            <a class="foundation-cta primary" href="donate.html?foundation=1">
+            <a class="foundation-cta primary" href="donate.html?cause=forest">
               <i class="fas fa-heart"></i>
               Donate Now
             </a>
-            <a class="foundation-cta secondary" href="foundation.html?id=1">
-              <i class="fas fa-info-circle"></i>
-              Learn More
+            <a class="foundation-cta secondary" href="organizations.html?filter=forest">
+              <i class="fas fa-list"></i>
+              View Organizations
             </a>
           </div>
         </div>
 
-        <div class="foundation-card" onclick="location.href='foundation.html?id=2'">
+        <div class="foundation-card" onclick="location.href='causes.html#energy'">
           <div class="foundation-header">
-            <div class="foundation-badge" id="badge-sequoia">0 ETH Raised</div>
+            <div class="foundation-badge" style="background: #f59e0b;">Clean Energy</div>
           </div>
           <div class="foundation-content">
-            <h3>Protect The Sequoias</h3>
-            <p>Preserving ancient giant trees against wildfires and climate change pressures</p>
-            <div class="foundation-stats">
-              <div class="foundation-stat">
-                <span class="stat-value" id="sequoia-projects">6</span>
-                <span class="stat-label">Active Projects</span>
-              </div>
-              <div class="foundation-stat">
-                <span class="stat-value" id="sequoia-impact">0</span>
-                <span class="stat-label">Trees Protected</span>
-              </div>
-            </div>
-          </div>
-          <div class="foundation-actions">
-            <a class="foundation-cta primary" href="donate.html?foundation=2">
-              <i class="fas fa-heart"></i>
-              Donate Now
-            </a>
-            <a class="foundation-cta secondary" href="foundation.html?id=2">
-              <i class="fas fa-info-circle"></i>
-              Learn More
-            </a>
-          </div>
-        </div>
-
-        <div class="foundation-card" onclick="location.href='foundation.html?id=3'">
-          <div class="foundation-header">
-            <div class="foundation-badge" id="badge-energy">0 ETH Raised</div>
-          </div>
-          <div class="foundation-content">
-            <h3>Clean Energy</h3>
+            <h3><i class="fas fa-solar-panel" style="color: #f59e0b; margin-right: 0.5rem;"></i>Clean Energy</h3>
             <p>Accelerating renewable energy installations in underserved communities worldwide</p>
             <div class="foundation-stats">
               <div class="foundation-stat">
-                <span class="stat-value" id="energy-projects">15</span>
-                <span class="stat-label">Active Projects</span>
+                <span class="stat-value">10</span>
+                <span class="stat-label">Organizations</span>
               </div>
               <div class="foundation-stat">
-                <span class="stat-value" id="energy-impact">0</span>
-                <span class="stat-label">MWh Generated</span>
+                <span class="stat-value">$160K</span>
+                <span class="stat-label">Total Raised</span>
               </div>
             </div>
           </div>
           <div class="foundation-actions">
-            <a class="foundation-cta primary" href="donate.html?foundation=3">
+            <a class="foundation-cta primary" href="donate.html?cause=energy">
               <i class="fas fa-heart"></i>
               Donate Now
             </a>
-            <a class="foundation-cta secondary" href="foundation.html?id=3">
-              <i class="fas fa-info-circle"></i>
-              Learn More
+            <a class="foundation-cta secondary" href="organizations.html?filter=energy">
+              <i class="fas fa-list"></i>
+              View Organizations
             </a>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Tokenomics -->
-    <section class="tokenomics">
-      <div class="section-header">
-        <h2>ECO Token Benefits</h2>
-        <p>Earn rewards while making a difference</p>
-      </div>
-      <div class="tokenomics-grid">
-        <div class="tokenomics-card">
-          <div class="tokenomics-icon">
-            <i class="fa-solid fa-coins"></i>
+        <div class="foundation-card" onclick="location.href='causes.html#wildlife'">
+          <div class="foundation-header">
+            <div class="foundation-badge" style="background: #8b5cf6;">Wildlife Protection</div>
           </div>
-          <h3>Fixed Supply</h3>
-          <p>Only 1 million ECO tokens will ever exist, ensuring scarcity and value</p>
-        </div>
-        <div class="tokenomics-card">
-          <div class="tokenomics-icon">
-            <i class="fa-solid fa-link"></i>
+          <div class="foundation-content">
+            <h3><i class="fas fa-paw" style="color: #8b5cf6; margin-right: 0.5rem;"></i>Wildlife Protection</h3>
+            <p>Protecting endangered species and preserving natural habitats worldwide</p>
+            <div class="foundation-stats">
+              <div class="foundation-stat">
+                <span class="stat-value">14</span>
+                <span class="stat-label">Organizations</span>
+              </div>
+              <div class="foundation-stat">
+                <span class="stat-value">$95K</span>
+                <span class="stat-label">Total Raised</span>
+              </div>
+            </div>
           </div>
-          <h3>ERC-20 Standard</h3>
-          <p>Fully compatible with DeFi protocols and cryptocurrency exchanges</p>
-        </div>
-        <div class="tokenomics-card">
-          <div class="tokenomics-icon">
-            <i class="fa-solid fa-medal"></i>
+          <div class="foundation-actions">
+            <a class="foundation-cta primary" href="donate.html?cause=wildlife">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a class="foundation-cta secondary" href="organizations.html?filter=wildlife">
+              <i class="fas fa-list"></i>
+              View Organizations
+            </a>
           </div>
-          <h3>Proof of Impact</h3>
-          <p>Optional soul-bound tokens proving your environmental contributions</p>
-        </div>
-        <div class="tokenomics-card">
-          <div class="tokenomics-icon">
-            <i class="fa-solid fa-vote-yea"></i>
-          </div>
-          <h3>Future Governance</h3>
-          <p>Vote on foundation partnerships and platform improvements</p>
         </div>
       </div>
     </section>

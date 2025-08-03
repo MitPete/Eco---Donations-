@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Environmental Causes - EcoCoin</title>
+  <meta name="description" content="Explore the environmental causes supported by EcoCoin - from ocean conservation to clean energy initiatives.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/src/styles/css/base.css?v=5">
+  <link rel="stylesheet" href="/src/styles/css/mobile-hero.css?v=10">
+
+  <style>
+    /* FORCE CORRECT HEADER LAYOUT - OVERRIDE CACHE ISSUES */
+    @media (min-width: 901px) {
+      body.causespage .header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 1rem 2rem !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        min-height: 70px !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+        flex-wrap: nowrap !important;
+      }
+      body.causespage .header__nav {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex: 1 !important;
+        gap: 1.5rem !important;
+        margin: 0 !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        order: 2 !important;
+      }
+      body.causespage .header__logo {
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+        color: #10b981 !important;
+        text-decoration: none !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        flex-shrink: 0 !important;
+        width: 180px !important;
+        min-width: 180px !important;
+        order: 1 !important;
+      }
+      body.causespage .header__wallet {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 1rem !important;
+        flex-shrink: 0 !important;
+        width: 200px !important;
+        min-width: 200px !important;
+        margin-left: auto !important;
+        order: 3 !important;
+      }
+    }
+
+    .causes-hero {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 8rem 0 4rem;
+      text-align: center;
+    }
+
+    .causes-hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .causes-hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .causes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .cause-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cause-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--cause-color);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .cause-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border-color: var(--cause-color);
+    }
+
+    .cause-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .cause-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      background: var(--cause-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .cause-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .cause-description {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .cause-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .cause-stat {
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .cause-stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--cause-color);
+      display: block;
+    }
+
+    .cause-stat-label {
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    .cause-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .cause-action {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .cause-action.primary {
+      background: var(--cause-color);
+      color: white;
+    }
+
+    .cause-action.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .cause-action.secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #e5e7eb;
+    }
+
+    .cause-action.secondary:hover {
+      background: #e5e7eb;
+    }
+
+    /* Color variables for each cause */
+    .cause-card.ocean { --cause-color: #0ea5e9; }
+    .cause-card.forest { --cause-color: #22c55e; }
+    .cause-card.climate { --cause-color: #ef4444; }
+    .cause-card.energy { --cause-color: #f59e0b; }
+    .cause-card.wildlife { --cause-color: #8b5cf6; }
+    .cause-card.water { --cause-color: #06b6d4; }
+
+    .impact-summary {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 4rem 0;
+      margin: 4rem 0;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .impact-item h3 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #10b981;
+      margin-bottom: 0.5rem;
+    }
+
+    .impact-item p {
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .causes-hero h1 {
+        font-size: 2rem;
+      }
+
+      .causes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cause-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body class="causespage">
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo">
+      <i class="fas fa-leaf"></i>
+      EcoCoin
+    </a>
+
+    <div class="header__wallet">
+      <div class="header__wallet-info">
+        <span id="walletAddress" class="header__wallet-address"></span>
+        <span id="walletBalance" class="header__wallet-balance"></span>
+      </div>
+      <button onclick="connectWallet()" id="connectButton" class="header__connect-button">
+        <i class="fas fa-wallet"></i>
+        Connect Wallet
+      </button>
+    </div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="header__nav" id="mobileNav">
+      <a href="index.html" class="header__nav-link">Home</a>
+      <a href="donate.html" class="header__nav-link">Donate</a>
+      <a href="causes.html" class="header__nav-link active">Causes</a>
+      <a href="organizations.html" class="header__nav-link">Organizations</a>
+      <a href="history.html" class="header__nav-link">History</a>
+      <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="main-content">
+    <section class="causes-hero">
+      <div class="container">
+        <h1>Environmental Causes We Support</h1>
+        <p>Choose from six major environmental impact areas. Every donation creates measurable change while earning you ECO governance tokens.</p>
+      </div>
+    </section>
+
+    <!-- Impact Summary -->
+    <section class="impact-summary">
+      <div class="container">
+        <div class="impact-grid">
+          <div class="impact-item">
+            <h3>$847K+</h3>
+            <p>Total Donated</p>
+          </div>
+          <div class="impact-item">
+            <h3>1,247</h3>
+            <p>Tons CO₂ Offset</p>
+          </div>
+          <div class="impact-item">
+            <h3>3,420</h3>
+            <p>Acres Protected</p>
+          </div>
+          <div class="impact-item">
+            <h3>892</h3>
+            <p>Eco Champions</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Causes Grid -->
+    <section class="container">
+      <div class="causes-grid">
+
+        <!-- Ocean Conservation -->
+        <div class="cause-card ocean">
+          <div class="cause-icon">
+            <i class="fas fa-water"></i>
+          </div>
+          <h3>Ocean Conservation</h3>
+          <p class="cause-description">Protecting marine ecosystems, removing plastic pollution, and restoring coral reefs to preserve ocean biodiversity.</p>
+          <div class="cause-stats">
+            <div class="cause-stat">
+              <span class="cause-stat-value">15</span>
+              <span class="cause-stat-label">Organizations</span>
+            </div>
+            <div class="cause-stat">
+              <span class="cause-stat-value">$125K</span>
+              <span class="cause-stat-label">Raised</span>
+            </div>
+          </div>
+          <div class="cause-actions">
+            <a href="donate.html?cause=ocean" class="cause-action primary">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a href="organizations.html?filter=ocean" class="cause-action secondary">
+              <i class="fas fa-list"></i>
+              View Organizations
+            </a>
+          </div>
+        </div>
+
+        <!-- Forest Protection -->
+        <div class="cause-card forest">
+          <div class="cause-icon">
+            <i class="fas fa-tree"></i>
+          </div>
+          <h3>Forest Protection</h3>
+          <p class="cause-description">Preventing deforestation, restoring damaged ecosystems, and protecting biodiversity hotspots worldwide.</p>
+          <div class="cause-stats">
+            <div class="cause-stat">
+              <span class="cause-stat-value">12</span>
+              <span class="cause-stat-label">Organizations</span>
+            </div>
+            <div class="cause-stat">
+              <span class="cause-stat-value">$200K</span>
+              <span class="cause-stat-label">Raised</span>
+            </div>
+          </div>
+          <div class="cause-actions">
+            <a href="donate.html?cause=forest" class="cause-action primary">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a href="organizations.html?filter=forest" class="cause-action secondary">
+              <i class="fas fa-list"></i>
+              View Organizations
+            </a>
+          </div>
+        </div>
+
+        <!-- Climate Action -->
+        <div class="cause-card climate">
+          <div class="cause-icon">
+            <i class="fas fa-globe-americas"></i>
+          </div>
+          <h3>Climate Action</h3>
+          <p class="cause-description">Fighting climate change through advocacy, carbon offset programs, and supporting climate adaptation initiatives.</p>
+          <div class="cause-stats">
+            <div class="cause-stat">
+              <span class="cause-stat-value">18</span>
+              <span class="cause-stat-label">Organizations</span>
+            </div>
+            <div class="cause-stat">
+              <span class="cause-stat-value">$180K</span>
+              <span class="cause-stat-label">Raised</span>
+            </div>
+          </div>
+          <div class="cause-actions">
+            <a href="donate.html?cause=climate" class="cause-action primary">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a href="organizations.html?filter=climate" class="cause-action secondary">
+              <i class="fas fa-list"></i>
+              View Organizations
+            </a>
+          </div>
+        </div>
+
+        <!-- Clean Energy -->
+        <div class="cause-card energy">
+          <div class="cause-icon">
+            <i class="fas fa-solar-panel"></i>
+          </div>
+          <h3>Clean Energy</h3>
+          <p class="cause-description">Accelerating renewable energy adoption and providing clean energy access to underserved communities globally.</p>
+          <div class="cause-stats">
+            <div class="cause-stat">
+              <span class="cause-stat-value">10</span>
+              <span class="cause-stat-label">Organizations</span>
+            </div>
+            <div class="cause-stat">
+              <span class="cause-stat-value">$160K</span>
+              <span class="cause-stat-label">Raised</span>
+            </div>
+          </div>
+          <div class="cause-actions">
+            <a href="donate.html?cause=energy" class="cause-action primary">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a href="organizations.html?filter=energy" class="cause-action secondary">
+              <i class="fas fa-list"></i>
+              View Organizations
+            </a>
+          </div>
+        </div>
+
+        <!-- Wildlife Protection -->
+        <div class="cause-card wildlife">
+          <div class="cause-icon">
+            <i class="fas fa-paw"></i>
+          </div>
+          <h3>Wildlife Protection</h3>
+          <p class="cause-description">Protecting endangered species, preserving natural habitats, and supporting wildlife conservation efforts.</p>
+          <div class="cause-stats">
+            <div class="cause-stat">
+              <span class="cause-stat-value">14</span>
+              <span class="cause-stat-label">Organizations</span>
+            </div>
+            <div class="cause-stat">
+              <span class="cause-stat-value">$95K</span>
+              <span class="cause-stat-label">Raised</span>
+            </div>
+          </div>
+          <div class="cause-actions">
+            <a href="donate.html?cause=wildlife" class="cause-action primary">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a href="organizations.html?filter=wildlife" class="cause-action secondary">
+              <i class="fas fa-list"></i>
+              View Organizations
+            </a>
+          </div>
+        </div>
+
+        <!-- Clean Water -->
+        <div class="cause-card water">
+          <div class="cause-icon">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h3>Clean Water Access</h3>
+          <p class="cause-description">Providing clean drinking water, improving sanitation, and supporting water conservation projects worldwide.</p>
+          <div class="cause-stats">
+            <div class="cause-stat">
+              <span class="cause-stat-value">8</span>
+              <span class="cause-stat-label">Organizations</span>
+            </div>
+            <div class="cause-stat">
+              <span class="cause-stat-value">$87K</span>
+              <span class="cause-stat-label">Raised</span>
+            </div>
+          </div>
+          <div class="cause-actions">
+            <a href="donate.html?cause=water" class="cause-action primary">
+              <i class="fas fa-heart"></i>
+              Donate Now
+            </a>
+            <a href="organizations.html?filter=water" class="cause-action secondary">
+              <i class="fas fa-list"></i>
+              View Organizations
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__content">
+      <div class="footer__section">
+        <h3><i class="fa-solid fa-leaf"></i> EcoCoin</h3>
+        <p>Empowering environmental change through blockchain technology and transparent donations.</p>
+        <div class="footer__social">
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+            <i class="fa-brands fa-twitter"></i>
+          </a>
+          <a href="https://discord.com" target="_blank" rel="noopener" aria-label="Discord">
+            <i class="fa-brands fa-discord"></i>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__section">
+        <h3>Platform</h3>
+        <a href="donate.html">Make a Donation</a>
+        <a href="causes.html">Browse Causes</a>
+        <a href="organizations.html">View Organizations</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Resources</h3>
+        <a href="history.html">Transaction History</a>
+        <a href="whitepaper.html">Whitepaper</a>
+        <a href="#api">API Documentation</a>
+        <a href="#support">Support Center</a>
+      </div>
+
+      <div class="footer__section">
+        <h3>Legal</h3>
+        <a href="#terms">Terms of Service</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#disclaimer">Disclaimer</a>
+        <a href="#cookies">Cookie Policy</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__bottom-content">
+        <p>© 2025 EcoCoin. Built with 💚 for the planet.</p>
+        <div class="footer__stats">
+          <span><i class="fa-solid fa-globe"></i> Carbon Neutral Platform</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Secure & Transparent</span>
+          <span><i class="fa-solid fa-leaf"></i> 100% Environmental Focus</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="ethers.umd.min.js"></script>
+  <script src="/scripts/main-wallet.js"></script>
+
+  <script>
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+      const nav = document.getElementById('mobileNav');
+      const header = document.querySelector('.header');
+
+      nav.classList.toggle('mobile-nav-open');
+      header.classList.toggle('mobile-nav-open');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const header = document.querySelector('.header');
+      const nav = document.getElementById('mobileNav');
+
+      if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+        nav.classList.remove('mobile-nav-open');
+        header.classList.remove('mobile-nav-open');
+      }
+    });
+
+    // Close mobile menu when clicking nav links
+    document.querySelectorAll('.header__nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        const nav = document.getElementById('mobileNav');
+        const header = document.querySelector('.header');
+        nav.classList.remove('mobile-nav-open');
+        header.classList.remove('mobile-nav-open');
+      });
+    });
+  </script>
+</body>
+</html>

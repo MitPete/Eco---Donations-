@@ -844,9 +844,11 @@
 
 .steps-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
-  align-items: center;
+  align-items: stretch;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .step-card {
@@ -858,6 +860,10 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  justify-content: flex-start;
 }
 
 .step-card:hover {
@@ -896,16 +902,25 @@
   border: 2px solid #e5e7eb;
 }
 
+.step-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .step-content h3 {
   font-size: 1.3rem;
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .step-content p {
   color: #6b7280;
   line-height: 1.6;
+  flex-grow: 1;
 }
 
 .step-connector {
@@ -923,9 +938,9 @@
 
 .homepage .foundations-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -1340,10 +1355,10 @@
   }
 
   .steps-grid,
-  .homepage .foundations-grid,
-  .tokenomics-grid {
+  .homepage .foundations-grid {
     grid-template-columns: 1fr;
     padding: 0 1rem;
+    gap: 1.5rem;
   }
 
   .step-card,
@@ -1466,5 +1481,327 @@
   .metric-label,
   .impact-card p {
     color: #d1d5db;
+  }
+}
+
+/* ==========================================
+   LIVE PROOF SECTION STYLES
+   ========================================== */
+
+.live-proof-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #1e293b;
+}
+
+.live-proof-section .section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.live-proof-section .section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.live-proof-section .section-header p {
+  font-size: 1.2rem;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.proof-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.proof-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.proof-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.proof-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.proof-card.highlight {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.proof-card.highlight::before {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.proof-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.proof-card.highlight .proof-icon {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.proof-content {
+  text-align: left;
+}
+
+.proof-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.proof-card.highlight .proof-value {
+  color: white;
+  background: none;
+  -webkit-text-fill-color: white;
+}
+
+.proof-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+
+.proof-card.highlight .proof-label {
+  color: white;
+}
+
+.proof-detail {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.proof-card.highlight .proof-detail {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ==========================================
+   WHY CHOOSE ECOCOIN SECTION STYLES
+   ========================================== */
+
+.why-ecocoin {
+  padding: 6rem 0;
+  background: white;
+  color: #1e293b;
+}
+
+.why-ecocoin .section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.why-ecocoin .section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.why-ecocoin .section-header p {
+  font-size: 1.2rem;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.benefit-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(16, 185, 129, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefit-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981, #059669);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.benefit-card:hover::before {
+  transform: scaleX(1);
+}
+
+.benefit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background: white;
+}
+
+.benefit-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: white;
+  font-size: 2rem;
+  position: relative;
+}
+
+.benefit-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon::after {
+  opacity: 1;
+}
+
+.benefit-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.benefit-card p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN FOR NEW SECTIONS
+   ========================================== */
+
+@media (max-width: 768px) {
+  .live-proof-section,
+  .why-ecocoin {
+    padding: 4rem 0;
+  }
+
+  .live-proof-section .section-header h2,
+  .why-ecocoin .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .proof-metrics {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .step-card {
+    min-height: 200px;
+    padding: 20px;
+  }
+
+  .proof-card,
+  .benefit-card {
+    padding: 1.5rem;
+  }
+
+  .proof-value {
+    font-size: 2rem;
+  }
+
+  .benefit-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .proof-card,
+  .benefit-card {
+    padding: 1.25rem;
+  }
+
+  .proof-value {
+    font-size: 1.8rem;
+  }
+
+  .live-proof-section .section-header p,
+  .why-ecocoin .section-header p {
+    font-size: 1rem;
   }
 }
