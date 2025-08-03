@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics - EcoCoin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="src/styles/css/base.css?v=11">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .analytics-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .analytics-header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .analytics-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .analytics-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .time-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-button {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .filter-button:hover,
+        .filter-button.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .metric-icon.revenue {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .metric-icon.users {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .metric-icon.donations {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .metric-icon.engagement {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .metric-icon.gas {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .metric-icon.governance {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .metric-change.positive {
+            color: #10b981;
+        }
+
+        .metric-change.negative {
+            color: #ef4444;
+        }
+
+        .metric-change.neutral {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .foundation-stats {
+            margin-bottom: 3rem;
+        }
+
+        .foundation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .foundation-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .foundation-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .foundation-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .foundation-logo.ocean {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+
+        .foundation-logo.forest {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .foundation-logo.wildlife {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .foundation-logo.climate {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .foundation-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .foundation-stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            transition: width 0.5s ease;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        @media (max-width: 768px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .time-filter {
+                flex-wrap: wrap;
+            }
+
+            .analytics-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="analytics-page">
+    <div class="analytics-container">
+        <!-- Back to Dashboard -->
+        <a href="admin-dashboard.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+        <!-- Header -->
+        <div class="analytics-header">
+            <h1 class="analytics-title">Platform Analytics</h1>
+            <p class="analytics-subtitle">Comprehensive insights into platform performance and user engagement</p>
+
+            <!-- Time Filter -->
+            <div class="time-filter">
+                <button class="filter-button" onclick="setTimeFilter('24h')">24 Hours</button>
+                <button class="filter-button active" onclick="setTimeFilter('7d')">7 Days</button>
+                <button class="filter-button" onclick="setTimeFilter('30d')">30 Days</button>
+                <button class="filter-button" onclick="setTimeFilter('90d')">90 Days</button>
+                <button class="filter-button" onclick="setTimeFilter('1y')">1 Year</button>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon revenue">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="totalRevenue">$1,847,293</div>
+                <div class="metric-label">Total Platform Revenue</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +18.7% from last period
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon users">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="activeUsers">12,847</div>
+                <div class="metric-label">Active Users</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +24.3% new users
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon donations">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="donationCount">3,456</div>
+                <div class="metric-label">Total Donations</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +12.8% this week
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon engagement">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="engagementRate">87.3%</div>
+                <div class="metric-label">User Engagement</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +5.2% engagement
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon gas">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="avgGasFee">$12.45</div>
+                <div class="metric-label">Avg Gas Fee</div>
+                <div class="metric-change negative">
+                    <i class="fas fa-arrow-down"></i>
+                    -8.3% vs last week
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon governance">
+                        <i class="fas fa-vote-yea"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="govParticipation">42.8%</div>
+                <div class="metric-label">Governance Participation</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +15.6% voting
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div>
+                        <h3 class="chart-title">Donation Trends</h3>
+                        <p class="chart-subtitle">Daily donation volume and transaction count</p>
+                    </div>
+                </div>
+                <canvas id="donationChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div>
+                        <h3 class="chart-title">Foundation Distribution</h3>
+                        <p class="chart-subtitle">Donation allocation by foundation</p>
+                    </div>
+                </div>
+                <canvas id="foundationChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Foundation Performance -->
+        <div class="foundation-stats">
+            <h3 class="chart-title" style="margin-bottom: 1.5rem;">Foundation Performance</h3>
+            <div class="foundation-grid">
+                <div class="foundation-card">
+                    <div class="foundation-header">
+                        <div class="foundation-logo ocean">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div class="foundation-name">Ocean Cleanup</div>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Total Raised:</span>
+                        <span class="stat-value">$456,789</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Donors:</span>
+                        <span class="stat-value">1,234</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Avg Donation:</span>
+                        <span class="stat-value">$370.15</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%"></div>
+                    </div>
+                </div>
+
+                <div class="foundation-card">
+                    <div class="foundation-header">
+                        <div class="foundation-logo forest">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <div class="foundation-name">Forest Protection</div>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Total Raised:</span>
+                        <span class="stat-value">$523,147</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Donors:</span>
+                        <span class="stat-value">987</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Avg Donation:</span>
+                        <span class="stat-value">$530.11</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 89%"></div>
+                    </div>
+                </div>
+
+                <div class="foundation-card">
+                    <div class="foundation-header">
+                        <div class="foundation-logo wildlife">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                        <div class="foundation-name">Wildlife Conservation</div>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Total Raised:</span>
+                        <span class="stat-value">$398,572</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Donors:</span>
+                        <span class="stat-value">756</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Avg Donation:</span>
+                        <span class="stat-value">$527.31</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%"></div>
+                    </div>
+                </div>
+
+                <div class="foundation-card">
+                    <div class="foundation-header">
+                        <div class="foundation-logo climate">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="foundation-name">Climate Action</div>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Total Raised:</span>
+                        <span class="stat-value">$468,785</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Donors:</span>
+                        <span class="stat-value">1,479</span>
+                    </div>
+                    <div class="foundation-stats-row">
+                        <span class="stat-label">Avg Donation:</span>
+                        <span class="stat-value">$317.04</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Donors Table -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3 class="chart-title">Top Donors</h3>
+                <p class="chart-subtitle">Highest contributing community members</p>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Wallet Address</th>
+                        <th>Total Donated</th>
+                        <th>ECO Tokens</th>
+                        <th>Donations Count</th>
+                        <th>Last Activity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><code>0x1234...5678</code></td>
+                        <td>45.7 ETH</td>
+                        <td>457 ECO</td>
+                        <td>23</td>
+                        <td>2 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><code>0x2345...6789</code></td>
+                        <td>38.2 ETH</td>
+                        <td>382 ECO</td>
+                        <td>19</td>
+                        <td>5 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><code>0x3456...7890</code></td>
+                        <td>32.9 ETH</td>
+                        <td>329 ECO</td>
+                        <td>17</td>
+                        <td>1 day ago</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><code>0x4567...8901</code></td>
+                        <td>28.5 ETH</td>
+                        <td>285 ECO</td>
+                        <td>12</td>
+                        <td>2 days ago</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><code>0x5678...9012</code></td>
+                        <td>25.3 ETH</td>
+                        <td>253 ECO</td>
+                        <td>15</td>
+                        <td>3 days ago</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Time filter functionality
+        function setTimeFilter(period) {
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update charts and data based on selected period
+            updateAnalytics(period);
+        }
+
+        function updateAnalytics(period) {
+            console.log(`Updating analytics for period: ${period}`);
+
+            // Simulate data updates based on time period
+            const multiplier = {
+                '24h': 0.1,
+                '7d': 1,
+                '30d': 4,
+                '90d': 12,
+                '1y': 50
+            }[period] || 1;
+
+            // Update metrics with simulated data
+            document.getElementById('totalRevenue').textContent =
+                '$' + (1847293 * multiplier).toLocaleString();
+            document.getElementById('activeUsers').textContent =
+                Math.floor(12847 * multiplier).toLocaleString();
+            document.getElementById('donationCount').textContent =
+                Math.floor(3456 * multiplier).toLocaleString();
+        }
+
+        // Initialize Charts
+        function initializeCharts() {
+            // Donation Trends Chart
+            const donationCtx = document.getElementById('donationChart').getContext('2d');
+            new Chart(donationCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Donation Volume (ETH)',
+                        data: [12.5, 19.2, 15.8, 25.3, 22.7, 30.1, 28.9],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Transaction Count',
+                        data: [45, 67, 52, 81, 73, 95, 89],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+
+            // Foundation Distribution Chart
+            const foundationCtx = document.getElementById('foundationChart').getContext('2d');
+            new Chart(foundationCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ocean Cleanup', 'Forest Protection', 'Wildlife Conservation', 'Climate Action'],
+                    datasets: [{
+                        data: [456789, 523147, 398572, 468785],
+                        backgroundColor: [
+                            '#0ea5e9',
+                            '#22c55e',
+                            '#f59e0b',
+                            '#ef4444'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Simulate real-time updates
+        function simulateRealTimeUpdates() {
+            setInterval(() => {
+                // Update metrics with small random changes
+                const elements = ['totalRevenue', 'activeUsers', 'donationCount'];
+                elements.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        const current = parseFloat(element.textContent.replace(/[$,]/g, ''));
+                        const change = (Math.random() - 0.5) * 100;
+                        const newValue = Math.max(0, current + change);
+
+                        if (id === 'totalRevenue') {
+                            element.textContent = '$' + newValue.toLocaleString();
+                        } else {
+                            element.textContent = Math.floor(newValue).toLocaleString();
+                        }
+                    }
+                });
+            }, 5000);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            simulateRealTimeUpdates();
+            console.log('📊 Analytics dashboard initialized');
+        });
+    </script>
+</body>
+</html>

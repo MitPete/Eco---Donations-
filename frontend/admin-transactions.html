@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Monitoring - EcoCoin Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/styles/css/base.css?v=11">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .monitoring-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .monitoring-header {
+            margin-bottom: 2rem;
+        }
+
+        .monitoring-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .monitoring-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .status-icon.pending {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .status-icon.confirmed {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .status-icon.failed {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .status-icon.gas {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .status-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .controls-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+            width: 250px;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .filter-dropdown {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .refresh-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .refresh-button {
+            padding: 0.75rem 1rem;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            color: #10b981;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .refresh-button:hover {
+            background: rgba(16, 185, 129, 0.3);
+        }
+
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .live-feed {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .feed-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #10b981;
+            font-size: 0.9rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .transaction-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            position: sticky;
+            top: 0;
+        }
+
+        .transaction-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .transaction-hash {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: #10b981;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .status-confirmed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-failed {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .foundation-tag {
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .foundation-ocean {
+            background: rgba(14, 165, 233, 0.2);
+            color: #0ea5e9;
+        }
+
+        .foundation-forest {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .foundation-wildlife {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .foundation-climate {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .btn-view {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .btn-retry {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .gas-tracker {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .gas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .gas-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .gas-metric {
+            text-align: center;
+        }
+
+        .gas-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .gas-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+        }
+
+        .alerts-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .alert-icon {
+            font-size: 1.2rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .alert-time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .monitoring-container {
+                padding: 1rem;
+            }
+
+            .controls-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-controls,
+            .refresh-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .transaction-table {
+                font-size: 0.8rem;
+            }
+
+            .transaction-table th,
+            .transaction-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="monitoring-page">
+    <div class="monitoring-container">
+        <!-- Back to Dashboard -->
+        <a href="admin-dashboard.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+        <!-- Header -->
+        <div class="monitoring-header">
+            <h1 class="monitoring-title">Transaction Monitoring</h1>
+            <p class="monitoring-subtitle">Real-time transaction tracking and blockchain analysis</p>
+        </div>
+
+        <!-- Status Overview -->
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-header">
+                    <div class="status-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="status-value" id="pendingCount">23</div>
+                <div class="status-label">Pending Transactions</div>
+            </div>
+
+            <div class="status-card">
+                <div class="status-header">
+                    <div class="status-icon confirmed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <div class="status-value" id="confirmedCount">1,847</div>
+                <div class="status-label">Confirmed Today</div>
+            </div>
+
+            <div class="status-card">
+                <div class="status-header">
+                    <div class="status-icon failed">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="status-value" id="failedCount">12</div>
+                <div class="status-label">Failed Transactions</div>
+            </div>
+
+            <div class="status-card">
+                <div class="status-header">
+                    <div class="status-icon gas">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                </div>
+                <div class="status-value" id="avgGas">15.3</div>
+                <div class="status-label">Avg Gas (Gwei)</div>
+            </div>
+        </div>
+
+        <!-- Gas Tracker -->
+        <div class="gas-tracker">
+            <div class="gas-header">
+                <h3>Gas Fee Tracker</h3>
+                <span class="live-indicator">
+                    <div class="live-dot"></div>
+                    Live
+                </span>
+            </div>
+            <div class="gas-metrics">
+                <div class="gas-metric">
+                    <div class="gas-value" id="gasStandard">12.5</div>
+                    <div class="gas-label">Standard (Gwei)</div>
+                </div>
+                <div class="gas-metric">
+                    <div class="gas-value" id="gasFast">18.7</div>
+                    <div class="gas-label">Fast (Gwei)</div>
+                </div>
+                <div class="gas-metric">
+                    <div class="gas-value" id="gasInstant">25.3</div>
+                    <div class="gas-label">Instant (Gwei)</div>
+                </div>
+                <div class="gas-metric">
+                    <div class="gas-value" id="gasOptimal">14.2</div>
+                    <div class="gas-label">Optimal (Gwei)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-section">
+            <div class="search-controls">
+                <input type="text" class="search-input" placeholder="Search by hash, address, or amount..." id="searchInput">
+                <select class="filter-dropdown" id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="failed">Failed</option>
+                </select>
+                <select class="filter-dropdown" id="foundationFilter">
+                    <option value="">All Foundations</option>
+                    <option value="ocean">Ocean Cleanup</option>
+                    <option value="forest">Forest Protection</option>
+                    <option value="wildlife">Wildlife Conservation</option>
+                    <option value="climate">Climate Action</option>
+                </select>
+            </div>
+            <div class="refresh-controls">
+                <div class="auto-refresh">
+                    <input type="checkbox" id="autoRefresh" checked>
+                    <label for="autoRefresh">Auto-refresh (10s)</label>
+                </div>
+                <button class="refresh-button" onclick="refreshTransactions()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Live Transaction Feed -->
+        <div class="live-feed">
+            <div class="feed-header">
+                <h3 class="feed-title">Live Transaction Feed</h3>
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    Live Updates
+                </div>
+            </div>
+
+            <div style="max-height: 600px; overflow-y: auto;">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Transaction Hash</th>
+                            <th>From</th>
+                            <th>Amount</th>
+                            <th>Foundation</th>
+                            <th>Status</th>
+                            <th>Gas</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                        <!-- Transactions will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="alerts-section">
+            <h3 style="margin-bottom: 1rem;">System Alerts</h3>
+            <div id="alertsContainer">
+                <div class="alert-item alert-warning">
+                    <i class="fas fa-exclamation-triangle alert-icon" style="color: #f59e0b;"></i>
+                    <div class="alert-content">
+                        <div class="alert-title">High Gas Fees Detected</div>
+                        <div class="alert-description">Current gas prices are 40% above average. Consider alerting users.</div>
+                    </div>
+                    <div class="alert-time">2 min ago</div>
+                </div>
+
+                <div class="alert-item alert-error">
+                    <i class="fas fa-exclamation-circle alert-icon" style="color: #ef4444;"></i>
+                    <div class="alert-content">
+                        <div class="alert-title">Failed Transaction Spike</div>
+                        <div class="alert-description">15 transactions failed in the last 5 minutes. Investigating...</div>
+                    </div>
+                    <div class="alert-time">5 min ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample transaction data
+        const sampleTransactions = [
+            {
+                id: 1,
+                hash: '0x1a2b3c4d5e6f7890abcdef1234567890abcdef12',
+                from: '0x742d35Cc6cF8fC3F1234567890123456789012AB',
+                amount: '0.5',
+                foundation: 'ocean',
+                status: 'confirmed',
+                gas: '21000',
+                timestamp: new Date(Date.now() - 2 * 60 * 1000)
+            },
+            {
+                id: 2,
+                hash: '0x2b3c4d5e6f7890abcdef1234567890abcdef1234',
+                from: '0x842d35Cc6cF8fC3F1234567890123456789012BC',
+                amount: '1.2',
+                foundation: 'forest',
+                status: 'pending',
+                gas: '25000',
+                timestamp: new Date(Date.now() - 5 * 60 * 1000)
+            },
+            {
+                id: 3,
+                hash: '0x3c4d5e6f7890abcdef1234567890abcdef123456',
+                from: '0x942d35Cc6cF8fC3F1234567890123456789012CD',
+                amount: '0.8',
+                foundation: 'wildlife',
+                status: 'confirmed',
+                gas: '23000',
+                timestamp: new Date(Date.now() - 8 * 60 * 1000)
+            },
+            {
+                id: 4,
+                hash: '0x4d5e6f7890abcdef1234567890abcdef12345678',
+                from: '0xa42d35Cc6cF8fC3F1234567890123456789012DE',
+                amount: '2.1',
+                foundation: 'climate',
+                status: 'failed',
+                gas: '50000',
+                timestamp: new Date(Date.now() - 12 * 60 * 1000)
+            }
+        ];
+
+        let transactions = [...sampleTransactions];
+        let autoRefreshInterval;
+
+        // Foundation mappings
+        const foundationNames = {
+            ocean: 'Ocean Cleanup',
+            forest: 'Forest Protection',
+            wildlife: 'Wildlife Conservation',
+            climate: 'Climate Action'
+        };
+
+        const foundationClasses = {
+            ocean: 'foundation-ocean',
+            forest: 'foundation-forest',
+            wildlife: 'foundation-wildlife',
+            climate: 'foundation-climate'
+        };
+
+        // Format transaction hash for display
+        function formatHash(hash) {
+            return hash.substring(0, 10) + '...' + hash.substring(hash.length - 8);
+        }
+
+        // Format address for display
+        function formatAddress(address) {
+            return address.substring(0, 6) + '...' + address.substring(address.length - 4);
+        }
+
+        // Format time for display
+        function formatTime(timestamp) {
+            const now = new Date();
+            const diff = Math.floor((now - timestamp) / 1000);
+
+            if (diff < 60) return `${diff}s ago`;
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return `${Math.floor(diff / 86400)}d ago`;
+        }
+
+        // Render transactions table
+        function renderTransactions() {
+            const tbody = document.getElementById('transactionTableBody');
+            tbody.innerHTML = '';
+
+            const filtered = filterTransactions();
+
+            filtered.forEach(tx => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatTime(tx.timestamp)}</td>
+                    <td class="transaction-hash">${formatHash(tx.hash)}</td>
+                    <td class="transaction-hash">${formatAddress(tx.from)}</td>
+                    <td>${tx.amount} ETH</td>
+                    <td>
+                        <span class="foundation-tag ${foundationClasses[tx.foundation]}">
+                            ${foundationNames[tx.foundation]}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${tx.status}">
+                            ${tx.status}
+                        </span>
+                    </td>
+                    <td>${parseInt(tx.gas).toLocaleString()}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn btn-view" onclick="viewTransaction('${tx.hash}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${tx.status === 'failed' ? `
+                                <button class="action-btn btn-retry" onclick="retryTransaction('${tx.hash}')">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter transactions based on search and filters
+        function filterTransactions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const foundationFilter = document.getElementById('foundationFilter').value;
+
+            return transactions.filter(tx => {
+                const matchesSearch = !searchTerm ||
+                    tx.hash.toLowerCase().includes(searchTerm) ||
+                    tx.from.toLowerCase().includes(searchTerm) ||
+                    tx.amount.includes(searchTerm);
+
+                const matchesStatus = !statusFilter || tx.status === statusFilter;
+                const matchesFoundation = !foundationFilter || tx.foundation === foundationFilter;
+
+                return matchesSearch && matchesStatus && matchesFoundation;
+            });
+        }
+
+        // Simulate new transactions
+        function addRandomTransaction() {
+            const foundations = ['ocean', 'forest', 'wildlife', 'climate'];
+            const statuses = ['pending', 'confirmed', 'failed'];
+            const statusWeights = [0.2, 0.7, 0.1]; // Most likely to be confirmed
+
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+            const newTransaction = {
+                id: transactions.length + 1,
+                hash: '0x' + Math.random().toString(16).substring(2, 42).padStart(40, '0'),
+                from: '0x' + Math.random().toString(16).substring(2, 42).padStart(40, '0'),
+                amount: (Math.random() * 3 + 0.1).toFixed(2),
+                foundation: foundations[Math.floor(Math.random() * foundations.length)],
+                status: randomStatus,
+                gas: Math.floor(Math.random() * 30000 + 21000).toString(),
+                timestamp: new Date()
+            };
+
+            transactions.unshift(newTransaction);
+
+            // Keep only last 50 transactions
+            if (transactions.length > 50) {
+                transactions = transactions.slice(0, 50);
+            }
+
+            updateCounts();
+            renderTransactions();
+        }
+
+        // Update status counts
+        function updateCounts() {
+            const pending = transactions.filter(tx => tx.status === 'pending').length;
+            const confirmed = transactions.filter(tx => tx.status === 'confirmed').length;
+            const failed = transactions.filter(tx => tx.status === 'failed').length;
+
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('confirmedCount').textContent = confirmed;
+            document.getElementById('failedCount').textContent = failed;
+        }
+
+        // Update gas prices
+        function updateGasPrices() {
+            const baseGas = 15 + (Math.random() - 0.5) * 10;
+
+            document.getElementById('gasStandard').textContent = Math.max(5, baseGas - 3).toFixed(1);
+            document.getElementById('gasFast').textContent = Math.max(8, baseGas + 3).toFixed(1);
+            document.getElementById('gasInstant').textContent = Math.max(12, baseGas + 8).toFixed(1);
+            document.getElementById('gasOptimal').textContent = Math.max(6, baseGas - 1).toFixed(1);
+            document.getElementById('avgGas').textContent = baseGas.toFixed(1);
+        }
+
+        // Refresh transactions
+        function refreshTransactions() {
+            console.log('Refreshing transactions...');
+            renderTransactions();
+            updateCounts();
+            updateGasPrices();
+        }
+
+        // View transaction details
+        function viewTransaction(hash) {
+            alert(`Viewing transaction: ${hash}\n\nThis would open a detailed view or redirect to block explorer.`);
+        }
+
+        // Retry failed transaction
+        function retryTransaction(hash) {
+            if (confirm(`Retry transaction: ${hash}?`)) {
+                console.log(`Retrying transaction: ${hash}`);
+                // Update transaction status to pending
+                const tx = transactions.find(t => t.hash === hash);
+                if (tx) {
+                    tx.status = 'pending';
+                    renderTransactions();
+                    updateCounts();
+                }
+            }
+        }
+
+        // Setup auto-refresh
+        function setupAutoRefresh() {
+            const checkbox = document.getElementById('autoRefresh');
+
+            if (checkbox.checked) {
+                autoRefreshInterval = setInterval(() => {
+                    addRandomTransaction();
+                    updateGasPrices();
+                }, 10000);
+            } else {
+                clearInterval(autoRefreshInterval);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', renderTransactions);
+        document.getElementById('statusFilter').addEventListener('change', renderTransactions);
+        document.getElementById('foundationFilter').addEventListener('change', renderTransactions);
+        document.getElementById('autoRefresh').addEventListener('change', setupAutoRefresh);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTransactions();
+            updateCounts();
+            updateGasPrices();
+            setupAutoRefresh();
+
+            // Add some random transactions periodically
+            setTimeout(() => addRandomTransaction(), 2000);
+            setTimeout(() => addRandomTransaction(), 5000);
+            setTimeout(() => addRandomTransaction(), 8000);
+
+            console.log('📊 Transaction monitoring initialized');
+        });
+    </script>
+</body>
+</html>

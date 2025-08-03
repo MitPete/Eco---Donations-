@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCoin Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        .admin-sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.03);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            padding: 0 1.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #10b981;
+        }
+
+        .sidebar-item.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-right: 2px solid #10b981;
+        }
+
+        .admin-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .content-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.donations {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .stat-icon.users {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .stat-icon.transactions {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .stat-icon.security {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.positive {
+            color: #10b981;
+        }
+
+        .stat-change.negative {
+            color: #ef4444;
+        }
+
+        .admin-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                padding: 1rem 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="admin-logo">
+            <i class="fas fa-leaf"></i>
+            EcoCoin Admin
+        </div>
+        <div class="admin-user">
+            <span>Welcome, Admin</span>
+            <i class="fas fa-user-circle"></i>
+        </div>
+    </header>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <nav class="admin-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Overview</div>
+                <button class="sidebar-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-chart-pie"></i>
+                    Dashboard
+                </button>
+                <button class="sidebar-item" onclick="showSection('analytics')">
+                    <i class="fas fa-chart-line"></i>
+                    Analytics
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Management</div>
+                <button class="sidebar-item" onclick="showSection('organizations')">
+                    <i class="fas fa-building"></i>
+                    Organizations
+                </button>
+                <button class="sidebar-item" onclick="showSection('users')">
+                    <i class="fas fa-users"></i>
+                    Users
+                </button>
+                <button class="sidebar-item" onclick="showSection('transactions')">
+                    <i class="fas fa-exchange-alt"></i>
+                    Transactions
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Governance</div>
+                <button class="sidebar-item" onclick="showSection('proposals')">
+                    <i class="fas fa-vote-yea"></i>
+                    Proposals
+                </button>
+                <button class="sidebar-item" onclick="showSection('governance')">
+                    <i class="fas fa-gavel"></i>
+                    Governance
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Security</div>
+                <button class="sidebar-item" onclick="showSection('security')">
+                    <i class="fas fa-shield-alt"></i>
+                    Security
+                </button>
+                <button class="sidebar-item" onclick="showSection('monitoring')">
+                    <i class="fas fa-eye"></i>
+                    Monitoring
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">System</div>
+                <button class="sidebar-item" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+                <button class="sidebar-item" onclick="showSection('logs')">
+                    <i class="fas fa-file-alt"></i>
+                    Logs
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="admin-section active">
+                <div class="content-header">
+                    <h1 class="content-title">Platform Overview</h1>
+                    <p class="content-subtitle">Real-time insights into your eco-donation platform</p>
+                </div>
+
+                <!-- Key Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon donations">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalDonations">$1,234,567</div>
+                        <div class="stat-label">Total Donations</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12.5% this month
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon users">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="activeUsers">8,942</div>
+                        <div class="stat-label">Active Users</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +8.3% this week
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon transactions">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="transactionCount">15,678</div>
+                        <div class="stat-label">Transactions</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +15.2% today
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon security">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="securityScore">99.8%</div>
+                        <div class="stat-label">Security Score</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-check"></i>
+                            All systems secure
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Recent Activity</h3>
+                        <div class="chart-filters">
+                            <button class="filter-btn active">24h</button>
+                            <button class="filter-btn">7d</button>
+                            <button class="filter-btn">30d</button>
+                        </div>
+                    </div>
+                    <div id="activityChart" style="height: 300px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5);">
+                        📊 Activity chart will be rendered here
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Recent Transactions</h3>
+                        <button class="action-btn btn-secondary">View All</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction Hash</th>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Foundation</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentTransactions">
+                            <tr>
+                                <td><code>0x1234...abcd</code></td>
+                                <td>0x5678...efgh</td>
+                                <td>0.5 ETH</td>
+                                <td>Ocean Cleanup</td>
+                                <td><span class="status-badge status-success">Confirmed</span></td>
+                                <td>2 min ago</td>
+                            </tr>
+                            <tr>
+                                <td><code>0x2345...bcde</code></td>
+                                <td>0x6789...fghi</td>
+                                <td>1.2 ETH</td>
+                                <td>Forest Protection</td>
+                                <td><span class="status-badge status-success">Confirmed</span></td>
+                                <td>5 min ago</td>
+                            </tr>
+                            <tr>
+                                <td><code>0x3456...cdef</code></td>
+                                <td>0x7890...ghij</td>
+                                <td>0.8 ETH</td>
+                                <td>Wildlife Conservation</td>
+                                <td><span class="status-badge status-warning">Pending</span></td>
+                                <td>8 min ago</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">Analytics Dashboard</h1>
+                    <p class="content-subtitle">Detailed platform analytics and insights</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Quick Analytics Preview</h3>
+                        <a href="admin-analytics.html" class="action-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open Full Analytics
+                        </a>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div class="stat-card">
+                            <div class="stat-value">$1,847,293</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12,847</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">87.3%</div>
+                            <div class="stat-label">Engagement Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Organizations Section -->
+            <div id="organizations" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">Organization Management</h1>
+                    <p class="content-subtitle">Manage environmental organizations and partnerships</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Organization Tools</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div class="stat-card" style="text-align: center; padding: 2rem;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem; color: #10b981;">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <h3 style="margin-bottom: 1rem;">Add Organizations</h3>
+                            <p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5rem;">Add and verify new environmental organizations</p>
+                            <a href="admin-organizations.html" class="action-btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Manage Organizations
+                            </a>
+                        </div>
+                        <div class="stat-card" style="text-align: center; padding: 2rem;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem; color: #3b82f6;">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h3 style="margin-bottom: 1rem;">Performance Analytics</h3>
+                            <p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5rem;">View organization donation metrics</p>
+                            <button class="action-btn btn-secondary" onclick="showSection('analytics')">
+                                <i class="fas fa-chart-line"></i>
+                                View Analytics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">User Management</h1>
+                    <p class="content-subtitle">Monitor user activity and engagement</p>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Advanced user management module coming soon...
+                </div>
+            </div>
+
+            <!-- Transactions Section -->
+            <div id="transactions" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">Transaction Monitoring</h1>
+                    <p class="content-subtitle">Real-time transaction tracking and analysis</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Transaction Monitoring Tools</h3>
+                        <a href="admin-transactions.html" class="action-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open Transaction Monitor
+                        </a>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon pending" style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-clock" style="color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Pending Transactions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon confirmed" style="background: linear-gradient(135deg, #10b981, #059669); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-check" style="color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">1,847</div>
+                            <div class="stat-label">Confirmed Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon failed" style="background: linear-gradient(135deg, #ef4444, #dc2626); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-times" style="color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Failed Transactions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposals Section -->
+            <div id="proposals" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">Proposal Management</h1>
+                    <p class="content-subtitle">Review and moderate governance proposals</p>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Proposal management module coming soon...
+                </div>
+            </div>
+
+            <!-- Governance Section -->
+            <div id="governance" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">Governance Oversight</h1>
+                    <p class="content-subtitle">Monitor DAO governance and voting</p>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Governance oversight module coming soon...
+                </div>
+            </div>
+
+            <!-- Security Section -->
+            <div id="security" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">Security Management</h1>
+                    <p class="content-subtitle">Platform security and risk management</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Security Status</h3>
+                        <a href="admin-security.html" class="action-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open Security Center
+                        </a>
+                    </div>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 4rem; font-weight: 900; color: #10b981; margin-bottom: 1rem;">99.8%</div>
+                        <div style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; color: #10b981;">EXCELLENT</div>
+                        <div style="color: rgba(255, 255, 255, 0.7);">All security systems functioning optimally</div>
+                        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;">
+                            <div class="stat-card" style="min-width: 150px;">
+                                <div class="stat-value">6</div>
+                                <div class="stat-label">Active Contracts</div>
+                            </div>
+                            <div class="stat-card" style="min-width: 150px;">
+                                <div class="stat-value">3/3</div>
+                                <div class="stat-label">Multi-Sig Status</div>
+                            </div>
+                            <div class="stat-card" style="min-width: 150px;">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">Active Alerts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring Section -->
+            <div id="monitoring" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">System Monitoring</h1>
+                    <p class="content-subtitle">Real-time system health and performance</p>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Advanced system monitoring module coming soon...
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">System Settings</h1>
+                    <p class="content-subtitle">Configure platform settings and parameters</p>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    System settings module coming soon...
+                </div>
+            </div>
+
+            <!-- Logs Section -->
+            <div id="logs" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">System Logs</h1>
+                    <p class="content-subtitle">View detailed system and audit logs</p>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    System logs module coming soon...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all sidebar items
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked sidebar item
+            event.target.classList.add('active');
+        }
+
+        // Simulate real-time data updates
+        function updateStats() {
+            // Update donation total
+            const donations = document.getElementById('totalDonations');
+            if (donations) {
+                const current = parseFloat(donations.textContent.replace(/[$,]/g, ''));
+                const increase = Math.random() * 1000;
+                donations.textContent = '$' + (current + increase).toLocaleString('en-US', {maximumFractionDigits: 0});
+            }
+
+            // Update user count
+            const users = document.getElementById('activeUsers');
+            if (users) {
+                const current = parseInt(users.textContent.replace(/,/g, ''));
+                const increase = Math.floor(Math.random() * 10);
+                users.textContent = (current + increase).toLocaleString();
+            }
+
+            // Update transaction count
+            const transactions = document.getElementById('transactionCount');
+            if (transactions) {
+                const current = parseInt(transactions.textContent.replace(/,/g, ''));
+                const increase = Math.floor(Math.random() * 5);
+                transactions.textContent = (current + increase).toLocaleString();
+            }
+        }
+
+        // Update stats every 30 seconds
+        setInterval(updateStats, 30000);
+
+        // Initialize with some animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation to stat cards
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'fadeIn 0.5s ease-in-out forwards';
+            });
+        });
+
+        console.log('🔧 EcoCoin Admin Dashboard loaded successfully');
+    </script>
+</body>
+</html>

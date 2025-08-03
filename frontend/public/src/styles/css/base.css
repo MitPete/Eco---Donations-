@@ -78,6 +78,26 @@ body {
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
+.header__nav-link.admin-link {
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  color: #ffd700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.5rem;
+}
+
+.header__nav-link.admin-link:hover {
+  background: rgba(255, 193, 7, 0.25);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
 .header__wallet {
   display: flex;
   align-items: center;

@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Management - EcoCoin Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/styles/css/base.css?v=11">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .security-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .security-header {
+            margin-bottom: 2rem;
+        }
+
+        .security-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .security-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .security-status {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .security-score {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .score-excellent {
+            color: #10b981;
+        }
+
+        .score-good {
+            color: #22c55e;
+        }
+
+        .score-warning {
+            color: #f59e0b;
+        }
+
+        .score-critical {
+            color: #ef4444;
+        }
+
+        .security-level {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .security-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .security-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-emergency {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-pause {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .btn-audit {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .security-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-contracts {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .icon-multisig {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .icon-access {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .icon-monitoring {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-secure {
+            background: #10b981;
+        }
+
+        .status-warning {
+            background: #f59e0b;
+        }
+
+        .status-critical {
+            background: #ef4444;
+        }
+
+        .card-metrics {
+            margin-bottom: 1rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .metric-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .metric-value {
+            font-weight: 600;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-view {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .btn-configure {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .btn-small:hover {
+            transform: translateY(-1px);
+        }
+
+        .threats-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .threats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .threats-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .threat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .threat-critical {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .threat-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .threat-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .threat-icon {
+            font-size: 1.2rem;
+        }
+
+        .threat-content {
+            flex: 1;
+        }
+
+        .threat-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .threat-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .threat-severity {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .threat-time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        .audit-log {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .log-table th,
+        .log-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .log-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .log-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .log-action {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: #10b981;
+        }
+
+        .log-user {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: #3b82f6;
+        }
+
+        .emergency-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emergency-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ef4444;
+        }
+
+        .modal-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        @media (max-width: 768px) {
+            .security-container {
+                padding: 1rem;
+            }
+
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .security-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="security-page">
+    <div class="security-container">
+        <!-- Back to Dashboard -->
+        <a href="admin-dashboard.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+        <!-- Header -->
+        <div class="security-header">
+            <h1 class="security-title">Security Management</h1>
+            <p class="security-subtitle">Platform security monitoring and risk management</p>
+        </div>
+
+        <!-- Security Status Overview -->
+        <div class="security-status">
+            <div class="security-score score-excellent" id="securityScore">99.8%</div>
+            <div class="security-level" id="securityLevel">EXCELLENT</div>
+            <div class="security-description" id="securityDescription">
+                All security systems are functioning optimally. No immediate threats detected.
+            </div>
+            <div class="security-actions">
+                <button class="action-btn btn-emergency" onclick="showEmergencyModal()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Emergency Stop
+                </button>
+                <button class="action-btn btn-pause" onclick="pauseContracts()">
+                    <i class="fas fa-pause"></i>
+                    Pause Contracts
+                </button>
+                <button class="action-btn btn-audit" onclick="runSecurityAudit()">
+                    <i class="fas fa-search"></i>
+                    Run Audit
+                </button>
+            </div>
+        </div>
+
+        <!-- Security Modules -->
+        <div class="security-grid">
+            <div class="security-card">
+                <div class="card-icon icon-contracts">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <div class="card-title">Smart Contracts</div>
+                <div class="card-status">
+                    <div class="status-indicator status-secure"></div>
+                    <span>All contracts secure</span>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-row">
+                        <span class="metric-label">Active Contracts:</span>
+                        <span class="metric-value">6</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Paused Contracts:</span>
+                        <span class="metric-value">0</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Last Audit:</span>
+                        <span class="metric-value">2 days ago</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-small btn-view" onclick="viewContracts()">View Details</button>
+                    <button class="btn-small btn-configure" onclick="configureContracts()">Configure</button>
+                </div>
+            </div>
+
+            <div class="security-card">
+                <div class="card-icon icon-multisig">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <div class="card-title">Multi-Sig Wallet</div>
+                <div class="card-status">
+                    <div class="status-indicator status-secure"></div>
+                    <span>3/3 signatures required</span>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-row">
+                        <span class="metric-label">Pending Transactions:</span>
+                        <span class="metric-value">2</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Authorized Signers:</span>
+                        <span class="metric-value">5</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Required Signatures:</span>
+                        <span class="metric-value">3</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-small btn-view" onclick="viewMultiSig()">View Pending</button>
+                    <button class="btn-small btn-configure" onclick="configureMultiSig()">Manage</button>
+                </div>
+            </div>
+
+            <div class="security-card">
+                <div class="card-icon icon-access">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="card-title">Access Control</div>
+                <div class="card-status">
+                    <div class="status-indicator status-secure"></div>
+                    <span>All permissions secure</span>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-row">
+                        <span class="metric-label">Admin Accounts:</span>
+                        <span class="metric-value">3</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Failed Logins (24h):</span>
+                        <span class="metric-value">0</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Last Permission Change:</span>
+                        <span class="metric-value">1 week ago</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-small btn-view" onclick="viewAccess()">View Logs</button>
+                    <button class="btn-small btn-configure" onclick="configureAccess()">Manage</button>
+                </div>
+            </div>
+
+            <div class="security-card">
+                <div class="card-icon icon-monitoring">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="card-title">Threat Monitoring</div>
+                <div class="card-status">
+                    <div class="status-indicator status-warning"></div>
+                    <span>2 low-risk alerts</span>
+                </div>
+                <div class="card-metrics">
+                    <div class="metric-row">
+                        <span class="metric-label">Active Monitors:</span>
+                        <span class="metric-value">12</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Alerts (24h):</span>
+                        <span class="metric-value">2</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">False Positives:</span>
+                        <span class="metric-value">0.2%</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-small btn-view" onclick="viewThreats()">View Alerts</button>
+                    <button class="btn-small btn-configure" onclick="configureMonitoring()">Configure</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Detection -->
+        <div class="threats-section">
+            <div class="threats-header">
+                <h3 class="threats-title">Threat Detection & Alerts</h3>
+                <button class="btn-small btn-configure" onclick="configureAlerts()">Configure Alerts</button>
+            </div>
+
+            <div class="threat-item threat-warning">
+                <i class="fas fa-exclamation-triangle threat-icon" style="color: #f59e0b;"></i>
+                <div class="threat-content">
+                    <div class="threat-title">Elevated Gas Prices</div>
+                    <div class="threat-description">
+                        Network gas prices are 40% above normal. This may indicate network congestion or potential MEV attacks.
+                    </div>
+                    <div class="threat-severity" style="color: #f59e0b;">MEDIUM SEVERITY</div>
+                </div>
+                <div class="threat-time">15 min ago</div>
+            </div>
+
+            <div class="threat-item threat-info">
+                <i class="fas fa-info-circle threat-icon" style="color: #3b82f6;"></i>
+                <div class="threat-content">
+                    <div class="threat-title">Unusual Transaction Pattern</div>
+                    <div class="threat-description">
+                        Detected 3 large donations from the same wallet address within 1 hour. Pattern appears legitimate but flagged for review.
+                    </div>
+                    <div class="threat-severity" style="color: #3b82f6;">LOW SEVERITY</div>
+                </div>
+                <div class="threat-time">1 hour ago</div>
+            </div>
+
+            <div class="threat-item threat-info">
+                <i class="fas fa-check-circle threat-icon" style="color: #10b981;"></i>
+                <div class="threat-content">
+                    <div class="threat-title">Security Scan Completed</div>
+                    <div class="threat-description">
+                        Automated security scan completed successfully. No vulnerabilities detected in smart contracts.
+                    </div>
+                    <div class="threat-severity" style="color: #10b981;">RESOLVED</div>
+                </div>
+                <div class="threat-time">2 hours ago</div>
+            </div>
+        </div>
+
+        <!-- Audit Log -->
+        <div class="audit-log">
+            <h3 style="margin-bottom: 1rem;">Security Audit Log</h3>
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Action</th>
+                        <th>User</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025-08-03 14:30:15</td>
+                        <td class="log-action">EMERGENCY_STOP_INITIATED</td>
+                        <td class="log-user">0x1234...5678</td>
+                        <td>Emergency stop activated for DonationContract</td>
+                        <td><span class="status-badge status-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>2025-08-03 14:25:42</td>
+                        <td class="log-action">SECURITY_AUDIT_COMPLETED</td>
+                        <td class="log-user">SYSTEM</td>
+                        <td>Automated security audit - no issues found</td>
+                        <td><span class="status-badge status-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>2025-08-03 13:15:30</td>
+                        <td class="log-action">MULTISIG_THRESHOLD_CHANGED</td>
+                        <td class="log-user">0x2345...6789</td>
+                        <td>Required signatures changed from 2 to 3</td>
+                        <td><span class="status-badge status-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>2025-08-03 12:45:18</td>
+                        <td class="log-action">ADMIN_ROLE_GRANTED</td>
+                        <td class="log-user">0x3456...7890</td>
+                        <td>Admin role granted to 0x4567...8901</td>
+                        <td><span class="status-badge status-success">SUCCESS</span></td>
+                    </tr>
+                    <tr>
+                        <td>2025-08-03 11:30:05</td>
+                        <td class="log-action">UNAUTHORIZED_ACCESS_ATTEMPT</td>
+                        <td class="log-user">0x5678...9012</td>
+                        <td>Failed attempt to access admin functions</td>
+                        <td><span class="status-badge status-failed">BLOCKED</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Emergency Modal -->
+    <div class="emergency-modal" id="emergencyModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="modal-title">Emergency Stop Protocol</div>
+            <div class="modal-description">
+                This will immediately pause all smart contract operations and halt all transactions.
+                This action should only be used in case of detected security threats or critical vulnerabilities.
+                <br><br>
+                <strong>This action is irreversible without multi-sig approval.</strong>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-confirm" onclick="executeEmergencyStop()">
+                    <i class="fas fa-stop"></i>
+                    Execute Emergency Stop
+                </button>
+                <button class="btn-cancel" onclick="hideEmergencyModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Security score calculation
+        function updateSecurityScore() {
+            // Simulate security score calculation based on various factors
+            const baseScore = 99.8;
+            const score = Math.max(85, baseScore + (Math.random() - 0.5) * 2);
+
+            document.getElementById('securityScore').textContent = score.toFixed(1) + '%';
+
+            const scoreElement = document.getElementById('securityScore');
+            const levelElement = document.getElementById('securityLevel');
+            const descElement = document.getElementById('securityDescription');
+
+            // Update class and text based on score
+            scoreElement.className = 'security-score';
+
+            if (score >= 95) {
+                scoreElement.classList.add('score-excellent');
+                levelElement.textContent = 'EXCELLENT';
+                descElement.textContent = 'All security systems are functioning optimally. No immediate threats detected.';
+            } else if (score >= 85) {
+                scoreElement.classList.add('score-good');
+                levelElement.textContent = 'GOOD';
+                descElement.textContent = 'Security systems are functioning well with minor areas for improvement.';
+            } else if (score >= 70) {
+                scoreElement.classList.add('score-warning');
+                levelElement.textContent = 'WARNING';
+                descElement.textContent = 'Some security concerns detected. Immediate attention recommended.';
+            } else {
+                scoreElement.classList.add('score-critical');
+                levelElement.textContent = 'CRITICAL';
+                descElement.textContent = 'Critical security issues detected. Emergency action required.';
+            }
+        }
+
+        // Emergency modal functions
+        function showEmergencyModal() {
+            document.getElementById('emergencyModal').classList.add('active');
+        }
+
+        function hideEmergencyModal() {
+            document.getElementById('emergencyModal').classList.remove('active');
+        }
+
+        function executeEmergencyStop() {
+            alert('🚨 EMERGENCY STOP EXECUTED!\n\nAll smart contracts have been paused.\nNo new transactions will be processed.');
+            hideEmergencyModal();
+
+            // Update security status
+            document.getElementById('securityScore').textContent = '0.0%';
+            document.getElementById('securityScore').className = 'security-score score-critical';
+            document.getElementById('securityLevel').textContent = 'EMERGENCY STOP ACTIVE';
+            document.getElementById('securityDescription').textContent = 'All contracts are paused. Manual intervention required to resume operations.';
+        }
+
+        // Security action functions
+        function pauseContracts() {
+            if (confirm('Pause all smart contracts?\n\nThis will temporarily halt all platform operations.')) {
+                alert('⏸️ Contracts paused successfully.\n\nAll platform operations are temporarily suspended.');
+                console.log('Smart contracts paused');
+            }
+        }
+
+        function runSecurityAudit() {
+            alert('🔍 Security audit initiated...\n\nThis will take approximately 5-10 minutes to complete.');
+            console.log('Running security audit...');
+
+            // Simulate audit process
+            setTimeout(() => {
+                alert('✅ Security audit completed.\n\nNo vulnerabilities detected. Report available in logs.');
+            }, 3000);
+        }
+
+        // Card action functions
+        function viewContracts() {
+            alert('📋 Smart Contract Details:\n\n• DonationContract: Active\n• EcoCoin: Active\n• Governance: Active\n• AutoDonation: Active\n• SecurityConfig: Active\n• MultiSigWallet: Active');
+        }
+
+        function configureContracts() {
+            alert('⚙️ Contract Configuration\n\nThis would open the smart contract management interface.');
+        }
+
+        function viewMultiSig() {
+            alert('🔐 Multi-Sig Pending Transactions:\n\n1. Update security parameters (2/3 signatures)\n2. Add new foundation (1/3 signatures)');
+        }
+
+        function configureMultiSig() {
+            alert('👥 Multi-Sig Management\n\nThis would open the multi-signature wallet configuration.');
+        }
+
+        function viewAccess() {
+            alert('🔒 Access Control Logs\n\nShowing recent admin access attempts and permission changes.');
+        }
+
+        function configureAccess() {
+            alert('🛡️ Access Control Management\n\nThis would open the role and permission management interface.');
+        }
+
+        function viewThreats() {
+            alert('⚠️ Active Threat Alerts\n\nShowing current security alerts and monitoring status.');
+        }
+
+        function configureMonitoring() {
+            alert('📊 Monitoring Configuration\n\nThis would open the threat detection and alerting setup.');
+        }
+
+        function configureAlerts() {
+            alert('🔔 Alert Configuration\n\nThis would open the security alert management interface.');
+        }
+
+        // Simulate real-time security updates
+        function simulateSecurityUpdates() {
+            setInterval(() => {
+                updateSecurityScore();
+            }, 30000); // Update every 30 seconds
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSecurityScore();
+            simulateSecurityUpdates();
+
+            console.log('🛡️ Security management dashboard initialized');
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('emergencyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideEmergencyModal();
+            }
+        });
+    </script>
+</body>
+</html>

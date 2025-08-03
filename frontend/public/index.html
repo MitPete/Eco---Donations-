@@ -74,6 +74,21 @@
       font-weight: 500;
       transition: color 0.2s;
     }
+    .header__nav-link.admin-link {
+      background: rgba(255, 193, 7, 0.2);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      color: #ffd700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .header__nav-link.admin-link:hover {
+      background: rgba(255, 193, 7, 0.3);
+      color: #fff;
+    }
     .header__wallet {
       display: flex;
       align-items: center;
@@ -470,6 +485,9 @@
       <a href="organizations.html" class="header__nav-link">Organizations</a>
       <a href="history.html" class="header__nav-link">History</a>
       <a href="dashboard.html" class="header__nav-link">Dashboard</a>
+      <a href="admin-dashboard.html" class="header__nav-link admin-link" title="Admin Panel">
+        <i class="fas fa-cog"></i> Admin
+      </a>
     </nav>
   </header>
 
