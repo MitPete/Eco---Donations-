@@ -7,6 +7,10 @@
 - Frontend application structure
 - Database schema and data flow
 
+## Core Features Documentation
+
+- **[🌉 Bridging the Gap: Organization Wallet Management](BRIDGING_THE_GAP.md)** - Complete guide to our revolutionary nonprofit integration system
+
 ## Development Guides
 
 - Setting up development environment

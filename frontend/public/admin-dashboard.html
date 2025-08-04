@@ -410,12 +410,20 @@
                     <i class="fas fa-building"></i>
                     Organizations
                 </button>
+                <button class="sidebar-item" onclick="showSection('wallets')">
+                    <i class="fas fa-wallet"></i>
+                    Wallet Management
+                </button>
+                <button class="sidebar-item" onclick="showSection('conversions')">
+                    <i class="fas fa-exchange-alt"></i>
+                    Conversions
+                </button>
                 <button class="sidebar-item" onclick="showSection('users')">
                     <i class="fas fa-users"></i>
                     Users
                 </button>
                 <button class="sidebar-item" onclick="showSection('transactions')">
-                    <i class="fas fa-exchange-alt"></i>
+                    <i class="fas fa-money-bill-wave"></i>
                     Transactions
                 </button>
             </div>
@@ -657,6 +665,184 @@
                 </div>
             </div>
 
+            <!-- Wallet Management Section -->
+            <div id="wallets" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">Wallet Management</h1>
+                    <p class="content-subtitle">Manage organization wallets and the "Bridging the Gap" system</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Wallet Overview</h3>
+                        <button class="action-btn btn-primary" onclick="refreshWalletData()">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh Data
+                        </button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-wallet" style="color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="total-wallets">0</div>
+                            <div class="stat-label">Active Wallets</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-coins" style="color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="total-balance">0.0000 ETH</div>
+                            <div class="stat-label">Total Balance</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-clock" style="color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="pending-conversions">0</div>
+                            <div class="stat-label">Pending Conversions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-building" style="color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="organizations-with-wallets">0</div>
+                            <div class="stat-label">Organizations</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Organization Wallets</h3>
+                        <div class="chart-filters">
+                            <button class="filter-btn active" onclick="filterWallets('all')">All</button>
+                            <button class="filter-btn" onclick="filterWallets('active')">Active</button>
+                            <button class="filter-btn" onclick="filterWallets('pending')">Pending</button>
+                        </div>
+                    </div>
+                    <div id="wallet-search" style="margin-bottom: 1rem;">
+                        <input type="text" placeholder="Search organizations..."
+                               style="width: 100%; padding: 0.75rem; border: 1px solid rgba(255,255,255,0.2);
+                                      border-radius: 6px; background: rgba(255,255,255,0.05); color: white;"
+                               onkeyup="searchWallets(this.value)">
+                    </div>
+                    <div id="wallet-table">
+                        <!-- Wallet table will be populated here -->
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Quick Actions</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <button class="action-btn btn-primary" onclick="generateMissingWallets()" style="padding: 1rem;">
+                            <i class="fas fa-plus-circle"></i>
+                            Generate Missing Wallets
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="exportWalletData()" style="padding: 1rem;">
+                            <i class="fas fa-download"></i>
+                            Export Wallet Data
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="openTestingDashboard()" style="padding: 1rem;">
+                            <i class="fas fa-flask"></i>
+                            Open Testing Dashboard
+                        </button>
+                        <button class="action-btn btn-danger" onclick="clearTestData()" style="padding: 1rem;">
+                            <i class="fas fa-trash"></i>
+                            Clear Test Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversions Section -->
+            <div id="conversions" class="admin-section">
+                <div class="content-header">
+                    <h1 class="content-title">ETH to USD Conversions</h1>
+                    <p class="content-subtitle">Manage crypto-to-fiat conversions for organizations</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Conversion Summary</h3>
+                        <button class="action-btn btn-primary" onclick="refreshConversions()">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div class="stat-card">
+                            <div class="stat-value" id="ready-to-convert">0.0000 ETH</div>
+                            <div class="stat-label">Ready to Convert</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="converted-today">$0.00</div>
+                            <div class="stat-label">Converted Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-converted">$0.00</div>
+                            <div class="stat-label">Total Converted</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="conversion-rate">$2,000</div>
+                            <div class="stat-label">Current ETH Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Bulk Conversion Tools</h3>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Bulk conversions will convert all organization balances to USD. This action cannot be undone.
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <button class="action-btn btn-primary" onclick="convertAllBalances()" style="padding: 1rem;">
+                            <i class="fas fa-exchange-alt"></i>
+                            Convert All Balances
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="scheduleConversions()" style="padding: 1rem;">
+                            <i class="fas fa-clock"></i>
+                            Schedule Conversions
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="viewConversionHistory()" style="padding: 1rem;">
+                            <i class="fas fa-history"></i>
+                            View History
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="generateConversionReport()" style="padding: 1rem;">
+                            <i class="fas fa-file-alt"></i>
+                            Generate Report
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Individual Conversions</h3>
+                        <div class="chart-filters">
+                            <button class="filter-btn active" onclick="filterConversions('all')">All</button>
+                            <button class="filter-btn" onclick="filterConversions('ready')">Ready</button>
+                            <button class="filter-btn" onclick="filterConversions('processing')">Processing</button>
+                        </div>
+                    </div>
+                    <div id="conversion-table">
+                        <!-- Conversion table will be populated here -->
+                    </div>
+                </div>
+            </div>
+
             <!-- Users Section -->
             <div id="users" class="admin-section">
                 <div class="content-header">
@@ -815,6 +1001,7 @@
         </main>
     </div>
 
+    <script src="ethers.umd.min.js"></script>
     <script>
         // Navigation functionality
         function showSection(sectionId) {
@@ -873,7 +1060,460 @@
                 card.style.animationDelay = `${index * 0.1}s`;
                 card.style.animation = 'fadeIn 0.5s ease-in-out forwards';
             });
+
+            // Load wallet data when page loads
+            loadWalletData();
         });
+
+        // ========== WALLET MANAGEMENT FUNCTIONS ==========
+
+        // Load wallet data
+        function loadWalletData() {
+            const wallets = JSON.parse(localStorage.getItem('organizationWallets') || '{}');
+            const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+
+            // Update stats
+            document.getElementById('total-wallets').textContent = Object.keys(secureWallets).length;
+            document.getElementById('organizations-with-wallets').textContent = Object.keys(wallets).length;
+
+            // Calculate total balance
+            const totalBalance = donations.reduce((sum, donation) => {
+                return sum + (donation.organizationAmount || 0);
+            }, 0);
+            document.getElementById('total-balance').textContent = totalBalance.toFixed(4) + ' ETH';
+
+            // Update pending conversions
+            document.getElementById('pending-conversions').textContent = Object.keys(secureWallets).length;
+
+            // Update conversion stats
+            const ethToUsd = 2000; // Approximate rate
+            document.getElementById('ready-to-convert').textContent = totalBalance.toFixed(4) + ' ETH';
+            document.getElementById('converted-today').textContent = '$0.00'; // Would come from conversion history
+            document.getElementById('total-converted').textContent = '$0.00'; // Would come from conversion history
+
+            // Load wallet table
+            loadWalletTable();
+            loadConversionTable();
+        }
+
+        // Load wallet table
+        function loadWalletTable() {
+            const container = document.getElementById('wallet-table');
+            const wallets = JSON.parse(localStorage.getItem('organizationWallets') || '{}');
+            const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+
+            if (Object.keys(secureWallets).length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        No organization wallets found. Generate wallets for organizations to get started.
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Organization</th>
+                            <th>Wallet Address</th>
+                            <th>Balance (ETH)</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            Object.keys(secureWallets).forEach(orgId => {
+                const walletData = secureWallets[orgId];
+                const orgDonations = donations.filter(d => d.organizationId === orgId);
+                const balance = orgDonations.reduce((sum, d) => sum + (d.organizationAmount || 0), 0);
+
+                tableHTML += `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.8rem;">
+                                    ${walletData.organizationName.charAt(0)}
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500;">${walletData.organizationName}</div>
+                                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">ID: ${orgId}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                                ${walletData.address.substring(0, 8)}...${walletData.address.substring(34)}
+                            </code>
+                        </td>
+                        <td>
+                            <span style="font-weight: 600; color: #10b981;">${balance.toFixed(4)} ETH</span>
+                        </td>
+                        <td>
+                            <span class="status-badge ${balance > 0 ? 'status-success' : 'status-warning'}">
+                                ${balance > 0 ? 'Active' : 'Empty'}
+                            </span>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="action-btn btn-primary" onclick="convertWallet('${orgId}')" ${balance === 0 ? 'disabled' : ''}>
+                                    Convert
+                                </button>
+                                <button class="action-btn btn-secondary" onclick="viewWalletDetails('${orgId}')">
+                                    Details
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table>';
+            container.innerHTML = tableHTML;
+        }
+
+        // Load conversion table
+        function loadConversionTable() {
+            const container = document.getElementById('conversion-table');
+            const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+            const ethToUsd = 2000; // Approximate rate
+
+            if (Object.keys(secureWallets).length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        No wallets available for conversion.
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Organization</th>
+                            <th>ETH Balance</th>
+                            <th>USD Equivalent</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            Object.keys(secureWallets).forEach(orgId => {
+                const walletData = secureWallets[orgId];
+                const orgDonations = donations.filter(d => d.organizationId === orgId);
+                const balance = orgDonations.reduce((sum, d) => sum + (d.organizationAmount || 0), 0);
+                const usdValue = balance * ethToUsd;
+
+                tableHTML += `
+                    <tr>
+                        <td>
+                            <div style="font-weight: 500;">${walletData.organizationName}</div>
+                        </td>
+                        <td>
+                            <span style="font-weight: 600;">${balance.toFixed(4)} ETH</span>
+                        </td>
+                        <td>
+                            <span style="color: #10b981; font-weight: 600;">$${usdValue.toFixed(2)}</span>
+                        </td>
+                        <td>
+                            <span class="status-badge ${balance > 0 ? 'status-warning' : 'status-error'}">
+                                ${balance > 0 ? 'Ready' : 'No Balance'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="action-btn btn-primary" onclick="convertBalance('${orgId}')" ${balance === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-exchange-alt"></i>
+                                Convert Now
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table>';
+            container.innerHTML = tableHTML;
+        }
+
+        // Refresh wallet data
+        function refreshWalletData() {
+            loadWalletData();
+            showNotification('Wallet data refreshed successfully', 'success');
+        }
+
+        // Generate missing wallets
+        function generateMissingWallets() {
+            if (!confirm('Generate wallets for all organizations without wallets? This will create new Ethereum wallets.')) {
+                return;
+            }
+
+            if (typeof ethers === 'undefined') {
+                alert('ethers.js not loaded. Please ensure the page has access to ethers library.');
+                return;
+            }
+
+            const existingWallets = JSON.parse(localStorage.getItem('organizationWallets') || '{}');
+            const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+            let created = 0;
+
+            // Get all organizations (this would normally come from your organizations data)
+            const sampleOrgs = [
+                { id: 'ocean_conservancy', name: 'Ocean Conservancy' },
+                { id: 'rainforest_alliance', name: 'Rainforest Alliance' },
+                { id: 'solar_power_collective', name: 'Solar Power Collective' },
+                { id: 'wildlife_protection_fund', name: 'Wildlife Protection Fund' },
+                { id: 'clean_water_initiative', name: 'Clean Water Initiative' }
+            ];
+
+            sampleOrgs.forEach(org => {
+                if (!existingWallets[org.id]) {
+                    try {
+                        const wallet = ethers.Wallet.createRandom();
+
+                        existingWallets[org.id] = wallet.address;
+                        secureWallets[org.id] = {
+                            address: wallet.address,
+                            privateKey: wallet.privateKey,
+                            organizationName: org.name,
+                            created: new Date().toISOString(),
+                            status: 'active'
+                        };
+
+                        created++;
+                    } catch (error) {
+                        console.error('Failed to create wallet for', org.name, error);
+                    }
+                }
+            });
+
+            localStorage.setItem('organizationWallets', JSON.stringify(existingWallets));
+            localStorage.setItem('secureOrgWallets', JSON.stringify(secureWallets));
+
+            showNotification(`Created ${created} new organization wallets`, 'success');
+            loadWalletData();
+        }
+
+        // Convert wallet balance
+        function convertWallet(orgId) {
+            const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+
+            const walletData = secureWallets[orgId];
+            const orgDonations = donations.filter(d => d.organizationId === orgId);
+            const balance = orgDonations.reduce((sum, d) => sum + (d.organizationAmount || 0), 0);
+
+            if (balance === 0) {
+                alert('No balance to convert for this organization.');
+                return;
+            }
+
+            const ethToUsd = 2000; // Approximate rate
+            const usdValue = balance * ethToUsd;
+
+            if (confirm(`Convert ${balance.toFixed(4)} ETH (~$${usdValue.toFixed(2)}) to USD for ${walletData.organizationName}?`)) {
+                // Simulate conversion process
+                const conversions = JSON.parse(localStorage.getItem('conversions') || '[]');
+                conversions.push({
+                    id: Date.now().toString(),
+                    orgId: orgId,
+                    organizationName: walletData.organizationName,
+                    amount: balance,
+                    usdValue: usdValue,
+                    timestamp: new Date().toISOString(),
+                    status: 'processing'
+                });
+                localStorage.setItem('conversions', JSON.stringify(conversions));
+
+                showNotification(`Conversion initiated for ${walletData.organizationName}: ${balance.toFixed(4)} ETH → $${usdValue.toFixed(2)}`, 'success');
+                loadWalletData();
+            }
+        }
+
+        // Convert all balances
+        function convertAllBalances() {
+            if (!confirm('Convert ALL organization balances to USD? This action cannot be undone.')) {
+                return;
+            }
+
+            const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+            const ethToUsd = 2000;
+
+            let totalConverted = 0;
+            let organizationsConverted = 0;
+
+            Object.keys(secureWallets).forEach(orgId => {
+                const orgDonations = donations.filter(d => d.organizationId === orgId);
+                const balance = orgDonations.reduce((sum, d) => sum + (d.organizationAmount || 0), 0);
+
+                if (balance > 0) {
+                    convertWallet(orgId);
+                    totalConverted += balance;
+                    organizationsConverted++;
+                }
+            });
+
+            showNotification(`Batch conversion completed: ${organizationsConverted} organizations, ${totalConverted.toFixed(4)} ETH → $${(totalConverted * ethToUsd).toFixed(2)}`, 'success');
+        }
+
+        // Export wallet data
+        function exportWalletData() {
+            const data = {
+                wallets: JSON.parse(localStorage.getItem('organizationWallets') || '{}'),
+                secureWallets: JSON.parse(localStorage.getItem('secureOrgWallets') || '{}'),
+                donations: JSON.parse(localStorage.getItem('donations') || '[]'),
+                conversions: JSON.parse(localStorage.getItem('conversions') || '[]'),
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `wallet-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showNotification('Wallet data exported successfully', 'success');
+        }
+
+        // Open testing dashboard
+        function openTestingDashboard() {
+            window.open('test-wallet-management.html', '_blank');
+        }
+
+        // Clear test data
+        function clearTestData() {
+            if (!confirm('Clear all test data? This will remove test organizations and donations, but keep real data.')) {
+                return;
+            }
+
+            const items = ['organizationWallets', 'secureOrgWallets', 'donations', 'conversions'];
+            items.forEach(itemKey => {
+                const data = JSON.parse(localStorage.getItem(itemKey) || '{}');
+                if (Array.isArray(data)) {
+                    const filtered = data.filter(item => !item.id || !item.id.toString().includes('test'));
+                    localStorage.setItem(itemKey, JSON.stringify(filtered));
+                } else {
+                    Object.keys(data).forEach(key => {
+                        if (key.includes('test')) {
+                            delete data[key];
+                        }
+                    });
+                    localStorage.setItem(itemKey, JSON.stringify(data));
+                }
+            });
+
+            showNotification('Test data cleared successfully', 'success');
+            loadWalletData();
+        }
+
+        // Search wallets
+        function searchWallets(query) {
+            // Simple search implementation - filter table rows
+            const rows = document.querySelectorAll('#wallet-table tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        // Filter wallets
+        function filterWallets(type) {
+            // Update filter buttons
+            document.querySelectorAll('.chart-filters .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter logic would go here
+            showNotification(`Showing ${type} wallets`, 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type}`;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '9999';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${message}
+            `;
+
+            document.body.appendChild(notification);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Refresh conversions
+        function refreshConversions() {
+            loadWalletData();
+            showNotification('Conversion data refreshed', 'success');
+        }
+
+        // Additional wallet management functions
+        function viewWalletDetails(orgId) {
+            const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+            const walletData = secureWallets[orgId];
+
+            if (walletData) {
+                alert(`Wallet Details for ${walletData.organizationName}:\n\nAddress: ${walletData.address}\nCreated: ${new Date(walletData.created).toLocaleString()}\nStatus: ${walletData.status}`);
+            }
+        }
+
+        function convertBalance(orgId) {
+            convertWallet(orgId); // Same function, different entry point
+        }
+
+        function scheduleConversions() {
+            alert('Scheduled conversion feature coming soon. This will allow you to set up automatic conversions at specified intervals.');
+        }
+
+        function viewConversionHistory() {
+            const conversions = JSON.parse(localStorage.getItem('conversions') || '[]');
+            if (conversions.length === 0) {
+                alert('No conversion history found.');
+            } else {
+                alert(`Found ${conversions.length} conversion records. Full history viewer coming soon.`);
+            }
+        }
+
+        function generateConversionReport() {
+            const conversions = JSON.parse(localStorage.getItem('conversions') || '[]');
+            const data = {
+                report: 'Conversion Summary Report',
+                generated: new Date().toISOString(),
+                totalConversions: conversions.length,
+                conversions: conversions
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `conversion-report-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showNotification('Conversion report generated and downloaded', 'success');
+        }
 
         console.log('🔧 EcoCoin Admin Dashboard loaded successfully');
     </script>

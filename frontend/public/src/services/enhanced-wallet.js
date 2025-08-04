@@ -1,6 +1,10 @@
-// Enhanced Wallet Integration Manager
+// Enhanced Wallet Integration Manager - DISABLED FOR DEBUGGING
 class EnhancedWalletManager {
     constructor() {
+        // Constructor disabled to prevent auto-initialization
+        console.log('ℹ️ Enhanced Wallet Manager constructor disabled for debugging');
+        return;
+
         this.currentWallet = null;
         this.providers = new Map();
         this.connectionStatus = 'disconnected';
@@ -9,26 +13,36 @@ class EnhancedWalletManager {
             sepolia: { chainId: '0xaa36a7', name: 'Sepolia Testnet' },
             localhost: { chainId: '0x7a69', name: 'Localhost 8545' }
         };
-        
+
         this.init();
     }
 
     async init() {
-        console.log('🔗 Initializing Enhanced Wallet Manager...');
-        
-        // Register available wallet providers
-        await this.registerProviders();
-        
-        // Check for existing connections
-        await this.checkExistingConnections();
-        
-        // Set up event listeners
-        this.setupEventListeners();
-        
-        // Update UI
-        this.updateWalletUI();
-        
-        console.log('✅ Enhanced Wallet Manager initialized');
+        // DISABLED FOR DEBUGGING - preventing auto-initialization errors
+        console.log('ℹ️ Enhanced Wallet Manager initialization disabled for debugging');
+        return;
+
+        try {
+            console.log('🔗 Initializing Enhanced Wallet Manager...');
+
+            // Register available wallet providers
+            await this.registerProviders();
+
+            // Check for existing connections
+            await this.checkExistingConnections();
+
+            // Set up event listeners
+            this.setupEventListeners();
+
+            // Update UI
+            this.updateWalletUI();
+
+            console.log('✅ Enhanced Wallet Manager initialized');
+        } catch (error) {
+            console.log('⚠️ Enhanced Wallet Manager initialization warning:', error.message);
+            // Continue initialization even if some parts fail
+            this.updateWalletUI();
+        }
     }
 
     async registerProviders() {
@@ -80,21 +94,24 @@ class EnhancedWalletManager {
     }
 
     async checkExistingConnections() {
+        // Disable auto-connection for now to avoid startup errors
+        console.log('ℹ️ Auto-connection disabled for debugging');
+
+        // Clear any problematic saved connections
         const savedWallet = localStorage.getItem('connectedWallet');
-        const autoConnect = localStorage.getItem('autoConnectWallet') === 'true';
-        
-        if (savedWallet && autoConnect && this.providers.has(savedWallet)) {
-            try {
-                await this.connectWallet(savedWallet, false);
-            } catch (error) {
-                console.log('Failed to auto-reconnect wallet:', error.message);
-                this.clearWalletConnection();
-            }
+        if (savedWallet) {
+            console.log('ℹ️ Clearing saved wallet connection for clean start');
+            this.clearWalletConnection();
         }
     }
 
     async connectWallet(walletType = null, showSelector = true) {
         try {
+            // Check if we have any providers at all
+            if (this.providers.size === 0) {
+                throw new Error('No wallet providers available. Please install a Web3 wallet like MetaMask.');
+            }
+
             // Show wallet selector if no specific wallet requested
             if (!walletType && showSelector && this.providers.size > 1) {
                 walletType = await this.showWalletSelector();
@@ -103,19 +120,34 @@ class EnhancedWalletManager {
             }
 
             if (!walletType || !this.providers.has(walletType)) {
-                throw new Error('Wallet not available');
+                throw new Error('Selected wallet is not available');
             }
 
             const walletInfo = this.providers.get(walletType);
             console.log(`🔗 Connecting to ${walletInfo.name}...`);
 
-            // Request account access
-            const accounts = await walletInfo.provider.request({
-                method: 'eth_requestAccounts'
-            });
+            // Check if provider is accessible
+            if (!walletInfo.provider || typeof walletInfo.provider.request !== 'function') {
+                throw new Error(`${walletInfo.name} provider is not properly initialized`);
+            }
+
+            // Check if MetaMask is actually available (not just the provider)
+            if (walletType === 'metamask' && (!window.ethereum || !window.ethereum.isMetaMask)) {
+                throw new Error('MetaMask is not installed or not available');
+            }
+
+            // Request account access with timeout
+            const accounts = await Promise.race([
+                walletInfo.provider.request({
+                    method: 'eth_requestAccounts'
+                }),
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Connection timeout - wallet may not be available')), 5000)
+                )
+            ]);
 
             if (!accounts || accounts.length === 0) {
-                throw new Error('No accounts found');
+                throw new Error('No accounts found or access denied');
             }
 
             // Get network info
@@ -164,22 +196,37 @@ class EnhancedWalletManager {
     async disconnectWallet() {
         if (this.currentWallet) {
             console.log(`🔌 Disconnecting from ${this.currentWallet.info.name}...`);
-            
+
             this.currentWallet = null;
             this.connectionStatus = 'disconnected';
-            
+
             // Clear saved connection
             localStorage.removeItem('connectedWallet');
             localStorage.removeItem('autoConnectWallet');
-            
+
             // Update UI
             this.updateWalletUI();
-            
+
             // Trigger disconnection event
             this.dispatchWalletEvent('walletDisconnected', {});
-            
+
             this.showToast('Wallet disconnected', 'info');
         }
+    }
+
+    clearWalletConnection() {
+        // Clear any saved wallet connection data
+        localStorage.removeItem('connectedWallet');
+        localStorage.removeItem('autoConnectWallet');
+
+        // Reset wallet state
+        this.currentWallet = null;
+        this.connectionStatus = 'disconnected';
+
+        // Update UI
+        this.updateWalletUI();
+
+        console.log('🧹 Wallet connection data cleared');
     }
 
     async switchNetwork(networkName) {
@@ -202,7 +249,7 @@ class EnhancedWalletManager {
 
             this.currentWallet.chainId = network.chainId;
             this.updateWalletUI();
-            
+
             this.dispatchWalletEvent('networkChanged', {
                 chainId: network.chainId,
                 networkName: network.name
@@ -273,7 +320,7 @@ class EnhancedWalletManager {
                             <button class="wallet-option" data-wallet="${key}">
                                 <span class="wallet-icon">${wallet.icon}</span>
                                 <span class="wallet-name">${wallet.name}</span>
-                                ${wallet.mobile && /Mobi|Android/i.test(navigator.userAgent) ? 
+                                ${wallet.mobile && /Mobi|Android/i.test(navigator.userAgent) ?
                                     '<span class="wallet-badge">📱</span>' : ''}
                             </button>
                         `).join('')}
@@ -370,7 +417,7 @@ class EnhancedWalletManager {
 
     async updateBalance() {
         const balanceElements = document.querySelectorAll('#walletBalance, .wallet-balance');
-        
+
         if (this.currentWallet) {
             try {
                 const balance = await this.getBalance();
@@ -440,21 +487,172 @@ class EnhancedWalletManager {
     }
 }
 
-// Global wallet manager instance
-window.walletManager = new EnhancedWalletManager();
+// Global wallet manager instance - DISABLED for debugging
+// window.walletManager = new EnhancedWalletManager();
 
-// Enhanced wallet connection function for backward compatibility
+// Ultra-simple MetaMask connection - standalone function
 window.connectWallet = async function() {
+    console.log('🔗 Simple wallet connection starting...');
+
+    // Check if MetaMask exists
+    if (!window.ethereum) {
+        console.log('❌ No ethereum provider found');
+        const message = 'MetaMask not found. Please install MetaMask extension.';
+        window.showToast ? window.showToast(message, 'error') : alert(message);
+        return null;
+    }
+
+    console.log('✅ Ethereum provider found');
+
     try {
-        await window.walletManager.connectWallet();
+        // Just request accounts - nothing else
+        console.log('📝 Requesting accounts...');
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        });
+
+        console.log('📋 Got accounts:', accounts);
+
+        if (accounts && accounts.length > 0) {
+            const address = accounts[0];
+            console.log('✅ Connected to address:', address);
+
+            // Update just the connect button
+            const connectBtn = document.querySelector('#connectButton');
+            if (connectBtn) {
+                connectBtn.textContent = '🦊 Connected';
+                connectBtn.style.backgroundColor = '#059669';
+                connectBtn.style.color = 'white';
+            }
+
+            // Show address if there's a display element
+            const addressDisplay = document.querySelector('#walletAddress');
+            if (addressDisplay) {
+                addressDisplay.textContent = `${address.slice(0, 6)}...${address.slice(-4)}`;
+                addressDisplay.style.display = 'block';
+            }
+
+            // Show success toast instead of alert
+            const successMessage = `Wallet connected! ${address.slice(0, 8)}...${address.slice(-6)}`;
+            if (window.showToast) {
+                window.showToast(successMessage, 'success');
+            } else {
+                console.log('✅', successMessage);
+            }
+
+            // Store connection for persistence
+            localStorage.setItem('connectedWallet', 'metamask');
+            localStorage.setItem('walletAddress', address);
+
+            return address;
+        } else {
+            console.log('❌ No accounts returned');
+            const message = 'No accounts found. Make sure MetaMask is unlocked.';
+            window.showToast ? window.showToast(message, 'warning') : alert(message);
+            return null;
+        }
     } catch (error) {
-        console.error('Failed to connect wallet:', error);
+        console.error('❌ Connection failed:', error);
+
+        let message = 'Failed to connect to MetaMask';
+        if (error.code === 4001) {
+            message = 'Connection cancelled by user.';
+        } else if (error.code === -32002) {
+            message = 'MetaMask is busy. Please check MetaMask and try again.';
+        } else if (error.message.includes('extension not found')) {
+            message = 'MetaMask extension issue. Try refreshing the page.';
+        }
+
+        window.showToast ? window.showToast(message, 'error') : alert(message);
+        return null;
     }
 };
 
-// Network switching functions
-window.switchToMainnet = () => window.walletManager.switchNetwork('mainnet');
-window.switchToSepolia = () => window.walletManager.switchNetwork('sepolia');
-window.switchToLocalhost = () => window.walletManager.switchNetwork('localhost');
+// Network switching functions - DISABLED (wallet manager not available)
+// window.switchToMainnet = () => window.walletManager.switchNetwork('mainnet');
+// window.switchToSepolia = () => window.walletManager.switchNetwork('sepolia');
+// window.switchToLocalhost = () => window.walletManager.switchNetwork('localhost');
 
-console.log('✅ Enhanced Wallet Manager loaded');
+// Simple helper functions for donations
+window.isWalletConnected = async function() {
+    try {
+        if (typeof window.ethereum === 'undefined') return false;
+
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        return accounts && accounts.length > 0;
+    } catch (error) {
+        return false;
+    }
+};
+
+window.getConnectedWallet = async function() {
+    try {
+        if (typeof window.ethereum === 'undefined') return null;
+
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        return accounts && accounts.length > 0 ? accounts[0] : null;
+    } catch (error) {
+        return null;
+    }
+};
+
+// Check for existing connection on page load
+window.checkExistingWalletConnection = async function() {
+    try {
+        if (typeof window.ethereum === 'undefined') return;
+
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+
+        if (accounts && accounts.length > 0) {
+            const address = accounts[0];
+            console.log('✅ Existing wallet connection found:', address);
+
+            // Update UI to show connected state
+            const connectBtn = document.querySelector('#connectButton');
+            if (connectBtn) {
+                connectBtn.textContent = '🦊 Connected';
+                connectBtn.style.backgroundColor = '#059669';
+                connectBtn.style.color = 'white';
+            }
+
+            const addressDisplay = document.querySelector('#walletAddress');
+            if (addressDisplay) {
+                addressDisplay.textContent = `${address.slice(0, 6)}...${address.slice(-4)}`;
+                addressDisplay.style.display = 'block';
+            }
+
+            return address;
+        }
+    } catch (error) {
+        console.log('No existing wallet connection found');
+    }
+    return null;
+};
+
+// Debug function to check MetaMask status
+window.checkMetaMaskStatus = function() {
+    console.log('🔍 MetaMask Status Check:');
+    console.log('- window.ethereum exists:', typeof window.ethereum !== 'undefined');
+    console.log('- window.ethereum.isMetaMask:', window.ethereum?.isMetaMask);
+    console.log('- MetaMask version:', window.ethereum?.version);
+    console.log('- Provider ready:', window.ethereum?._state?.isConnected);
+    console.log('- User agent:', navigator.userAgent);
+
+    if (typeof window.ethereum === 'undefined') {
+        console.log('❌ MetaMask not detected. Please install MetaMask extension.');
+        return false;
+    } else if (!window.ethereum.isMetaMask) {
+        console.log('⚠️ Ethereum provider found but it\'s not MetaMask.');
+        return false;
+    } else {
+        console.log('✅ MetaMask detected and ready.');
+        return true;
+    }
+};
+
+console.log('✅ Simple wallet functions loaded');
+
+// Check for existing wallet connection when page loads
+setTimeout(() => {
+    window.checkExistingWalletConnection();
+}, 1000);

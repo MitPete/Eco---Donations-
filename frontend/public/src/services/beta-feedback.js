@@ -463,12 +463,13 @@ class BetaFeedbackWidget {
             if (!isDevelopment) {
                 // In production, we might not have a backend yet
                 console.log('📝 Beta feedback: Production mode, skipping backend connection');
+                this.loadLocalFeedbackData();
                 return;
             }
 
             // Try to connect to backend, but don't fail if it's not available
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000); // Timeout after 2 seconds
+            const timeoutId = setTimeout(() => controller.abort(), 1000); // Short timeout for development
 
             const response = await fetch(API_CONFIG.feedback, {
                 method: 'GET',
@@ -481,15 +482,17 @@ class BetaFeedbackWidget {
             clearTimeout(timeoutId);
 
             if (response.ok) {
-                this.feedbackData = await response.json();
-                console.log('📝 Beta feedback data loaded successfully');
+                const data = await response.json();
+                this.feedbackData = data.feedback || [];
+                console.log('📝 Beta feedback: Backend connected successfully');
             } else {
-                console.log('📝 Beta feedback: Backend returned non-OK status, using local storage fallback');
-                this.loadLocalFeedbackData();
+                throw new Error('Backend responded with error');
             }
         } catch (error) {
-            // Backend not available, use local storage instead
-            console.log('📝 Beta feedback: Backend not available, using local storage fallback');
+            // Backend not available, use local storage instead (this is expected in development)
+            if (error.name !== 'AbortError') {
+                console.log('📝 Beta feedback: Backend not available, using local storage fallback');
+            }
             this.loadLocalFeedbackData();
         }
     }

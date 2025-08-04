@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet Management Testing Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: white;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .test-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .test-card {
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .test-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #1f2937;
+    }
+
+    .test-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      margin: 5px;
+      width: 100%;
+    }
+
+    .test-button:hover {
+      opacity: 0.9;
+    }
+
+    .test-result {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 10px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .status-success {
+      background: #10b981;
+    }
+
+    .status-error {
+      background: #ef4444;
+    }
+
+    .status-warning {
+      background: #f59e0b;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .nav-links {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin: 0 10px;
+      display: inline-block;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🧪 Wallet Management Testing Dashboard</h1>
+      <p>Comprehensive testing interface for the "Bridging the Gap" system</p>
+    </div>
+
+    <div class="nav-links">
+      <a href="donate.html" class="nav-link">🎯 Donation Page</a>
+      <a href="admin-organizations.html" class="nav-link">💼 Admin Dashboard</a>
+      <a href="../docs/technical/TESTING_GUIDE.md" class="nav-link">📋 Testing Guide</a>
+    </div>
+
+    <!-- System Status -->
+    <div class="test-section">
+      <h2>🔍 System Status</h2>
+      <div class="test-grid">
+        <div class="test-card">
+          <div class="test-title">Core Dependencies</div>
+          <div id="dependencies-status"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="checkDependencies()">Check Dependencies</button>
+          </div>
+        </div>
+
+        <div class="test-card">
+          <div class="test-title">MetaMask Connection</div>
+          <div id="metamask-status"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="checkMetaMask()">Check MetaMask</button>
+            <button class="action-btn" onclick="connectWallet()">Connect Wallet</button>
+          </div>
+        </div>
+
+        <div class="test-card">
+          <div class="test-title">Data Storage</div>
+          <div id="storage-status"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="checkStorage()">Check Storage</button>
+            <button class="action-btn" onclick="clearStorage()">Clear Test Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Function Testing -->
+    <div class="test-section">
+      <h2>⚡ Function Testing</h2>
+      <div class="test-grid">
+        <div class="test-card">
+          <div class="test-title">Wallet Creation</div>
+          <div id="wallet-test-result"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="testWalletCreation()">Test Wallet Creation</button>
+            <button class="action-btn" onclick="createTestWallet()">Create Test Wallet</button>
+          </div>
+        </div>
+
+        <div class="test-card">
+          <div class="test-title">Organization Loading</div>
+          <div id="org-test-result"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="testOrganizationLoading()">Test Organizations</button>
+            <button class="action-btn" onclick="loadTestData()">Load Test Data</button>
+          </div>
+        </div>
+
+        <div class="test-card">
+          <div class="test-title">Transaction Simulation</div>
+          <div id="transaction-test-result"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="simulateTransaction()">Simulate Transaction</button>
+            <button class="action-btn" onclick="testFeeCalculation()">Test Fee Calculation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integration Testing -->
+    <div class="test-section">
+      <h2>🔗 Integration Testing</h2>
+      <div class="test-grid">
+        <div class="test-card">
+          <div class="test-title">End-to-End Simulation</div>
+          <div id="e2e-test-result"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="runE2ETest()">Run Full Test</button>
+            <button class="action-btn" onclick="validateResults()">Validate Results</button>
+          </div>
+        </div>
+
+        <div class="test-card">
+          <div class="test-title">Admin Dashboard</div>
+          <div id="admin-test-result"></div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="testAdminFunctions()">Test Admin Functions</button>
+            <button class="action-btn" onclick="generateTestData()">Generate Test Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Results -->
+    <div class="test-section">
+      <h2>📊 Test Results Summary</h2>
+      <div id="test-summary"></div>
+    </div>
+  </div>
+
+  <script src="organizations.js"></script>
+  <script src="ethers.umd.min.js"></script>
+
+  <script>
+    let testResults = {
+      dependencies: null,
+      metamask: null,
+      storage: null,
+      wallet: null,
+      organizations: null,
+      transactions: null
+    };
+
+    // Check core dependencies
+    function checkDependencies() {
+      const result = document.getElementById('dependencies-status');
+      let status = '';
+
+      const checks = [
+        { name: 'ethers.js', test: typeof ethers !== 'undefined' },
+        { name: 'organizationCategories', test: typeof organizationCategories !== 'undefined' },
+        { name: 'organizations', test: typeof organizations !== 'undefined' },
+        { name: 'localStorage', test: typeof localStorage !== 'undefined' }
+      ];
+
+      checks.forEach(check => {
+        const indicator = check.test ? '🟢' : '🔴';
+        status += `${indicator} ${check.name}: ${check.test ? 'Available' : 'Missing'}\n`;
+      });
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+      testResults.dependencies = checks.every(c => c.test);
+      updateSummary();
+    }
+
+    // Check MetaMask connection
+    async function checkMetaMask() {
+      const result = document.getElementById('metamask-status');
+      let status = '';
+
+      try {
+        if (typeof ethereum === 'undefined') {
+          status = '🔴 MetaMask not installed';
+          testResults.metamask = false;
+        } else {
+          const accounts = await ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            status = `🟢 Connected: ${accounts[0]}\n`;
+            status += `🟢 Network: ${await ethereum.request({ method: 'eth_chainId' })}`;
+            testResults.metamask = true;
+          } else {
+            status = '🟡 MetaMask available but not connected';
+            testResults.metamask = false;
+          }
+        }
+      } catch (error) {
+        status = `🔴 Error: ${error.message}`;
+        testResults.metamask = false;
+      }
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+      updateSummary();
+    }
+
+    // Connect wallet
+    async function connectWallet() {
+      try {
+        await ethereum.request({ method: 'eth_requestAccounts' });
+        checkMetaMask();
+      } catch (error) {
+        alert('Failed to connect wallet: ' + error.message);
+      }
+    }
+
+    // Check storage
+    function checkStorage() {
+      const result = document.getElementById('storage-status');
+      let status = '';
+
+      const items = [
+        'organizationWallets',
+        'secureOrgWallets',
+        'donations',
+        'orgNotifications'
+      ];
+
+      items.forEach(item => {
+        const data = localStorage.getItem(item);
+        const indicator = data ? '🟢' : '🟡';
+        const count = data ? JSON.parse(data).length || Object.keys(JSON.parse(data)).length : 0;
+        status += `${indicator} ${item}: ${data ? `${count} items` : 'Empty'}\n`;
+      });
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+      testResults.storage = true;
+      updateSummary();
+    }
+
+    // Clear storage
+    function clearStorage() {
+      if (confirm('Clear all test data? This cannot be undone.')) {
+        ['organizationWallets', 'secureOrgWallets', 'donations', 'orgNotifications'].forEach(item => {
+          localStorage.removeItem(item);
+        });
+        checkStorage();
+        alert('Test data cleared!');
+      }
+    }
+
+    // Test wallet creation
+    function testWalletCreation() {
+      const result = document.getElementById('wallet-test-result');
+      let status = '';
+
+      try {
+        const wallet = ethers.Wallet.createRandom();
+        status = `🟢 Wallet created successfully\n`;
+        status += `Address: ${wallet.address}\n`;
+        status += `Valid format: ${wallet.address.startsWith('0x') && wallet.address.length === 42}\n`;
+        status += `Private key length: ${wallet.privateKey.length}`;
+        testResults.wallet = true;
+      } catch (error) {
+        status = `🔴 Wallet creation failed: ${error.message}`;
+        testResults.wallet = false;
+      }
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+      updateSummary();
+    }
+
+    // Create test wallet for organization
+    function createTestWallet() {
+      try {
+        const wallet = ethers.Wallet.createRandom();
+        const testOrgId = 'test_org_' + Date.now();
+
+        // Store in localStorage
+        const orgWallets = JSON.parse(localStorage.getItem('organizationWallets') || '{}');
+        const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+
+        orgWallets[testOrgId] = wallet.address;
+        secureWallets[testOrgId] = {
+          address: wallet.address,
+          privateKey: wallet.privateKey,
+          organizationName: 'Test Organization',
+          created: new Date().toISOString(),
+          status: 'active'
+        };
+
+        localStorage.setItem('organizationWallets', JSON.stringify(orgWallets));
+        localStorage.setItem('secureOrgWallets', JSON.stringify(secureWallets));
+
+        alert(`Test wallet created for: ${testOrgId}\nAddress: ${wallet.address}`);
+        checkStorage();
+      } catch (error) {
+        alert('Failed to create test wallet: ' + error.message);
+      }
+    }
+
+    // Test organization loading
+    function testOrganizationLoading() {
+      const result = document.getElementById('org-test-result');
+      let status = '';
+
+      try {
+        if (typeof organizationCategories !== 'undefined') {
+          const categories = Object.keys(organizationCategories);
+          status += `🟢 Categories loaded: ${categories.length}\n`;
+          status += `Categories: ${categories.join(', ')}\n`;
+        } else {
+          status += `🔴 Categories not loaded\n`;
+        }
+
+        if (typeof organizations !== 'undefined') {
+          const totalOrgs = Object.keys(organizations).reduce((sum, cat) =>
+            sum + (organizations[cat] ? organizations[cat].length : 0), 0);
+          status += `🟢 Organizations loaded: ${totalOrgs}\n`;
+          Object.keys(organizations).forEach(cat => {
+            status += `  ${cat}: ${organizations[cat] ? organizations[cat].length : 0} orgs\n`;
+          });
+        } else {
+          status += `🔴 Organizations not loaded\n`;
+        }
+
+        testResults.organizations = typeof organizationCategories !== 'undefined' && typeof organizations !== 'undefined';
+      } catch (error) {
+        status = `🔴 Error loading organizations: ${error.message}`;
+        testResults.organizations = false;
+      }
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+      updateSummary();
+    }
+
+    // Load test data
+    function loadTestData() {
+      if (!window.organizations) {
+        alert('Organizations data not available. Check if organizations.js is loaded.');
+        return;
+      }
+
+      // Simulate some test donations
+      const testDonations = [
+        {
+          id: Date.now().toString(),
+          timestamp: new Date().toISOString(),
+          userAddress: '0x1234567890123456789012345678901234567890',
+          organizationId: 'ocean_conservancy',
+          organizationName: 'Ocean Conservancy',
+          category: 'ocean',
+          amount: 0.05,
+          platformFee: 0.0015,
+          organizationAmount: 0.0485,
+          message: 'Test donation for ocean cleanup',
+          status: 'completed'
+        }
+      ];
+
+      localStorage.setItem('donations', JSON.stringify(testDonations));
+      alert('Test donation data loaded!');
+      checkStorage();
+    }
+
+    // Simulate transaction
+    function simulateTransaction() {
+      const result = document.getElementById('transaction-test-result');
+      let status = '';
+
+      try {
+        const donationAmount = 0.05;
+        const platformFeePercent = 0.03;
+        const platformFee = donationAmount * platformFeePercent;
+        const organizationAmount = donationAmount - platformFee;
+
+        status += `🟢 Transaction simulation:\n`;
+        status += `Total donation: ${donationAmount} ETH\n`;
+        status += `Platform fee (3%): ${platformFee.toFixed(4)} ETH\n`;
+        status += `To organization: ${organizationAmount.toFixed(4)} ETH\n`;
+        status += `Fee percentage: ${((platformFee / donationAmount) * 100).toFixed(1)}%`;
+
+        testResults.transactions = true;
+      } catch (error) {
+        status = `🔴 Transaction simulation failed: ${error.message}`;
+        testResults.transactions = false;
+      }
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+      updateSummary();
+    }
+
+    // Test fee calculation
+    function testFeeCalculation() {
+      const amounts = [0.01, 0.05, 0.1, 1.0, 10.0];
+      let result = 'Fee calculation test:\n\n';
+
+      amounts.forEach(amount => {
+        const fee = amount * 0.03;
+        const orgAmount = amount - fee;
+        result += `${amount} ETH → Org: ${orgAmount.toFixed(4)} ETH, Fee: ${fee.toFixed(4)} ETH\n`;
+      });
+
+      document.getElementById('transaction-test-result').innerHTML = `<div class="test-result">${result}</div>`;
+    }
+
+    // Run end-to-end test
+    function runE2ETest() {
+      const result = document.getElementById('e2e-test-result');
+      let status = 'Running end-to-end test...\n\n';
+
+      // Simulate full donation flow
+      try {
+        // Step 1: Check dependencies
+        if (typeof ethers === 'undefined') throw new Error('ethers.js not loaded');
+        if (typeof organizations === 'undefined') throw new Error('Organizations not loaded');
+        status += '✓ Dependencies available\n';
+
+        // Step 2: Create test wallet
+        const testWallet = ethers.Wallet.createRandom();
+        status += '✓ Wallet creation works\n';
+
+        // Step 3: Simulate donation
+        const donation = {
+          amount: 0.05,
+          organization: 'ocean_conservancy',
+          category: 'ocean'
+        };
+        status += '✓ Donation data structured\n';
+
+        // Step 4: Calculate fees
+        const fee = donation.amount * 0.03;
+        const orgAmount = donation.amount - fee;
+        status += '✓ Fee calculation completed\n';
+
+        // Step 5: Store test data
+        const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+        donations.push({
+          id: Date.now().toString(),
+          ...donation,
+          walletAddress: testWallet.address,
+          platformFee: fee,
+          organizationAmount: orgAmount,
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('donations', JSON.stringify(donations));
+        status += '✓ Data storage works\n';
+
+        status += '\n🟢 End-to-end test PASSED!';
+      } catch (error) {
+        status += `\n🔴 End-to-end test FAILED: ${error.message}`;
+      }
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+    }
+
+    // Validate results
+    function validateResults() {
+      const result = document.getElementById('e2e-test-result');
+      let status = 'Validating stored results...\n\n';
+
+      const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+      const wallets = JSON.parse(localStorage.getItem('organizationWallets') || '{}');
+
+      status += `Donations recorded: ${donations.length}\n`;
+      status += `Wallets created: ${Object.keys(wallets).length}\n`;
+
+      if (donations.length > 0) {
+        const latest = donations[donations.length - 1];
+        status += `\nLatest donation:\n`;
+        status += `Amount: ${latest.amount} ETH\n`;
+        status += `Organization: ${latest.organization}\n`;
+        status += `Timestamp: ${latest.timestamp}\n`;
+      }
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+    }
+
+    // Test admin functions
+    function testAdminFunctions() {
+      const result = document.getElementById('admin-test-result');
+      let status = 'Testing admin functions...\n\n';
+
+      try {
+        // Test data loading
+        const wallets = JSON.parse(localStorage.getItem('organizationWallets') || '{}');
+        const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+
+        status += `✓ Can read wallet data: ${Object.keys(wallets).length} wallets\n`;
+        status += `✓ Can read donation data: ${donations.length} donations\n`;
+
+        // Test calculations
+        const totalBalance = donations.reduce((sum, d) => sum + (d.organizationAmount || 0), 0);
+        status += `✓ Balance calculation: ${totalBalance.toFixed(4)} ETH\n`;
+
+        // Test conversion simulation
+        if (Object.keys(wallets).length > 0) {
+          status += `✓ Conversion targets: ${Object.keys(wallets).length} organizations\n`;
+        }
+
+        status += '\n🟢 Admin functions working!';
+      } catch (error) {
+        status += `\n🔴 Admin test failed: ${error.message}`;
+      }
+
+      result.innerHTML = `<div class="test-result">${status}</div>`;
+    }
+
+    // Generate test data
+    function generateTestData() {
+      const testOrgs = ['ocean_conservancy', 'rainforest_alliance', 'solar_power_collective'];
+      const donations = [];
+      const wallets = {};
+      const secureWallets = {};
+
+      testOrgs.forEach((org, index) => {
+        const wallet = ethers.Wallet.createRandom();
+        const amount = 0.01 * (index + 1);
+
+        wallets[org] = wallet.address;
+        secureWallets[org] = {
+          address: wallet.address,
+          privateKey: wallet.privateKey,
+          organizationName: org.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          created: new Date().toISOString(),
+          status: 'active'
+        };
+
+        donations.push({
+          id: (Date.now() + index).toString(),
+          timestamp: new Date().toISOString(),
+          userAddress: ethers.Wallet.createRandom().address,
+          organizationId: org,
+          organizationName: secureWallets[org].organizationName,
+          category: index === 0 ? 'ocean' : index === 1 ? 'forest' : 'energy',
+          amount: amount,
+          platformFee: amount * 0.03,
+          organizationAmount: amount * 0.97,
+          message: `Test donation ${index + 1}`,
+          status: 'completed'
+        });
+      });
+
+      localStorage.setItem('organizationWallets', JSON.stringify(wallets));
+      localStorage.setItem('secureOrgWallets', JSON.stringify(secureWallets));
+      localStorage.setItem('donations', JSON.stringify(donations));
+
+      alert(`Generated test data for ${testOrgs.length} organizations!`);
+      checkStorage();
+    }
+
+    // Update test summary
+    function updateSummary() {
+      const summary = document.getElementById('test-summary');
+      const total = Object.keys(testResults).length;
+      const passed = Object.values(testResults).filter(r => r === true).length;
+      const failed = Object.values(testResults).filter(r => r === false).length;
+      const pending = total - passed - failed;
+
+      let html = `
+        <div class="test-grid">
+          <div style="text-align: center; grid-column: span 3;">
+            <h3>Test Results: ${passed}/${total} Passed</h3>
+            <div style="margin: 10px 0;">
+              <span class="status-indicator status-success"></span>Passed: ${passed}
+              <span class="status-indicator status-error"></span>Failed: ${failed}
+              <span class="status-indicator status-warning"></span>Pending: ${pending}
+            </div>
+          </div>
+        </div>
+      `;
+
+      summary.innerHTML = html;
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateSummary();
+      // Auto-run basic checks
+      setTimeout(() => {
+        checkDependencies();
+        checkMetaMask();
+        checkStorage();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

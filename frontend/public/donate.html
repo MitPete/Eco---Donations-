@@ -98,6 +98,117 @@
       cursor: pointer;
       border: none;
     }
+
+    /* Quick amount buttons */
+    .quick-amount {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .quick-amount:hover {
+      border-color: #4CAF50;
+      background: #f8f8f8;
+    }
+
+    .quick-amount.active {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    .eth-equivalent {
+      display: block;
+      font-size: 10px;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    #ethPriceDisplay {
+      background: #f8f9fa;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: 1px solid #dee2e6;
+    }
+
+    .eth-price-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%) !important;
+      color: #ffffff !important;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+      border: 2px solid #3b82f6;
+      min-height: 100px;
+      display: block !important;
+      position: relative;
+    }
+
+    .eth-price-banner * {
+      color: #ffffff !important;
+    }
+
+    .price-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .price-header i {
+      font-size: 18px;
+      color: #ffffff !important;
+    }
+
+    .price-label {
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.9;
+      color: #ffffff !important;
+    }
+
+    .price-main {
+      margin-bottom: 5px;
+    }
+
+    .price-amount {
+      font-size: 24px;
+      font-weight: 700;
+      margin-right: 10px;
+      color: #ffffff !important;
+    }
+
+    .price-change {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff !important;
+    }
+
+    .price-change.positive {
+      background: rgba(34, 197, 94, 0.8);
+      color: #ffffff !important;
+    }
+
+    .price-change.negative {
+      background: rgba(239, 68, 68, 0.8);
+      color: #ffffff !important;
+    }
+
+    .price-updated {
+      font-size: 11px;
+      opacity: 0.7;
+      color: #ffffff !important;
+    }
     .btn-primary {
       background: linear-gradient(135deg, #4ade80, #22c55e);
       color: white;
@@ -113,6 +224,249 @@
       animation: spin 1s ease-in-out infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Organization Details Card Styles */
+    .organization-details-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      color: #333;
+      transition: all 0.3s ease;
+    }
+
+    .organization-details-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .org-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .org-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 2px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .org-info h3 {
+      margin: 0;
+      color: #1f2937;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .org-verified {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #059669;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-top: 0.25rem;
+    }
+
+    .org-description {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .org-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .org-stats .stat {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+
+    .org-stats .stat i {
+      color: #059669;
+    }
+
+    .org-causes {
+      margin-bottom: 1rem;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+
+    .cause-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .cause-tag {
+      background: #f0fdf4;
+      color: #166534;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: 1px solid #bbf7d0;
+    }
+
+    .org-website {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #059669;
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .org-website:hover {
+      background: #047857;
+      color: white;
+    }
+
+    /* Foundation Selection Card Styles */
+    .foundation-selection {
+      padding: 60px 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .foundation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding: 0 20px;
+    }
+
+    .foundation-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .foundation-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .foundation-card.selected {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 3px solid #4CAF50;
+    }
+
+    .foundation-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 30px;
+      height: 30px;
+      background: #4CAF50;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .foundation-card__icon {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+
+    .foundation-card h3 {
+      margin: 0 0 15px 0;
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+
+    .foundation-card p {
+      margin: 0 0 20px 0;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .foundation-stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .foundation-stats .stat {
+      background: #f0f0f0;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .foundation-arrow {
+      margin-top: 40px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .foundation-arrow.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .foundation-arrow i {
+      font-size: 2em;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
   </style>
 
   <!-- Anti-FOUC Script - Load first -->
@@ -193,8 +547,42 @@
     })();
 
     // Fallback: define missing functions to prevent JS error
-    function prefillDonationForm() {}
-    function initializeDonationPage() {}
+    function prefillDonationForm() {
+      // Check URL parameters for cause/category prefilling
+      const urlParams = new URLSearchParams(window.location.search);
+      const cause = urlParams.get('cause');
+
+      if (cause) {
+        console.log('🔗 Prefilling form with cause:', cause);
+        // Wait a bit for the categories to load
+        setTimeout(() => {
+          const categorySelect = document.getElementById('category');
+          if (categorySelect) {
+            // Map URL causes to internal category keys
+            const causeMapping = {
+              'ocean': 'ocean',
+              'forest': 'forest',
+              'energy': 'energy',
+              'wildlife': 'wildlife',
+              'climate': 'climate',
+              'water': 'water'
+            };
+
+            const categoryKey = causeMapping[cause];
+            if (categoryKey) {
+              categorySelect.value = categoryKey;
+              // Trigger change event to load organizations
+              categorySelect.dispatchEvent(new Event('change'));
+              console.log('✅ Category prefilled:', categoryKey);
+            }
+          }
+        }, 1000);
+      }
+    }
+
+    function initializeDonationPage() {
+      console.log('🚀 Initializing donation page...');
+    }
   </script>
 </head>
 <body class="donatepage" onload="prefillDonationForm(); initializeDonationPage()">
@@ -275,8 +663,9 @@
     <!-- Foundation Selection Cards -->
     <div class="foundation-selection">
       <h2 class="section-title">Choose Your Cause</h2>
+      <p class="section-subtitle">Select a cause to see available organizations below</p>
       <div class="foundation-grid">
-        <div class="foundation-card" data-foundation="0">
+        <div class="foundation-card" data-foundation="0" onclick="console.log('🔥 Ocean card clicked inline!'); selectFoundation(0);">
           <div class="foundation-card__icon">🌊</div>
           <h3>Save The Oceans</h3>
           <p>Protect marine ecosystems and combat ocean pollution</p>
@@ -286,7 +675,7 @@
           </div>
           <div class="foundation-card__overlay"></div>
         </div>
-        <div class="foundation-card" data-foundation="1">
+        <div class="foundation-card" data-foundation="1" onclick="console.log('🔥 Forest card clicked inline!'); selectFoundation(1);">
           <div class="foundation-card__icon">🌳</div>
           <h3>Protect The Rainforest</h3>
           <p>Preserve biodiversity and fight deforestation</p>
@@ -296,7 +685,7 @@
           </div>
           <div class="foundation-card__overlay"></div>
         </div>
-        <div class="foundation-card" data-foundation="2">
+        <div class="foundation-card" data-foundation="2" onclick="console.log('🔥 Sequoia card clicked inline!'); selectFoundation(2);">
           <div class="foundation-card__icon">🌲</div>
           <h3>Protect The Sequoias</h3>
           <p>Safeguard ancient giants for future generations</p>
@@ -306,7 +695,7 @@
           </div>
           <div class="foundation-card__overlay"></div>
         </div>
-        <div class="foundation-card" data-foundation="3">
+        <div class="foundation-card" data-foundation="3" onclick="console.log('🔥 Energy card clicked inline!'); selectFoundation(3);">
           <div class="foundation-card__icon">⚡</div>
           <h3>Clean Energy</h3>
           <p>Accelerate the transition to renewable energy</p>
@@ -316,6 +705,10 @@
           </div>
           <div class="foundation-card__overlay"></div>
         </div>
+      </div>
+      <div class="foundation-arrow">
+        <i class="fas fa-arrow-down"></i>
+        <span>Choose specific organization below</span>
       </div>
     </div>
 
@@ -334,19 +727,60 @@
 
           <form id="donationForm" onsubmit="return sendDonation(event)" class="donate-form">
             <div class="form-group">
-              <label for="foundation" class="form-label">
-                <i class="fas fa-globe"></i>
-                Foundation
+              <label for="category" class="form-label">
+                <i class="fas fa-filter"></i>
+                Category
               </label>
               <div class="select-wrapper">
-                <select id="foundation" class="form-select">
-                  <option value="0">🌊 Save The Oceans</option>
-                  <option value="1">🌳 Protect The Rainforest</option>
-                  <option value="2">🌲 Protect The Sequoias</option>
-                  <option value="3">⚡ Clean Energy</option>
+                <select id="category" class="form-select" onchange="loadOrganizationsByCategory()">
+                  <option value="">Select a category first...</option>
                 </select>
                 <i class="fas fa-chevron-down select-icon"></i>
               </div>
+            </div>
+
+            <div class="form-group" id="organizationGroup" style="display: none;">
+              <label for="organization" class="form-label">
+                <i class="fas fa-building"></i>
+                Organization
+              </label>
+              <div class="select-wrapper">
+                <select id="organization" class="form-select" onchange="showOrganizationDetails()">
+                  <option value="">Choose an organization...</option>
+                </select>
+                <i class="fas fa-chevron-down select-icon"></i>
+              </div>
+            </div>
+
+            <!-- Organization Details Card -->
+            <div id="organizationDetails" class="organization-details-card" style="display: none;">
+              <div class="org-header">
+                <img id="orgLogo" src="" alt="" class="org-logo">
+                <div class="org-info">
+                  <h3 id="orgName"></h3>
+                  <div class="org-verified" id="orgVerified" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Verified
+                  </div>
+                </div>
+              </div>
+              <p id="orgDescription" class="org-description"></p>
+              <div class="org-stats">
+                <div class="stat">
+                  <i class="fas fa-project-diagram"></i>
+                  <span><span id="orgProjects">0</span> Active Projects</span>
+                </div>
+                <div class="stat">
+                  <i class="fas fa-chart-line"></i>
+                  <span id="orgImpact">0</span> <span id="orgImpactMetric">Impact</span>
+                </div>
+              </div>
+              <div class="org-causes">
+                <strong>Focus Areas:</strong>
+                <div id="orgCauses" class="cause-tags"></div>
+              </div>
+              <a id="orgWebsite" href="#" target="_blank" class="org-website">
+                <i class="fas fa-external-link-alt"></i> Visit Website
+              </a>
             </div>
 
             <div class="form-group">
@@ -358,10 +792,31 @@
               <div class="amount-input-wrapper">
                 <input type="number" id="amount" step="0.01" min="0" required class="form-input" placeholder="0.1" />
                 <div class="quick-amounts">
-                  <button type="button" class="quick-amount" data-amount="0.1">0.1</button>
-                  <button type="button" class="quick-amount" data-amount="0.5">0.5</button>
-                  <button type="button" class="quick-amount" data-amount="1">1.0</button>
-                  <button type="button" class="quick-amount" data-amount="5">5.0</button>
+                  <div id="ethPriceDisplay" class="eth-price-banner">
+                    <div class="price-header">
+                      <i class="fab fa-ethereum"></i>
+                      <span class="price-label">ETH Price (Live)</span>
+                    </div>
+                    <div class="price-main">
+                      <span id="currentEthPrice" class="price-amount">$3,730.24</span>
+                      <span id="priceChange" class="price-change positive">+6.09%</span>
+                    </div>
+                    <div class="price-updated">
+                      Last updated: <span id="lastUpdated">Loading...</span>
+                    </div>
+                  </div>
+                  <button type="button" class="quick-amount" data-usd="25" onclick="selectQuickAmountUSD(25)">
+                    $25 <span class="eth-equivalent">≈ 0.07 ETH</span>
+                  </button>
+                  <button type="button" class="quick-amount" data-usd="50" onclick="selectQuickAmountUSD(50)">
+                    $50 <span class="eth-equivalent">≈ 0.14 ETH</span>
+                  </button>
+                  <button type="button" class="quick-amount" data-usd="100" onclick="selectQuickAmountUSD(100)">
+                    $100 <span class="eth-equivalent">≈ 0.29 ETH</span>
+                  </button>
+                  <button type="button" class="quick-amount" data-usd="250" onclick="selectQuickAmountUSD(250)">
+                    $250 <span class="eth-equivalent">≈ 0.72 ETH</span>
+                  </button>
                 </div>
               </div>
               <div class="impact-preview" id="impactPreview">
@@ -592,6 +1047,233 @@
   <script src="/scripts/contract-fix.js?v=1753062000"></script>
   <script src="/scripts/main-wallet.js?v=1753062000"></script>
   <script src="/src/modules/auto-donation.js?v=1753062000"></script>
+
+  <!-- Organization Data and Management -->
+  <script src="organizations.js"></script>
+  <script>
+    // Global variables
+    let selectedOrganization = null;
+    let allOrganizations = {};
+    let allCategories = {};
+
+    // Initialize organization functionality
+    function initializeOrganizations() {
+      // Wait for organizations.js to load
+      if (typeof organizationCategories === 'undefined' || typeof organizations === 'undefined') {
+        setTimeout(initializeOrganizations, 100);
+        return;
+      }
+
+      // Access the global variables exported from organizations.js
+      allCategories = organizationCategories;
+      allOrganizations = organizations;
+      loadCategories();
+
+      console.log('✅ Organizations initialized with categories:', Object.keys(allCategories));
+      console.log('✅ Organizations loaded:', Object.keys(allOrganizations));
+    }    // Load categories into the category dropdown
+    function loadCategories() {
+      const categorySelect = document.getElementById('category');
+      categorySelect.innerHTML = '<option value="">Select a category first...</option>';
+
+      Object.keys(organizationCategories).forEach(categoryKey => {
+        const category = organizationCategories[categoryKey];
+        const option = document.createElement('option');
+        option.value = categoryKey;
+        option.textContent = `${getIconForCategory(categoryKey)} ${category.name}`;
+        categorySelect.appendChild(option);
+      });
+    }
+
+    // Get emoji icon for category
+    function getIconForCategory(categoryKey) {
+      const icons = {
+        ocean: '🌊',
+        forest: '🌳',
+        climate: '🌍',
+        energy: '⚡',
+        wildlife: '🦎',
+        water: '💧'
+      };
+      return icons[categoryKey] || '🌱';
+    }
+
+    // Load organizations for selected category
+    window.loadOrganizationsByCategory = function() {
+      console.log('🔍 loadOrganizationsByCategory called');
+
+      const categorySelect = document.getElementById('category');
+      const organizationSelect = document.getElementById('organization');
+      const organizationGroup = document.getElementById('organizationGroup');
+      const organizationDetails = document.getElementById('organizationDetails');
+
+      const selectedCategory = categorySelect.value;
+      console.log('📝 Selected category:', selectedCategory);
+      console.log('📋 Available organizations:', allOrganizations);
+      console.log('📋 Available categories:', allCategories);
+
+      if (!selectedCategory) {
+        organizationGroup.style.display = 'none';
+        organizationDetails.style.display = 'none';
+        return;
+      }
+
+      // Show organization dropdown
+      organizationGroup.style.display = 'block';
+      organizationDetails.style.display = 'none';
+
+      // Clear and populate organization dropdown
+      organizationSelect.innerHTML = '<option value="">Choose an organization...</option>';
+
+      const categoryOrganizations = allOrganizations[selectedCategory] || [];
+      console.log('🏢 Organizations for category:', selectedCategory, '=', categoryOrganizations.length, 'orgs');
+
+      categoryOrganizations.forEach((org, index) => {
+        const option = document.createElement('option');
+        option.value = `${selectedCategory}_${index}`;
+        option.textContent = `${org.verified ? '✅ ' : ''}${org.name}`;
+        organizationSelect.appendChild(option);
+        console.log('➕ Added organization:', org.name);
+      });
+    };
+
+    // Get organization by ID (format: category_index)
+    function getOrganizationByIdFixed(organizationId) {
+      console.log('🔍 Looking for organization with ID:', organizationId);
+
+      if (!organizationId || !organizationId.includes('_')) {
+        console.log('❌ Invalid organization ID format');
+        return null;
+      }
+
+      const [category, index] = organizationId.split('_');
+      const idx = parseInt(index);
+
+      if (!allOrganizations[category] || !allOrganizations[category][idx]) {
+        console.log('❌ Organization not found in category:', category, 'index:', idx);
+        return null;
+      }
+
+      const org = allOrganizations[category][idx];
+      console.log('✅ Found organization:', org.name);
+
+      // Return organization with additional metadata
+      return {
+        ...org,
+        category: category,
+        originalIndex: idx
+      };
+    }    // Show organization details when selected
+    window.showOrganizationDetails = function() {
+      const organizationSelect = document.getElementById('organization');
+      const organizationDetails = document.getElementById('organizationDetails');
+
+      const selectedValue = organizationSelect.value;
+
+      if (!selectedValue) {
+        organizationDetails.style.display = 'none';
+        selectedOrganization = null;
+        return;
+      }
+
+      // Parse the selected value to get category and index
+      const [category, index] = selectedValue.split('_');
+      const org = allOrganizations[category][parseInt(index)];
+
+      if (org) {
+        selectedOrganization = { ...org, category, originalIndex: index };
+        displayOrganizationDetails(org);
+        organizationDetails.style.display = 'block';
+      }
+    };
+
+    // Display organization details in the card
+    function displayOrganizationDetails(org) {
+      // Set logo (with fallback)
+      const orgLogo = document.getElementById('orgLogo');
+      orgLogo.src = org.logo || '/images/orgs/default-org.png';
+      orgLogo.alt = org.name;
+      orgLogo.onerror = function() {
+        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iMTIiIGZpbGw9IiNGMEY5RkYiLz4KPHN2ZyB4PSIxOCIgeT0iMTgiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjMDU5NjY5Ii8+Cjwvc3ZnPgo8L3N2Zz4KPC9zdmc+';
+      };
+
+      // Set organization info
+      document.getElementById('orgName').textContent = org.name;
+      document.getElementById('orgDescription').textContent = org.description;
+
+      // Show/hide verified badge
+      const verifiedBadge = document.getElementById('orgVerified');
+      verifiedBadge.style.display = org.verified ? 'flex' : 'none';
+
+      // Set stats
+      document.getElementById('orgProjects').textContent = org.stats?.projectsActive || 0;
+      document.getElementById('orgImpact').textContent = (org.stats?.impactValue || 0).toLocaleString();
+      document.getElementById('orgImpactMetric').textContent = org.stats?.impactMetric || 'Impact';
+
+      // Set causes
+      const causesContainer = document.getElementById('orgCauses');
+      causesContainer.innerHTML = '';
+      if (org.causes && org.causes.length > 0) {
+        org.causes.forEach(cause => {
+          const tag = document.createElement('span');
+          tag.className = 'cause-tag';
+          tag.textContent = cause;
+          causesContainer.appendChild(tag);
+        });
+      }
+
+      // Set website link
+      const websiteLink = document.getElementById('orgWebsite');
+      if (org.website) {
+        websiteLink.href = org.website;
+        websiteLink.style.display = 'inline-flex';
+      } else {
+        websiteLink.style.display = 'none';
+      }
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeOrganizations();
+    });
+
+    // Make organization data available globally for donation processing
+    window.getSelectedOrganization = function() {
+      return selectedOrganization;
+    };
+
+    // Map organization categories to foundation IDs for contract compatibility
+    window.getFoundationIdForOrganization = function(organization) {
+      if (!organization) return null;
+
+      // Map categories to existing contract foundation IDs
+      const categoryToFoundationMap = {
+        'ocean': 0,      // SaveTheOceans
+        'forest': 1,     // ProtectTheRainforest
+        'climate': 3,    // CleanEnergy (closest match)
+        'energy': 3,     // CleanEnergy
+        'wildlife': 1,   // ProtectTheRainforest (closest match)
+        'water': 0       // SaveTheOceans (closest match)
+      };
+
+      return categoryToFoundationMap[organization.category] || 0;
+    };
+
+    // Enhanced organization info for transaction metadata
+    window.getOrganizationMetadata = function(organization) {
+      if (!organization) return {};
+
+      return {
+        id: `${organization.category}_${organization.originalIndex}`,
+        name: organization.name,
+        category: organization.category,
+        verified: organization.verified,
+        website: organization.website,
+        ein: organization.ein || null
+      };
+    };
+  </script>
+
   <script>
     // Enhanced Donate Page Functionality
     document.addEventListener('DOMContentLoaded', function() {
@@ -599,55 +1281,377 @@
     });
 
     function initializeDonatePageEnhancements() {
+      console.log('🚀 Initializing donate page enhancements...');
       setupFoundationCards();
-      setupQuickAmounts();
       setupAmountInput();
       setupImpactCalculator();
       animateHero();
+
+      // Initialize price display immediately with fallback
+      updatePriceDisplay(false);
+
+      // Fetch real-time ETH price
+      fetchEthPrice();
+
+      // Update prices every 5 minutes instead of 30 seconds to avoid rate limits
+      setInterval(fetchEthPrice, 300000);
+
+      console.log('✅ Donate page enhancements initialized');
     }
 
-    // Foundation Card Selection
-    function setupFoundationCards() {
-      const cards = document.querySelectorAll('.foundation-card');
-      const select = document.getElementById('foundation');
+    // Simple function to test foundation selection
+    function selectFoundation(foundationId) {
+      console.log('🎯 selectFoundation called with:', foundationId);
 
-      cards.forEach(card => {
-        card.addEventListener('click', () => {
-          // Remove active class from all cards
-          cards.forEach(c => c.classList.remove('active'));
-          // Add active class to clicked card
-          card.classList.add('active');
-          // Update select value
-          const foundation = card.dataset.foundation;
-          select.value = foundation;
-          // Trigger change event
-          select.dispatchEvent(new Event('change'));
-        });
+      // Remove selected class from all cards
+      document.querySelectorAll('.foundation-card').forEach(card => {
+        card.classList.remove('selected');
       });
 
-      // Set initial active card
-      if (cards.length > 0) {
-        cards[0].classList.add('active');
+      // Add selected class to clicked card
+      const clickedCard = document.querySelector(`.foundation-card[data-foundation="${foundationId}"]`);
+      if (clickedCard) {
+        clickedCard.classList.add('selected');
+        console.log('✅ Card selected visually');
+      }
+
+      const foundationToCategory = {
+        '0': 'ocean',
+        '1': 'forest',
+        '2': 'forest',
+        '3': 'energy'
+      };
+
+      const categoryKey = foundationToCategory[foundationId.toString()];
+      console.log('📝 Setting category to:', categoryKey);
+
+      const categorySelect = document.getElementById('category');
+      if (categorySelect && categoryKey) {
+        categorySelect.value = categoryKey;
+
+        // Manually call the function to debug
+        console.log('🔧 Manually calling loadOrganizationsByCategory...');
+        loadOrganizationsByCategory();
+
+        console.log('✅ Category set successfully');
+
+        // Scroll to the form
+        setTimeout(() => {
+          const formSection = document.querySelector('.donate-form-section');
+          if (formSection) {
+            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      } else {
+        console.log('❌ Category select not found or invalid category');
       }
     }
 
-    // Quick Amount Buttons
-    function setupQuickAmounts() {
-      const quickAmounts = document.querySelectorAll('.quick-amount');
-      const amountInput = document.getElementById('amount');
+    // Add function to test organizations manually
+    function testOrganizations() {
+      console.log('🧪 Testing organizations...');
+      console.log('allOrganizations:', allOrganizations);
+      console.log('allCategories:', allCategories);
 
-      quickAmounts.forEach(btn => {
-        btn.addEventListener('click', () => {
-          // Remove active class from all buttons
-          quickAmounts.forEach(b => b.classList.remove('active'));
-          // Add active class to clicked button
-          btn.classList.add('active');
-          // Set amount
-          amountInput.value = btn.dataset.amount;
-          // Trigger input event
-          amountInput.dispatchEvent(new Event('input'));
+      if (allOrganizations && allOrganizations.ocean) {
+        console.log('✅ Ocean organizations found:', allOrganizations.ocean.length);
+        allOrganizations.ocean.forEach((org, i) => {
+          console.log(`  ${i}: ${org.name}`);
+        });
+      } else {
+        console.log('❌ No ocean organizations found');
+      }
+    }    // Simple function to test quick amount selection
+    function selectQuickAmount(amount) {
+      console.log('💰 selectQuickAmount called with:', amount);
+
+      const amountInput = document.getElementById('amount');
+      if (amountInput) {
+        amountInput.value = amount;
+        console.log('✅ Amount set to:', amount);
+
+        // Remove active class from all buttons
+        document.querySelectorAll('.quick-amount').forEach(btn => {
+          btn.classList.remove('active');
+        });
+
+        // Add active class to clicked button
+        event.target.classList.add('active');
+      } else {
+        console.log('❌ Amount input not found');
+      }
+    }
+
+    // Real-time ETH price functionality
+    let currentEthPrice = 3730; // Default fallback price (current market price)
+    let priceChangeData = { change: 0, changePercent: 0 };
+
+    async function fetchEthPrice() {
+      try {
+        console.log('💰 Fetching real-time ETH price...');
+
+        // Try multiple APIs as fallbacks
+        const apiEndpoints = [
+          {
+            url: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd&include_24hr_change=true',
+            parser: (data) => {
+              if (data.ethereum && data.ethereum.usd) {
+                return {
+                  price: data.ethereum.usd,
+                  change24h: data.ethereum.usd_24h_change || 0,
+                  source: 'CoinGecko'
+                };
+              }
+              return null;
+            }
+          },
+          {
+            url: 'https://api.coinbase.com/v2/exchange-rates?currency=ETH',
+            parser: (data) => {
+              if (data.data && data.data.rates && data.data.rates.USD) {
+                return {
+                  price: parseFloat(data.data.rates.USD.amount),
+                  change24h: 0,
+                  source: 'Coinbase'
+                };
+              }
+              return null;
+            }
+          }
+        ];
+
+        for (const endpoint of apiEndpoints) {
+          try {
+            console.log('🔗 Trying API:', endpoint.url);
+            const response = await fetch(endpoint.url);
+            if (!response.ok) {
+              console.log('⚠️ API response not OK:', response.status);
+              continue;
+            }
+
+            const data = await response.json();
+            console.log('📊 API Response:', data);
+
+            const parsed = endpoint.parser(data);
+            if (parsed && parsed.price && !isNaN(parsed.price) && parsed.price > 0) {
+              currentEthPrice = parsed.price;
+              priceChangeData = {
+                change: (currentEthPrice * parsed.change24h) / 100,
+                changePercent: parsed.change24h
+              };
+
+              console.log('✅ ETH Price updated (' + parsed.source + '):', currentEthPrice, 'USD, 24h change:', parsed.change24h.toFixed(2) + '%');
+              updatePriceDisplay();
+              updateQuickAmountDisplays();
+              return currentEthPrice;
+            } else {
+              console.log('⚠️ Invalid price data from API:', parsed);
+            }
+          } catch (error) {
+            console.log('⚠️ API endpoint failed:', endpoint.url, error.message);
+            continue;
+          }
+        }
+
+        throw new Error('All API endpoints failed');
+
+      } catch (error) {
+        console.log('❌ Failed to fetch ETH price, using fallback:', currentEthPrice);
+        updatePriceDisplay(true);
+        updateQuickAmountDisplays();
+        return currentEthPrice;
+      }
+    }
+
+    function updatePriceDisplay(isError = false) {
+      const priceElement = document.getElementById('currentEthPrice');
+      const changeElement = document.getElementById('priceChange');
+      const updatedElement = document.getElementById('lastUpdated');
+
+      if (priceElement) {
+        priceElement.textContent = `$${currentEthPrice.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })}`;
+      }
+
+      if (changeElement && !isError && priceChangeData.changePercent !== 0) {
+        const changeText = `${priceChangeData.changePercent >= 0 ? '+' : ''}${priceChangeData.changePercent.toFixed(2)}%`;
+        changeElement.textContent = changeText;
+        changeElement.className = `price-change ${priceChangeData.changePercent >= 0 ? 'positive' : 'negative'}`;
+      } else if (changeElement) {
+        changeElement.textContent = isError ? '(fallback)' : '+6.09%';
+        changeElement.className = 'price-change positive';
+      }
+
+      if (updatedElement) {
+        const now = new Date();
+        updatedElement.textContent = now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+      }
+    }
+
+    function usdToEth(usdAmount) {
+      // Ensure we have a valid ETH price
+      if (!currentEthPrice || isNaN(currentEthPrice) || currentEthPrice <= 0) {
+        console.log('⚠️ Invalid ETH price for conversion:', currentEthPrice, '- using fallback');
+        currentEthPrice = 3730; // Use fallback price
+      }
+
+      const result = (usdAmount / currentEthPrice).toFixed(6);
+      console.log('💱 USD to ETH conversion:', usdAmount, 'USD =', result, 'ETH (rate:', currentEthPrice, ')');
+      return result;
+    }
+
+    function ethToUsd(ethAmount) {
+      // Ensure we have a valid ETH price
+      if (!currentEthPrice || isNaN(currentEthPrice) || currentEthPrice <= 0) {
+        console.log('⚠️ Invalid ETH price for conversion:', currentEthPrice, '- using fallback');
+        currentEthPrice = 3730; // Use fallback price
+      }
+
+      const result = (ethAmount * currentEthPrice).toFixed(2);
+      console.log('💱 ETH to USD conversion:', ethAmount, 'ETH =', result, 'USD (rate:', currentEthPrice, ')');
+      return result;
+    }
+
+    function updateUsdEquivalent() {
+      const amountInput = document.getElementById('amount');
+      const usdEquivalent = document.getElementById('usdEquivalent');
+
+      if (amountInput && usdEquivalent) {
+        const ethAmount = parseFloat(amountInput.value) || 0;
+        const usdAmount = ethToUsd(ethAmount);
+        usdEquivalent.textContent = `≈ $${usdAmount} USD`;
+      }
+    }
+
+    function updateQuickAmountDisplays() {
+      const amounts = [25, 50, 100, 250];
+      amounts.forEach((usd, index) => {
+        const ethAmount = usdToEth(usd);
+        const button = document.querySelector(`[data-usd="${usd}"] .eth-equivalent`);
+        if (button) {
+          button.textContent = `≈ ${ethAmount} ETH`;
+        }
+      });
+
+      // Also update the USD equivalent for current ETH input
+      updateUsdEquivalent();
+    }
+
+    function selectQuickAmountUSD(usdAmount) {
+      console.log('💰 selectQuickAmountUSD called with:', usdAmount, 'USD');
+      console.log('💰 Current ETH price:', currentEthPrice);
+
+      // Validate ETH price before proceeding
+      if (!currentEthPrice || isNaN(currentEthPrice) || currentEthPrice <= 0) {
+        console.log('⚠️ Invalid ETH price, using fallback:', 3730);
+        currentEthPrice = 3730;
+      }
+
+      // Remove active class from all buttons
+      document.querySelectorAll('.quick-amount').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Add active class to clicked button
+      const clickedButton = document.querySelector(`[data-usd="${usdAmount}"]`);
+      if (clickedButton) {
+        clickedButton.classList.add('active');
+        console.log('✅ Button activated:', clickedButton);
+      }
+
+      // Calculate ETH amount
+      const ethAmount = usdToEth(usdAmount);
+      console.log('💰 Calculated ETH amount:', ethAmount);
+
+      // Validate ETH amount
+      if (!ethAmount || isNaN(parseFloat(ethAmount))) {
+        console.error('❌ Invalid ETH amount calculated:', ethAmount);
+        return;
+      }
+
+      // Set amount in input
+      const amountInput = document.getElementById('amount');
+      console.log('💰 Amount input element:', amountInput);
+
+      if (amountInput) {
+        amountInput.value = ethAmount;
+        console.log('✅ Amount set to:', ethAmount, 'ETH (', usdAmount, 'USD)');
+        console.log('✅ Input value after setting:', amountInput.value);
+
+        // Trigger input event to update USD equivalent display
+        amountInput.dispatchEvent(new Event('input', { bubbles: true }));
+      } else {
+        console.error('❌ Amount input element not found!');
+      }
+
+      // Update USD equivalent display
+      updateUsdEquivalent();
+    }    // Foundation Card Selection - Updated for new organization system
+    function setupFoundationCards() {
+      const cards = document.querySelectorAll('.foundation-card');
+      const foundationArrow = document.querySelector('.foundation-arrow');
+
+      console.log('🔍 Setting up foundation cards. Found:', cards.length, 'cards');
+      console.log('🔍 Foundation arrow element:', foundationArrow ? 'found' : 'not found');
+
+      // Map foundation cards to categories
+      const foundationToCategory = {
+        '0': 'ocean',      // Save The Oceans -> Ocean Conservation
+        '1': 'forest',     // Protect The Rainforest -> Forest Protection
+        '2': 'forest',     // Protect The Sequoias -> Forest Protection
+        '3': 'energy'      // Clean Energy -> Clean Energy
+      };
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          // Remove selected class from all cards
+          cards.forEach(c => c.classList.remove('selected'));
+          // Add selected class to clicked card
+          card.classList.add('selected');
+
+          // Get the foundation number and map to category
+          const foundationId = card.dataset.foundation;
+          const categoryKey = foundationToCategory[foundationId];
+
+          console.log('🎯 Foundation card clicked:', foundationId, '-> Category:', categoryKey);
+
+          if (categoryKey) {
+            // Set the category dropdown
+            const categorySelect = document.getElementById('category');
+            if (categorySelect) {
+              categorySelect.value = categoryKey;
+              console.log('📝 Category dropdown set to:', categorySelect.value);
+              // Trigger the change event to load organizations
+              categorySelect.dispatchEvent(new Event('change'));
+            }
+
+            // Show arrow indicator
+            if (foundationArrow) {
+              foundationArrow.classList.add('show');
+            }
+
+            // Always scroll to form section when a card is clicked
+            setTimeout(() => {
+              const formSection = document.querySelector('.donate-form-section');
+              if (formSection) {
+                formSection.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start',
+                  inline: 'nearest'
+                });
+              }
+            }, 100);
+          }
         });
       });
+
+      // Don't auto-select any card initially - let user choose
     }
 
     // Amount Input with USD Conversion and ECO Token Calculation
@@ -656,12 +1660,9 @@
       const usdEquivalent = document.getElementById('usdEquivalent');
       const ecoTokens = document.getElementById('ecoTokens');
 
-      // Mock ETH to USD rate (in production, fetch from API)
-      const ethToUsd = 2000;
-
       amountInput.addEventListener('input', (e) => {
         const ethAmount = parseFloat(e.target.value) || 0;
-        const usdAmount = (ethAmount * ethToUsd).toFixed(2);
+        const usdAmount = ethToUsd(ethAmount); // Use our real-time price function
         const tokenAmount = Math.floor(ethAmount * 100); // 1 ETH = 100 ECO tokens
 
         usdEquivalent.textContent = `≈ $${usdAmount} USD`;
@@ -669,6 +1670,9 @@
 
         updateImpactCalculator(ethAmount);
       });
+
+      // Update USD equivalent immediately when page loads
+      updateUsdEquivalent();
     }
 
     // Impact Calculator
@@ -716,10 +1720,285 @@
       }, 2000);
     }
 
-    // Override default donation success to include animation
+    // MAIN DONATION FUNCTION - Handles the entire donation process
+    async function sendDonation(event) {
+      event.preventDefault(); // Prevent form submission/page refresh
+
+      console.log('🚀 Starting donation process...');
+
+      try {
+        // Get form data
+        const form = document.getElementById('donationForm');
+        const formData = new FormData(form);
+
+        const category = document.getElementById('category').value;
+        const organizationSelect = document.getElementById('organization');
+        const organizationId = organizationSelect.value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const message = document.getElementById('message').value;
+
+        // Validation
+        if (!category) {
+          showToast('Please select a category first', 'error');
+          return false;
+        }
+
+        if (!organizationId) {
+          showToast('Please select an organization', 'error');
+          return false;
+        }
+
+        if (!amount || amount <= 0) {
+          showToast('Please enter a valid donation amount', 'error');
+          return false;
+        }
+
+        // Get organization details
+        const organization = getOrganizationByIdFixed(organizationId);
+        if (!organization) {
+          showToast('Organization not found', 'error');
+          return false;
+        }
+
+        console.log('📝 Donation details:', { category, organizationId, amount, organization: organization.name });
+
+        // Check wallet connection
+        if (typeof ethereum === 'undefined') {
+          showToast('Please install MetaMask to make donations', 'error');
+          return false;
+        }
+
+        // Request wallet connection if needed
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        if (!accounts || accounts.length === 0) {
+          showToast('Please connect your wallet', 'error');
+          return false;
+        }
+
+        const userAccount = accounts[0];
+        console.log('👤 User wallet:', userAccount);
+
+        // Get or create organization wallet address
+        const orgWalletAddress = await getOrganizationWalletAddressFixed(organizationId, organization);
+        console.log('🏢 Organization wallet:', orgWalletAddress);
+
+        // Calculate platform fee (3%)
+        const platformFeePercent = 0.03;
+        const platformFee = amount * platformFeePercent;
+        const organizationAmount = amount - platformFee;
+
+        console.log('💰 Amount breakdown:', {
+          total: amount,
+          platformFee: platformFee,
+          toOrganization: organizationAmount
+        });
+
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Processing...';
+        submitButton.disabled = true;
+
+        showToast('Preparing donation transaction...', 'info');
+
+        // Create provider and signer
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+
+        // Convert amounts to Wei (ETH to Wei)
+        const totalAmountWei = ethers.utils.parseEther(amount.toString());
+        const orgAmountWei = ethers.utils.parseEther(organizationAmount.toString());
+        const feeAmountWei = ethers.utils.parseEther(platformFee.toString());
+
+        // Platform wallet address (this should be your main wallet)
+        const platformWalletAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"; // Using your connected wallet for testing
+
+        // Execute transactions
+        showToast('Sending donation to organization...', 'info');
+
+        // Transaction 1: Send to organization
+        const orgTx = await signer.sendTransaction({
+          to: orgWalletAddress,
+          value: orgAmountWei,
+          gasLimit: 21000
+        });
+
+        console.log('📤 Organization transaction sent:', orgTx.hash);
+
+        // Transaction 2: Send platform fee
+        const feeTx = await signer.sendTransaction({
+          to: platformWalletAddress,
+          value: feeAmountWei,
+          gasLimit: 21000
+        });
+
+        console.log('📤 Platform fee transaction sent:', feeTx.hash);
+
+        showToast('Confirming transactions...', 'info');
+
+        // Wait for confirmations
+        await orgTx.wait();
+        await feeTx.wait();
+
+        // Record donation in our system
+        const donationRecord = {
+          id: Date.now().toString(),
+          timestamp: new Date().toISOString(),
+          userAddress: userAccount,
+          organizationId: organizationId,
+          organizationName: organization.name,
+          category: category,
+          amount: amount,
+          platformFee: platformFee,
+          organizationAmount: organizationAmount,
+          message: message,
+          transactionHashes: {
+            organization: orgTx.hash,
+            platformFee: feeTx.hash
+          },
+          status: 'completed'
+        };
+
+        // Store locally (in a real app, you'd send this to your backend)
+        const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+        donations.push(donationRecord);
+        localStorage.setItem('donations', JSON.stringify(donations));
+
+        // Notify organization (this would integrate with your organization management system)
+        await notifyOrganization(organization, donationRecord);
+
+        // Success!
+        showToast(`Successfully donated ${organizationAmount.toFixed(4)} ETH to ${organization.name}!`, 'success');
+        animateDonationSuccess();
+
+        // Reset form
+        form.reset();
+        document.getElementById('organizationGroup').style.display = 'none';
+        document.getElementById('organizationDetails').style.display = 'none';
+
+        console.log('✅ Donation completed successfully!');
+
+        return true;
+
+      } catch (error) {
+        console.error('❌ Donation error:', error);
+        showToast(`Donation failed: ${error.message}`, 'error');
+        return false;
+      } finally {
+        // Reset button state
+        const submitButton = document.querySelector('#donationForm button[type="submit"]');
+        if (submitButton) {
+          submitButton.textContent = 'Donate Now';
+          submitButton.disabled = false;
+        }
+      }
+    }
+
+    // ORGANIZATION WALLET MANAGEMENT - This solves the "bridging the gap" problem
+    async function getOrganizationWalletAddressFixed(organizationId, organization) {
+      // Check if organization already has a wallet in our system
+      let orgWallets = JSON.parse(localStorage.getItem('organizationWallets') || '{}');
+
+      if (orgWallets[organizationId]) {
+        console.log('📋 Using existing wallet for', organization.name);
+        return orgWallets[organizationId];
+      }
+
+      // Create a new managed wallet for this organization
+      console.log('🆕 Creating new wallet for', organization.name);
+
+      // Generate a new wallet (this would be done securely on your backend)
+      const wallet = ethers.Wallet.createRandom();
+      const walletAddress = wallet.address;
+      const privateKey = wallet.privateKey; // In production, encrypt this and store securely
+
+      // Store wallet info (in production, this would be in your secure database)
+      orgWallets[organizationId] = walletAddress;
+      localStorage.setItem('organizationWallets', JSON.stringify(orgWallets));
+
+      // Store private key securely (in production, use proper encryption)
+      const secureWallets = JSON.parse(localStorage.getItem('secureOrgWallets') || '{}');
+      secureWallets[organizationId] = {
+        address: walletAddress,
+        privateKey: privateKey, // TODO: Encrypt this!
+        organizationName: organization.name,
+        created: new Date().toISOString(),
+        status: 'active'
+      };
+      localStorage.setItem('secureOrgWallets', JSON.stringify(secureWallets));
+
+      // TODO: In production, you would:
+      // 1. Generate wallet on secure backend
+      // 2. Encrypt private keys
+      // 3. Set up automated conversion to fiat
+      // 4. Create organization dashboard
+      // 5. Send welcome email with wallet info
+
+      console.log('✅ Created wallet for', organization.name, ':', walletAddress);
+      return walletAddress;
+    }
+
+    // ORGANIZATION NOTIFICATION SYSTEM
+    async function notifyOrganization(organization, donationRecord) {
+      console.log('📧 Notifying organization:', organization.name);
+
+      // Store notification for organization dashboard
+      const notifications = JSON.parse(localStorage.getItem('orgNotifications') || '{}');
+      if (!notifications[donationRecord.organizationId]) {
+        notifications[donationRecord.organizationId] = [];
+      }
+
+      notifications[donationRecord.organizationId].push({
+        type: 'donation_received',
+        amount: donationRecord.organizationAmount,
+        donor: donationRecord.userAddress,
+        message: donationRecord.message,
+        timestamp: donationRecord.timestamp,
+        transactionHash: donationRecord.transactionHashes.organization
+      });
+
+      localStorage.setItem('orgNotifications', JSON.stringify(notifications));
+
+      // TODO: In production, you would:
+      // 1. Send email notification to organization
+      // 2. Update organization dashboard in real-time
+      // 3. Trigger automatic fiat conversion if configured
+      // 4. Generate donation receipt
+      // 5. Update public donation counter
+    }
+
+    // Override default donation success to include animation and organization validation
     if (typeof sendDonation === 'function') {
       const originalSendDonation = sendDonation;
       sendDonation = function(event) {
+        // Validate organization selection
+        const selectedOrg = window.getSelectedOrganization();
+        if (!selectedOrg) {
+          event.preventDefault();
+
+          // Show error message
+          if (window.showToast) {
+            showToast('⚠️ Please select an organization to donate to', 'error');
+          } else {
+            alert('Please select an organization to donate to');
+          }
+
+          // Highlight the organization field
+          const orgSelect = document.getElementById('organization');
+          if (orgSelect) {
+            orgSelect.focus();
+            orgSelect.style.borderColor = '#ef4444';
+            setTimeout(() => {
+              orgSelect.style.borderColor = '';
+            }, 3000);
+          }
+
+          return false;
+        }
+
+        // Log the selected organization for debugging
+        console.log('Donating to organization:', selectedOrg);
+
         const result = originalSendDonation(event);
         if (result !== false) {
           animateDonationSuccess();

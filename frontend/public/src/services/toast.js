@@ -266,6 +266,11 @@ window.toast = new ToastManager();
 window.loading = new LoadingManager();
 window.buttonLoading = new ButtonLoadingManager();
 
+// Global convenience function for backward compatibility
+window.showToast = function(message, type = 'info', options = {}) {
+  return window.toast.show(message, type, options);
+};
+
 // Cleanup on page unload
 window.addEventListener('beforeunload', () => {
   window.loading.hide();

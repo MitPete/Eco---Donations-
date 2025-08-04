@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Donation Page</title>
+</head>
+<body>
+    <h1>Test Donation Page Functionality</h1>
+
+    <div>
+        <h2>Foundation Cards Test</h2>
+        <div class="foundation-card" data-foundation="0">Ocean Card</div>
+        <div class="foundation-card" data-foundation="1">Forest Card</div>
+    </div>
+
+    <div>
+        <h2>Quick Amount Test</h2>
+        <button type="button" class="quick-amount" data-amount="0.1">0.1 ETH</button>
+        <button type="button" class="quick-amount" data-amount="0.5">0.5 ETH</button>
+        <input type="number" id="amount" placeholder="Amount">
+    </div>
+
+    <div>
+        <h2>Category Test</h2>
+        <select id="category">
+            <option value="">Select category</option>
+            <option value="ocean">Ocean Conservation</option>
+            <option value="forest">Forest Protection</option>
+        </select>
+    </div>
+
+    <script>
+        // Test foundation cards
+        function setupFoundationCards() {
+            const cards = document.querySelectorAll('.foundation-card');
+            const foundationToCategory = {
+                '0': 'ocean',
+                '1': 'forest'
+            };
+
+            cards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.style.border = '1px solid blue';
+                card.style.padding = '10px';
+                card.style.margin = '5px';
+
+                card.addEventListener('click', () => {
+                    console.log('Foundation card clicked!');
+                    const foundationId = card.dataset.foundation;
+                    const categoryKey = foundationToCategory[foundationId];
+
+                    const categorySelect = document.getElementById('category');
+                    if (categorySelect) {
+                        categorySelect.value = categoryKey;
+                        console.log('Category set to:', categoryKey);
+                    }
+                });
+            });
+        }
+
+        // Test quick amounts
+        function setupQuickAmounts() {
+            const quickAmounts = document.querySelectorAll('.quick-amount');
+            const amountInput = document.getElementById('amount');
+
+            quickAmounts.forEach(btn => {
+                btn.style.border = '1px solid green';
+                btn.style.padding = '5px';
+                btn.style.margin = '5px';
+                btn.style.cursor = 'pointer';
+
+                btn.addEventListener('click', () => {
+                    console.log('Quick amount clicked!');
+                    quickAmounts.forEach(b => b.style.backgroundColor = '');
+                    btn.style.backgroundColor = 'lightgreen';
+                    amountInput.value = btn.dataset.amount;
+                    console.log('Amount set to:', btn.dataset.amount);
+                });
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded');
+            setupFoundationCards();
+            setupQuickAmounts();
+        });
+    </script>
+</body>
+</html>

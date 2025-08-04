@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Click Test</title>
+    <style>
+        .foundation-card {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            cursor: pointer;
+            background: #f5f5f5;
+        }
+        .foundation-card.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .quick-amount {
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            background: white;
+        }
+        .quick-amount.active {
+            background: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Click Test</h1>
+
+    <h2>Foundation Cards:</h2>
+    <div class="foundation-card" data-foundation="0">🌊 Save The Oceans</div>
+    <div class="foundation-card" data-foundation="1">🌳 Protect The Rainforest</div>
+
+    <h2>Quick Amount Buttons:</h2>
+    <button type="button" class="quick-amount" data-amount="0.1">0.1 ETH</button>
+    <button type="button" class="quick-amount" data-amount="0.5">0.5 ETH</button>
+    <button type="button" class="quick-amount" data-amount="1">1.0 ETH</button>
+
+    <h2>Form Elements:</h2>
+    <select id="category">
+        <option value="">Select category</option>
+        <option value="ocean">Ocean Conservation</option>
+        <option value="forest">Forest Protection</option>
+    </select>
+    <br><br>
+    <input type="number" id="amount" placeholder="Amount" step="0.1">
+
+    <script>
+        console.log('🔄 Starting simple test page');
+
+        // Wait for DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ DOM loaded, setting up handlers');
+
+            // Foundation cards
+            const cards = document.querySelectorAll('.foundation-card');
+            console.log('Found foundation cards:', cards.length);
+
+            const foundationToCategory = {
+                '0': 'ocean',
+                '1': 'forest'
+            };
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    console.log('🎯 Foundation card clicked!', card.dataset.foundation);
+
+                    // Remove selected from all
+                    cards.forEach(c => c.classList.remove('selected'));
+                    // Add to this one
+                    card.classList.add('selected');
+
+                    // Set category
+                    const categoryKey = foundationToCategory[card.dataset.foundation];
+                    const categorySelect = document.getElementById('category');
+                    if (categorySelect && categoryKey) {
+                        categorySelect.value = categoryKey;
+                        console.log('📝 Category set to:', categoryKey);
+                    }
+                });
+            });
+
+            // Quick amounts
+            const quickAmounts = document.querySelectorAll('.quick-amount');
+            console.log('Found quick amount buttons:', quickAmounts.length);
+
+            const amountInput = document.getElementById('amount');
+
+            quickAmounts.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    console.log('💰 Quick amount clicked!', btn.dataset.amount);
+
+                    // Remove active from all
+                    quickAmounts.forEach(b => b.classList.remove('active'));
+                    // Add to this one
+                    btn.classList.add('active');
+
+                    // Set amount
+                    if (amountInput) {
+                        amountInput.value = btn.dataset.amount;
+                        console.log('📝 Amount set to:', btn.dataset.amount);
+                    }
+                });
+            });
+
+            console.log('✅ All handlers set up successfully');
+        });
+    </script>
+</body>
+</html>

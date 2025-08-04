@@ -23,7 +23,8 @@
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
 
   <!-- Critical CSS - Inline to prevent FOUC -->
@@ -422,7 +423,6 @@
   <link rel="preload" href="/src/styles/css/base.css" as="style" importance="high">
   <link rel="preload" href="/src/styles/css/home.css" as="style" importance="high">
   <link rel="preload" href="/src/styles/css/mobile-hero.css" as="style" importance="high">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" crossorigin>
 
   <!-- Critical stylesheets loaded immediately -->
   <link rel="stylesheet" href="/src/styles/css/base.css?v=3" id="base-css" importance="high">
@@ -934,13 +934,13 @@
   </script>
 
   <!-- Enhanced Wallet Integration -->
-  <script src="/src/services/wallet-persistence.js"></script>
-  <script src="/src/services/transaction-tracker.js"></script>
+  <!-- <script src="/src/services/wallet-persistence.js"></script> -->
+  <!-- <script src="/src/services/transaction-tracker.js"></script> -->
   <script src="/src/services/enhanced-wallet.js"></script>
-  <script src="/src/services/transaction-flow.js"></script>
+  <!-- <script src="/src/services/transaction-flow.js"></script> -->
 
-  <!-- Beta Testing Scripts -->
-  <script type="module" src="/src/config/config.js"></script>
-  <script type="module" src="/src/services/beta-feedback.js"></script>
+  <!-- Beta Testing Scripts - TEMPORARILY DISABLED FOR DEBUGGING -->
+  <!-- <script type="module" src="/src/config/config.js"></script> -->
+  <!-- <script type="module" src="/src/services/beta-feedback.js"></script> -->
 </body>
 </html>

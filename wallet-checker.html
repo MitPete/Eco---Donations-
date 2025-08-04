@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wallet Balance Checker</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .wallet { margin: 10px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .address { font-family: monospace; font-size: 12px; color: #666; }
+        .balance { font-weight: bold; color: #2563eb; }
+        button { padding: 10px 20px; margin: 5px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Wallet Balance Checker</h1>
+        <p>Check balances of test accounts and organization wallets</p>
+
+        <button onclick="checkAllBalances()">🔄 Refresh All Balances</button>
+        <button onclick="checkOrgWallets()">🏢 Check Organization Wallets</button>
+
+        <div style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+            <h3>➕ Add New Organization Wallet</h3>
+            <p style="font-size: 12px; color: #666;">When you test donations, new organization wallets will be created. Add them here to track.</p>
+            <input type="text" id="newWalletAddress" placeholder="Wallet Address (0x...)" style="width: 300px; margin: 5px;">
+            <input type="text" id="newWalletName" placeholder="Organization Name" style="width: 200px; margin: 5px;">
+            <input type="text" id="newWalletCategory" placeholder="Category" style="width: 100px; margin: 5px;">
+            <button onclick="addNewOrgWallet()">Add Wallet</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const testAccounts = [
+            { name: "Account 1 (Main)", address: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266" },
+            { name: "Account 2 (Test)", address: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8" },
+            { name: "Account 3 (Test)", address: "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc" },
+            { name: "Account 4 (Test)", address: "0x90f79bf6eb2c4f870365e785982e1f101e93b906" }
+        ];
+
+        const orgWallets = [
+            { name: "American Forests", address: "0x9350C3E4AB5a2acDDc163f4A8D02fC29BeE84Ed8", category: "Forest" },
+            // More organization wallets will be added as they are created during testing
+        ];
+
+        // Keep track of newly discovered organization wallets
+        let discoveredWallets = [];
+
+        async function getBalance(address) {
+            try {
+                const response = await fetch('http://localhost:8545', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "eth_getBalance",
+                        params: [address, "latest"],
+                        id: 1
+                    })
+                });
+                const data = await response.json();
+                const balanceWei = parseInt(data.result, 16);
+                const balanceEth = balanceWei / Math.pow(10, 18);
+                return balanceEth.toFixed(6);
+            } catch (error) {
+                return "Error";
+            }
+        }
+
+        async function getTransactionCount(address) {
+            try {
+                const response = await fetch('http://localhost:8545', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "eth_getTransactionCount",
+                        params: [address, "latest"],
+                        id: 1
+                    })
+                });
+                const data = await response.json();
+                return parseInt(data.result, 16);
+            } catch (error) {
+                return 0;
+            }
+        }
+
+        async function checkAllBalances() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>📊 Test Account Balances</h2>';
+
+            for (const account of testAccounts) {
+                const balance = await getBalance(account.address);
+                const txCount = await getTransactionCount(account.address);
+                results.innerHTML += `
+                    <div class="wallet">
+                        <strong>${account.name}</strong><br>
+                        <div class="address">${account.address}</div>
+                        <div class="balance">${balance} ETH</div>
+                        <div style="font-size: 12px; color: #888;">Transactions: ${txCount}</div>
+                    </div>
+                `;
+            }
+        }
+
+        async function checkOrgWallets() {
+            const results = document.getElementById('results');
+            results.innerHTML += '<h2>🏢 Organization Wallets</h2>';
+
+            for (const org of orgWallets) {
+                const balance = await getBalance(org.address);
+                const txCount = await getTransactionCount(org.address);
+                const status = parseFloat(balance) > 0 ? "✅ FUNDED" : "⚪ EMPTY";
+                results.innerHTML += `
+                    <div class="wallet" style="border-left: 4px solid ${parseFloat(balance) > 0 ? '#10b981' : '#6b7280'};">
+                        <strong>${org.name} ${status}</strong><br>
+                        <div class="address">${org.address}</div>
+                        <div class="balance">${balance} ETH</div>
+                        <div style="font-size: 12px; color: #888;">Category: ${org.category} | Transactions: ${txCount}</div>
+                    </div>
+                `;
+            }
+        }
+
+        async function addNewOrgWallet() {
+            const address = document.getElementById('newWalletAddress').value;
+            const name = document.getElementById('newWalletName').value;
+            const category = document.getElementById('newWalletCategory').value;
+
+            if (address && name && category) {
+                orgWallets.push({ name, address, category });
+                document.getElementById('newWalletAddress').value = '';
+                document.getElementById('newWalletName').value = '';
+                document.getElementById('newWalletCategory').value = '';
+                await checkOrgWallets();
+            }
+        }        // Auto-load on page start
+        window.onload = () => {
+            checkAllBalances();
+            setTimeout(checkOrgWallets, 1000);
+        };
+    </script>
+</body>
+</html>
